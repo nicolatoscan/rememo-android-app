@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,16 +20,13 @@ public class AfterSignUpActivity extends AppCompatActivity {
 
     FirebaseAuth fAuth;
     TextInputLayout txtName;
-    ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_after_signup);
         fAuth = FirebaseAuth.getInstance();
-
-        txtName = findViewById(R.id.afterSignUpTxtUsername);
-        progress = findViewById(R.id.afterSignUpProgressBar);
+        txtName = findViewById(R.id.afterSignUpTxtLayoutUsername);
         Button btnGoTo = findViewById(R.id.afterLoginBtnGoToRememo);
         btnGoTo.setOnClickListener(v -> onClickOpenRememo());
     }
@@ -46,7 +44,7 @@ public class AfterSignUpActivity extends AppCompatActivity {
         txtName.setError(null);
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
         fAuth.getCurrentUser().updateProfile(profileUpdates);
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
 

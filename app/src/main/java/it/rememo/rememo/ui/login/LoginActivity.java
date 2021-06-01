@@ -25,6 +25,7 @@ import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import it.rememo.rememo.MainActivity;
@@ -45,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         fAuth = FirebaseAuth.getInstance();
-        fAuth.signOut();
         if (fAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
@@ -165,10 +165,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void openAfterLogin(AuthResult result) {
-        String email = result.getUser().getEmail();
-        boolean newUser = result.getAdditionalUserInfo().isNewUser();
-        Toast.makeText(LoginActivity.this, "Logged in as " + email, Toast.LENGTH_LONG).show();
-        startActivity(new Intent(this, newUser ? AfterSignUpActivity.class : MainActivity.class));
+        FirebaseUser user = result.getUser();
+        String name = result.getUser().getDisplayName();
+        Toast.makeText(LoginActivity.this, "Logged in as " + (name == null ? user.getEmail() : name), Toast.LENGTH_LONG).show();
+        startActivity(new Intent(getApplicationContext(), name == null ? AfterSignUpActivity.class : MainActivity.class));
         finish();
     }
 }
