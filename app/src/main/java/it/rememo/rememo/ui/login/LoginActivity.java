@@ -71,16 +71,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
+                failedLogin(null);
             }
         }
     }
@@ -88,15 +85,11 @@ public class LoginActivity extends AppCompatActivity {
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         fAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            openAfterLogin(task.getResult());
-                            // Sign in success, update UI with the signed-in user's information
-                        } else {
-                            failedLogin(null);
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        openAfterLogin(task.getResult());
+                    } else {
+                        failedLogin(null);
                     }
                 });
     }
@@ -122,16 +115,13 @@ public class LoginActivity extends AppCompatActivity {
                 .setAndroidPackageName("it.rememo.rememo", true, "0")
                 .build();
 
-        fAuth.sendSignInLinkToEmail(email, acSettings).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull @NotNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).edit().putString("signinEmail", email).apply();
-                    progressSendingEmail.setVisibility(View.INVISIBLE);
-                    startActivity(new Intent(LoginActivity.this, EmailSentActivity.class));
-                } else {
-                    Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                }
+        fAuth.sendSignInLinkToEmail(email, acSettings).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).edit().putString("signinEmail", email).apply();
+                progressSendingEmail.setVisibility(View.INVISIBLE);
+                startActivity(new Intent(LoginActivity.this, EmailSentActivity.class));
+            } else {
+                Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -143,19 +133,11 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         fAuth.signInWithEmailLink(email, emailLink)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            openAfterLogin(task.getResult());
-                            // You can access the new user via result.getUser()
-                            // Additional user info profile *not* available via:
-                            // result.getAdditionalUserInfo().getProfile() == null
-                            // You can check if the user is new or existing:
-                            // result.getAdditionalUserInfo().isNewUser()
-                        } else {
-                            failedLogin(null);
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        openAfterLogin(task.getResult());
+                    } else {
+                        failedLogin(null);
                     }
                 });
     }
