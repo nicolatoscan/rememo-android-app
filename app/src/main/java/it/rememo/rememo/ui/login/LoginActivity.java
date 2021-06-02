@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 public class LoginActivity extends AppCompatActivity {
 
     TextInputLayout txtEmail;
+    Button btnSendEmail;
     ProgressBar progressSendingEmail;
     FirebaseAuth fAuth;
     GoogleSignInClient mGoogleSignInClient;
@@ -65,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         SignInButton googleBtn = findViewById(R.id.sign_in_with_google_button);
+        findViewById(R.id.loginBtnSendEmail);
         googleBtn.setOnClickListener(v -> signInWithGoogle());
     }
 
@@ -108,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         txtEmail.setError(null);
 
         progressSendingEmail.setVisibility(View.VISIBLE);
+        btnSendEmail.setEnabled(false);
 
         ActionCodeSettings acSettings = ActionCodeSettings.newBuilder()
                 .setUrl("https://rememo-cb013.web.app")
@@ -121,8 +125,10 @@ public class LoginActivity extends AppCompatActivity {
                 progressSendingEmail.setVisibility(View.INVISIBLE);
                 startActivity(new Intent(LoginActivity.this, EmailSentActivity.class));
             } else {
-                Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                txtEmail.setError(task.getException().getMessage());
+                progressSendingEmail.setVisibility(View.GONE);
             }
+            btnSendEmail.setEnabled(true);
         });
     }
 

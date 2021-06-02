@@ -11,9 +11,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
-    public CollectionsGroupPagerAdapter(Fragment fa) {
+    ArrayList<String> collectionsGroups;
+    public CollectionsGroupPagerAdapter(Fragment fa, ArrayList<String> collectionsGroups) {
         super(fa);
+        this.collectionsGroups = collectionsGroups;
     }
 
     @NotNull
@@ -21,14 +25,14 @@ public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int i) {
         Fragment fragment = new CollectionsGroupFragment();
         Bundle args = new Bundle();
-        // Our object is just an integer :-P
-        args.putInt(CollectionsGroupFragment.ARG_OBJECT, i + 1);
+        args.putInt(CollectionsGroupFragment.ARG_POSITION, i);
+        args.putString(CollectionsGroupFragment.ARG_TITLE, collectionsGroups.get(i));
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return collectionsGroups.size();
     }
 }

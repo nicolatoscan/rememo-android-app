@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.ArrayList;
+
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.FragmentCollectionsBinding;
 
@@ -32,8 +34,12 @@ public class CollectionsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        binding.pager.setAdapter(new CollectionsGroupPagerAdapter(this));
-        new TabLayoutMediator(binding.tabLayout, binding.pager, (tab, position) -> tab.setText("OBJECT " + (position + 1))).attach();
+        ArrayList<String> collectionsGroups = new ArrayList<String>();
+        collectionsGroups.add("Mine");
+        collectionsGroups.add("Class 4°B");
+        collectionsGroups.add("Class 4°A");
+        binding.pager.setAdapter(new CollectionsGroupPagerAdapter(this, collectionsGroups));
+        new TabLayoutMediator(binding.tabLayout, binding.pager, (tab, position) ->  tab.setText(collectionsGroups.get(position))).attach();
     }
 
     @Override
