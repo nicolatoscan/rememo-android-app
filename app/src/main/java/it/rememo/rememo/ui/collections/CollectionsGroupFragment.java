@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -34,7 +35,6 @@ public class CollectionsGroupFragment extends Fragment {
     CollectionRecyclerViewAdapter adapter;
     private FragmentCollectionGroupBinding binding;
     FirebaseFirestore db;
-    String userId;
     ArrayList<Collection> collectionList = new ArrayList<>();
 
     @Override
@@ -54,6 +54,7 @@ public class CollectionsGroupFragment extends Fragment {
             binding.addCollectionFloatingButton.setOnClickListener(v -> onAddCollectionClick());
         }
 
+        // Recycler View
         RecyclerView recyclerView = view.findViewById(R.id.collectionRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CollectionRecyclerViewAdapter(getContext(), collectionList);
@@ -62,6 +63,8 @@ public class CollectionsGroupFragment extends Fragment {
         });
         recyclerView.setAdapter(adapter);
 
+        // To update collections
+        binding.collectionSwipeContainer.setOnRefreshListener(() -> updateCollectionList());
         updateCollectionList();
     }
 
@@ -76,12 +79,12 @@ public class CollectionsGroupFragment extends Fragment {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         updatedCollections.add(new Collection(document));
                     }
-                    collectionList.clear();
-                    collectionList.addAll(updatedCollections);
-                    adapter.notifyDataSetChanged();
+                    adapter.clear();
+                    adapter.addAll(updatedCollections);
                 } else {
                     Common.showToast(getContext(), "Couldn't update collections");
                 }
+                binding.collectionSwipeContainer.setRefreshing(false);
             });
     }
 
@@ -111,8 +114,7 @@ public class CollectionsGroupFragment extends Fragment {
         Collection collection = new Collection(name, null, 0);
         collection.addToFirestore(
             doc -> {
-                collectionList.add(collection);
-                adapter.notifyItemInserted(collectionList.size() - 1);
+                adapter.add(collection);
             },
             ex -> Common.showToast(getContext(), "Error creating collection, please try again later")
         );

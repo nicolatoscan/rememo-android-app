@@ -50,11 +50,6 @@ public class Collection {
         this.ownerId = ownerId;
     }
 
-    public Collection(DocumentReference doc) {
-        this.id = doc.getId();
-    }
-
-
     public Map<String, Object>  getHashMap() {
         Map<String, Object> collection = new HashMap<>();
         collection.put(Collection.KEY_OWNER_ID, Common.getUserId());
