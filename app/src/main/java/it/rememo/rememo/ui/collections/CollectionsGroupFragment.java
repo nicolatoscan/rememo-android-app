@@ -15,7 +15,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,6 +24,7 @@ import java.util.ArrayList;
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.FragmentCollectionGroupBinding;
 import it.rememo.rememo.models.Collection;
+import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
 
 // Instances of this class are fragments representing a single
@@ -82,26 +82,22 @@ public class CollectionsGroupFragment extends Fragment {
                     adapter.clear();
                     adapter.addAll(updatedCollections);
                 } else {
-                    Common.showToast(getContext(), "Couldn't update collections");
+                    Common.toast(getContext(), "Couldn't update collections");
                 }
                 binding.collectionSwipeContainer.setRefreshing(false);
             });
     }
 
     private void onAddCollectionClick() {
-        final EditText input = new EditText(getContext());
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setHint("Collection name");
+        final EditText textInput = new EditText(getContext());
+        textInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        textInput.setHint("Collection name");
 
-        FrameLayout container = new FrameLayout(getContext());
-        container.setPadding(40, 50, 40, 20);
-        container.addView(input);
-
-        new AlertDialog.Builder(getContext())
+        Alerts
+            .getInputTextAlert(getContext(), textInput)
             .setTitle("Create a new collection")
-            .setView(container)
             .setPositiveButton("Create", (dialog, which) -> {
-                String title = input.getText().toString();
+                String title = textInput.getText().toString();
                 if (title.length() > 0) {
                     createCollection(title);
                 }
@@ -116,7 +112,7 @@ public class CollectionsGroupFragment extends Fragment {
             doc -> {
                 adapter.add(collection);
             },
-            ex -> Common.showToast(getContext(), "Error creating collection, please try again later")
+            ex -> Common.toast(getContext(), "Error creating collection, please try again later")
         );
         return collection;
     }

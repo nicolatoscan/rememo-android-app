@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +74,29 @@ public class Collection {
 
     }
 
+    public void updateFirestore(
+            Map<String, Object> updateData,
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail) {
+        FirebaseFirestore.getInstance().collection(Collection.COLLECTION_NAME)
+                .document(id)
+                .set(updateData, SetOptions.merge())
+                .addOnSuccessListener(success)
+                .addOnFailureListener(fail);
+
+    }
+
+    public void deleteFromFirestore(
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail) {
+        FirebaseFirestore.getInstance().collection(Collection.COLLECTION_NAME)
+                .document(id)
+                .delete()
+                .addOnSuccessListener(success)
+                .addOnFailureListener(fail);
+
+    }
+
     public String getId() {
         return id;
     }
@@ -80,9 +104,15 @@ public class Collection {
     public String getName() {
         return name;
     }
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getDescription() {
         return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getOwnerId() {

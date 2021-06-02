@@ -14,10 +14,10 @@ public class Common {
         return userId;
     }
 
-    public static void showToast(Context ctx, String error) {
-        Common.showToast(ctx, error, Toast.LENGTH_LONG);
+    public static void toast(Context ctx, String error) {
+        Common.toast(ctx, error, Toast.LENGTH_LONG);
     }
-    public static void showToast(Context ctx, String error, int lenght) {
+    public static void toast(Context ctx, String error, int lenght) {
         Toast.makeText(ctx, error, lenght).show();
     }
 }
