@@ -19,13 +19,13 @@ import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
 
-public class CollectionRecyclerViewAdapter extends RecyclerView.Adapter<CollectionRecyclerViewAdapter.ViewHolder> {
+public class CollectionsRecyclerViewAdapter extends RecyclerView.Adapter<CollectionsRecyclerViewAdapter.ViewHolder> {
 
     private List<Collection> collections;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
-    CollectionRecyclerViewAdapter(Context context, List<Collection> collections) {
+    CollectionsRecyclerViewAdapter(Context context, List<Collection> collections) {
         this.mInflater = LayoutInflater.from(context);
         this.collections = collections;
     }
@@ -82,9 +82,9 @@ public class CollectionRecyclerViewAdapter extends RecyclerView.Adapter<Collecti
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView viewText;
         private Collection collection = null;
-        private CollectionRecyclerViewAdapter adapterReference;
+        private CollectionsRecyclerViewAdapter adapterReference;
 
-        ViewHolder(View itemView, CollectionRecyclerViewAdapter adapterReference) {
+        ViewHolder(View itemView, CollectionsRecyclerViewAdapter adapterReference) {
             super(itemView);
             this.adapterReference = adapterReference;
 

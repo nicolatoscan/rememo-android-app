@@ -6,12 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +30,7 @@ import it.rememo.rememo.utils.Common;
 public class CollectionsGroupFragment extends Fragment {
     public static final String ARG_TITLE = "title";
     public static final String ARG_POSITION = "position";
-    CollectionRecyclerViewAdapter adapter;
+    CollectionsRecyclerViewAdapter adapter;
     private FragmentCollectionGroupBinding binding;
     FirebaseFirestore db;
     ArrayList<Collection> collectionList = new ArrayList<>();
@@ -57,7 +55,7 @@ public class CollectionsGroupFragment extends Fragment {
         // Recycler View
         RecyclerView recyclerView = view.findViewById(R.id.collectionRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new CollectionRecyclerViewAdapter(getContext(), collectionList);
+        adapter = new CollectionsRecyclerViewAdapter(getContext(), collectionList);
         adapter.setClickListener((v, i) -> {
             Toast.makeText(getContext(), "You clicked " + adapter.getItem(i).getName(), Toast.LENGTH_SHORT).show();
         });
