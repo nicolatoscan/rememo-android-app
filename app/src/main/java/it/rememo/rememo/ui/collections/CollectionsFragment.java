@@ -1,4 +1,4 @@
-package it.rememo.rememo.ui.dashboard;
+package it.rememo.rememo.ui.collections;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

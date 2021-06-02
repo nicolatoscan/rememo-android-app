@@ -1,4 +1,4 @@
-package it.rememo.rememo.ui.notifications;
+package it.rememo.rememo.ui.profile;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

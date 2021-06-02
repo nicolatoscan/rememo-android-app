@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="it.rememo.rememo.ui.dashboard.CollectionsFragment"
-        android:label="@string/title_dashboard"
+        android:id="@+id/navigation_collections"
+        android:name="it.rememo.rememo.ui.collections.CollectionsFragment"
+        android:label="@string/title_collections"
         tools:layout="@layout/fragment_collections" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="it.rememo.rememo.ui.notifications.ProfileFragment"
-        android:label="@string/title_notifications"
+        android:id="@+id/navigation_profile"
+        android:name="it.rememo.rememo.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>
