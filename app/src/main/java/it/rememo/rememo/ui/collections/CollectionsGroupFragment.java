@@ -1,5 +1,6 @@
 package it.rememo.rememo.ui.collections;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -28,7 +29,6 @@ import it.rememo.rememo.utils.Common;
 // Instances of this class are fragments representing a single
 // object in our collection.
 public class CollectionsGroupFragment extends Fragment {
-    public static final String ARG_TITLE = "title";
     public static final String ARG_POSITION = "position";
     CollectionsRecyclerViewAdapter adapter;
     private FragmentCollectionGroupBinding binding;
@@ -45,7 +45,6 @@ public class CollectionsGroupFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
         Bundle args = getArguments();
-        String title = args.getString(ARG_TITLE, "");
         int position = args.getInt(ARG_POSITION, -1);
         if (position == 0) {
             binding.addCollectionFloatingButton.setVisibility(View.VISIBLE);
@@ -53,13 +52,14 @@ public class CollectionsGroupFragment extends Fragment {
         }
 
         // Recycler View
-        RecyclerView recyclerView = view.findViewById(R.id.collectionRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.collectionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CollectionsRecyclerViewAdapter(getContext(), collectionList);
         adapter.setClickListener((v, i) -> {
-            Toast.makeText(getContext(), "You clicked " + adapter.getItem(i).getName(), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getContext(), CollectionDetailsActivity.class);
+            intent.putExtra(CollectionDetailsActivity.ARG_COLLECTION, adapter.getItem(i));
+            startActivity(intent);
         });
-        recyclerView.setAdapter(adapter);
+        binding.collectionRecyclerView.setAdapter(adapter);
 
         // To update collections
         binding.collectionSwipeContainer.setOnRefreshListener(() -> updateCollectionList());
@@ -77,8 +77,7 @@ public class CollectionsGroupFragment extends Fragment {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         updatedCollections.add(new Collection(document));
                     }
-                    adapter.clear();
-                    adapter.addAll(updatedCollections);
+                    adapter.resetAll(updatedCollections);
                 } else {
                     Common.toast(getContext(), "Couldn't update collections");
                 }

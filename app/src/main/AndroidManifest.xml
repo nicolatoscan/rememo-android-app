@@ -9,11 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rememo">
-        <activity android:name=".ui.login.AfterSignUpActivity"></activity>
+        <activity android:name=".ui.collections.CollectionDetailsActivity" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.login.AfterSignUpActivity" />
         <activity android:name=".ui.login.EmailSentActivity" />
         <activity android:name=".ui.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -6,18 +6,19 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import it.rememo.rememo.utils.Common;
 
-public class Collection {
+public class Collection implements Serializable {
     public final static String KEY_NAME = "name";
     public final static String KEY_DESCRIPTION = "description";
     public final static String KEY_NUMBER_OF_ITEMS = "numberOfItems";
@@ -29,6 +30,8 @@ public class Collection {
     private String description;
     private String ownerId;
     private int numberOfItems;
+
+    private ArrayList<CollectionWord> words = new ArrayList<>();
 
     public Collection(String id, String name, String description, int numberOfItems) {
         this.Init(id, name, description, numberOfItems, null);
@@ -74,6 +77,8 @@ public class Collection {
 
     }
 
+
+
     public void updateFirestore(
             Map<String, Object> updateData,
             @NonNull OnSuccessListener<? super Void> success,
@@ -95,6 +100,58 @@ public class Collection {
                 .addOnSuccessListener(success)
                 .addOnFailureListener(fail);
 
+    }
+
+    public void fetchWords(
+            @NonNull OnSuccessListener<? super ArrayList<CollectionWord>> success,
+            @NonNull OnFailureListener fail) {
+
+        FirebaseFirestore.getInstance().collection(Collection.COLLECTION_NAME)
+                .document(id)
+                .collection(CollectionWord.COLLECTION_NAME)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        words.clear();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            words.add(new CollectionWord(this, document));
+                        }
+                        success.onSuccess(words);
+                    } else {
+                        fail.onFailure(null);
+                    }
+                });
+    }
+
+    public void addWord(CollectionWord word,
+                @NonNull OnSuccessListener<? super CollectionWord> success,
+                @NonNull OnFailureListener fail) {
+        FirebaseFirestore.getInstance().collection(Collection.COLLECTION_NAME)
+                .document(id)
+                .collection(CollectionWord.COLLECTION_NAME)
+                .add(word.getHashMap())
+                .addOnSuccessListener(doc -> {
+                    word.setId(doc.getId());
+                    word.setCollectionParent(this);
+                    words.add(word);
+                    success.onSuccess(word);
+                })
+                .addOnFailureListener(fail);
+    }
+
+    public void deleteWord(CollectionWord word,
+                        @NonNull OnSuccessListener<? super Void> success,
+                        @NonNull OnFailureListener fail) {
+        if (words.remove(word)) {
+            word.setCollectionParent(null);
+            FirebaseFirestore.getInstance().collection(Collection.COLLECTION_NAME)
+                    .document(id)
+                    .collection(CollectionWord.COLLECTION_NAME)
+                    .document(word.getId())
+                    .delete()
+                    .addOnSuccessListener(success)
+                    .addOnFailureListener(fail);
+        }
     }
 
     public String getId() {
@@ -122,5 +179,10 @@ public class Collection {
     public int getNumberOfItems() {
         return numberOfItems;
     }
+
+    public ArrayList<CollectionWord> getWords() {
+        return words;
+    }
+
 
 }

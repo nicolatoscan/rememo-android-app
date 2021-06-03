@@ -26,7 +26,6 @@ public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
         Fragment fragment = new CollectionsGroupFragment();
         Bundle args = new Bundle();
         args.putInt(CollectionsGroupFragment.ARG_POSITION, i);
-        args.putString(CollectionsGroupFragment.ARG_TITLE, collectionsGroups.get(i));
         fragment.setArguments(args);
         return fragment;
     }

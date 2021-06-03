@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
@@ -15,7 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 import it.rememo.rememo.R;
+import it.rememo.rememo.databinding.RowCollectionItemBinding;
 import it.rememo.rememo.models.Collection;
+import it.rememo.rememo.models.CollectionWord;
 import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
 
@@ -32,8 +35,8 @@ public class CollectionsRecyclerViewAdapter extends RecyclerView.Adapter<Collect
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.row_collection_item, parent, false);
-        return new ViewHolder(view, this);
+        RowCollectionItemBinding binding = RowCollectionItemBinding.inflate(mInflater, parent, false);
+        return new ViewHolder(binding, this);
     }
 
     @Override
@@ -47,17 +50,13 @@ public class CollectionsRecyclerViewAdapter extends RecyclerView.Adapter<Collect
         return collections.size();
     }
 
-    public void clear() {
-        collections.clear();
-        notifyDataSetChanged();
-    }
-
     public void removeAt(int i) {
         collections.remove(i);
         notifyItemRemoved(i);
     }
 
-    public void addAll(List<Collection> list) {
+    public void resetAll(List<Collection> list) {
+        collections.clear();
         collections.addAll(list);
         notifyDataSetChanged();
     }
@@ -80,15 +79,15 @@ public class CollectionsRecyclerViewAdapter extends RecyclerView.Adapter<Collect
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView viewText;
+        private RowCollectionItemBinding binding;
         private Collection collection = null;
         private CollectionsRecyclerViewAdapter adapterReference;
 
-        ViewHolder(View itemView, CollectionsRecyclerViewAdapter adapterReference) {
-            super(itemView);
+        ViewHolder(RowCollectionItemBinding binding, CollectionsRecyclerViewAdapter adapterReference) {
+            super(binding.getRoot());
             this.adapterReference = adapterReference;
 
-            viewText = itemView.findViewById(R.id.txtCollectionRow);
+            this.binding = binding;
 
             itemView.setOnClickListener(view -> {
                 if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
@@ -96,56 +95,61 @@ public class CollectionsRecyclerViewAdapter extends RecyclerView.Adapter<Collect
 
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                 // menu.setHeaderTitle("Select The Action");
-                menu.add(0, view.getId(), 0, "Rename").setOnMenuItemClickListener((mItem) -> {
-                    renameCollection();
-                    return true;
-                });
-                menu.add(0, view.getId(), 0, "Delete").setOnMenuItemClickListener((mItem) -> {
-                    collection.deleteFromFirestore(
-                            x -> removeAt(getAdapterPosition()),
-                            ex -> Common.toast(itemView.getContext(), "Couldn't delete this collection")
-                    );
-                    return true;
-                });
+                menu.add(0, view.getId(), 0, "Rename").setOnMenuItemClickListener((mItem) -> renameCollection());
+                menu.add(0, view.getId(), 0, "Delete").setOnMenuItemClickListener((mItem) -> deleteCollection());
             });
         }
 
-        private void renameCollection() {
+        private boolean renameCollection() {
             final EditText textInput = new EditText(itemView.getContext());
             textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-            if (collection == null) {
-                textInput.setHint("Collection name");
-            } else {
+            textInput.setHint("Collection name");
+            if (collection != null) {
                 textInput.setText(collection.getName());
             }
 
             Alerts
-                    .getInputTextAlert(itemView.getContext(), textInput)
-                    .setTitle("Rename collection")
-                    .setPositiveButton("Rename", (dialog, which) -> {
-                        String title = textInput.getText().toString();
+                .getInputTextAlert(itemView.getContext(), textInput)
+                .setTitle("Rename collection")
+                .setPositiveButton("Rename", (dialog, which) -> {
+                    String title = textInput.getText().toString();
 
-                        Map<String, Object> updateColl = new HashMap<>();
-                        updateColl.put(Collection.KEY_NAME, title);
-                        collection.updateFirestore(updateColl,
-                                x -> {
-                                    collection.setName(title);
-                                    updateUI();
-                                },
-                                ex -> Common.toast(itemView.getContext(), "Couldn't rename collection")
-                        );
-                    })
-                    .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
-                    .show();
+                    Map<String, Object> updateColl = new HashMap<>();
+                    updateColl.put(Collection.KEY_NAME, title);
+                    collection.updateFirestore(updateColl,
+                            x -> {
+                                collection.setName(title);
+                                updateUI();
+                            },
+                            ex -> Common.toast(itemView.getContext(), "Couldn't rename collection")
+                    );
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                .show();
+            return true;
         }
 
+        private boolean deleteCollection() {
+            new AlertDialog.Builder(itemView.getContext())
+                    .setTitle("Delete word")
+                    .setMessage("Are you sure you want to delete " + collection.getName() + " and all it's words?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton("I'm sure", (dialog, whichButton) -> {
+                        collection.deleteFromFirestore(
+                                x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), "Collection deleted"); },
+                                ex -> Common.toast(itemView.getContext(), "Couldn't delete this collection")
+                        );
+                    })
+                    .setNegativeButton("Cancel", null).show();
+            return true;
+        }
         public void setCollection(Collection c) {
             collection = c;
             updateUI();
         }
 
         private void updateUI() {
-            viewText.setText(collection.getName());
+            binding.txtCollectionRow.setText(collection.getName());
         }
     }
 
