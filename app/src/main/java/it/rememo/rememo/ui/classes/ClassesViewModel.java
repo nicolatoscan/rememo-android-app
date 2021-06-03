@@ -1,16 +1,14 @@
-package it.rememo.rememo.ui.profile;
+package it.rememo.rememo.ui.classes;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-public class ProfileViewModel extends ViewModel {
+public class ClassesViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ProfileViewModel() {
+    public ClassesViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is notifications fragment");
     }

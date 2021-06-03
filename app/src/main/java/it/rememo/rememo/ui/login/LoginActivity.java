@@ -31,22 +31,23 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import it.rememo.rememo.MainActivity;
 import it.rememo.rememo.R;
+import it.rememo.rememo.databinding.ActivityCollectionDetailsBinding;
+import it.rememo.rememo.databinding.ActivityLoginBinding;
 
 import org.jetbrains.annotations.NotNull;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextInputLayout txtEmail;
-    Button btnSendEmail;
-    ProgressBar progressSendingEmail;
     FirebaseAuth fAuth;
     GoogleSignInClient mGoogleSignInClient;
     private final int RC_SIGN_IN = 42;
+    ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         fAuth = FirebaseAuth.getInstance();
         if (fAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -58,18 +59,14 @@ public class LoginActivity extends AppCompatActivity {
             signInWithEmailLink(intentData.toString());
         }
 
-        btnSendEmail = findViewById(R.id.loginBtnSendEmail);
-        txtEmail = findViewById(R.id.loginEmailTextField);
-        progressSendingEmail = findViewById(R.id.loginProgressSendingEmail);
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        SignInButton googleBtn = findViewById(R.id.sign_in_with_google_button);
-        findViewById(R.id.loginBtnSendEmail);
-        googleBtn.setOnClickListener(v -> signInWithGoogle());
+        binding.signInWithGoogleButton.setOnClickListener(v -> signInWithGoogle());
+        binding.loginBtnSendEmail.setOnClickListener(v -> onClickSignInWithEmail());
     }
 
     @Override
@@ -103,16 +100,16 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    public void onClickSignInWithEmail(View v) {
-        String email = txtEmail.getEditText().getText().toString().trim();
+    public void onClickSignInWithEmail() {
+        String email = binding.loginEmailTextField.getEditText().getText().toString().trim();
         if (email.isEmpty()) {
-            txtEmail.setError("Email can't be empty");
+            binding.loginEmailTextField.setError("Email can't be empty");
             return;
         }
-        txtEmail.setError(null);
+        binding.loginEmailTextField.setError(null);
 
-        progressSendingEmail.setVisibility(View.VISIBLE);
-        btnSendEmail.setEnabled(false);
+        binding.loginProgressSendingEmail.setVisibility(View.VISIBLE);
+        binding.loginBtnSendEmail.setEnabled(false);
 
         ActionCodeSettings acSettings = ActionCodeSettings.newBuilder()
                 .setUrl("https://rememo-cb013.web.app")
@@ -123,13 +120,13 @@ public class LoginActivity extends AppCompatActivity {
         fAuth.sendSignInLinkToEmail(email, acSettings).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).edit().putString("signinEmail", email).apply();
-                progressSendingEmail.setVisibility(View.INVISIBLE);
+                binding.loginProgressSendingEmail.setVisibility(View.INVISIBLE);
                 startActivity(new Intent(LoginActivity.this, EmailSentActivity.class));
             } else {
-                txtEmail.setError(task.getException().getMessage());
-                progressSendingEmail.setVisibility(View.GONE);
+                binding.loginEmailTextField.setError(task.getException().getMessage());
+                binding.loginProgressSendingEmail.setVisibility(View.GONE);
             }
-            btnSendEmail.setEnabled(true);
+            binding.loginBtnSendEmail.setEnabled(true);
         });
     }
 

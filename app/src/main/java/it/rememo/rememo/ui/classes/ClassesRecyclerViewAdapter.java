@@ -1,8 +1,10 @@
-package it.rememo.rememo.ui.collections;
+package it.rememo.rememo.ui.classes;
 
 import android.content.Context;
 import android.text.InputType;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
@@ -18,19 +20,19 @@ import it.rememo.rememo.ui.shared.GroupRecyclerViewAdapter;
 import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
 
-public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collection, CollectionsRecyclerViewAdapter.ViewHolder> {
+public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collection, ClassesRecyclerViewAdapter.ViewHolder> {
 
-    CollectionsRecyclerViewAdapter(Context context, List<Collection> collections) {
+    ClassesRecyclerViewAdapter(Context context, List<Collection> collections) {
         super(context, collections);
     }
 
     protected RecyclerView.ViewHolder getViewHolder(RowCollectionItemBinding binding, GroupRecyclerViewAdapter adapter) {
-        return new ViewHolder(binding, this);
+        return new ClassesRecyclerViewAdapter.ViewHolder(binding, this);
     }
 
     public class ViewHolder extends GroupRecyclerViewAdapter.ViewHolder {
 
-        ViewHolder(RowCollectionItemBinding binding, CollectionsRecyclerViewAdapter adapterReference) {
+        ViewHolder(RowCollectionItemBinding binding, ClassesRecyclerViewAdapter adapterReference) {
             super(binding, adapterReference);
 
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
@@ -49,23 +51,23 @@ public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Col
             }
 
             Alerts
-                .getInputTextAlert(itemView.getContext(), textInput)
-                .setTitle("Rename collection")
-                .setPositiveButton("Rename", (dialog, which) -> {
-                    String title = textInput.getText().toString();
+                    .getInputTextAlert(itemView.getContext(), textInput)
+                    .setTitle("Rename collection")
+                    .setPositiveButton("Rename", (dialog, which) -> {
+                        String title = textInput.getText().toString();
 
-                    Map<String, Object> updateColl = new HashMap<>();
-                    updateColl.put(Collection.KEY_NAME, title);
-                    element.updateFirestore(updateColl,
-                            x -> {
-                                ((Collection) element).setName(title);
-                                updateUI();
-                            },
-                            ex -> Common.toast(itemView.getContext(), "Couldn't rename collection")
-                    );
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
-                .show();
+                        Map<String, Object> updateColl = new HashMap<>();
+                        updateColl.put(Collection.KEY_NAME, title);
+                        element.updateFirestore(updateColl,
+                                x -> {
+                                    ((Collection) element).setName(title);
+                                    updateUI();
+                                },
+                                ex -> Common.toast(itemView.getContext(), "Couldn't rename collection")
+                        );
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                    .show();
             return true;
         }
 

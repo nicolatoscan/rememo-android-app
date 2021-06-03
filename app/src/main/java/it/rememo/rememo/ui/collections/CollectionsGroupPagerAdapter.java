@@ -15,9 +15,12 @@ import java.util.ArrayList;
 
 public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
     ArrayList<String> collectionsGroups;
-    public CollectionsGroupPagerAdapter(Fragment fa, ArrayList<String> collectionsGroups) {
+    public CollectionsGroupPagerAdapter(Fragment fa) {
         super(fa);
-        this.collectionsGroups = collectionsGroups;
+        collectionsGroups = new ArrayList<String>();
+        collectionsGroups.add("Mine");
+        collectionsGroups.add("Class 4°B");
+        collectionsGroups.add("Class 4°A");
     }
 
     @NotNull
@@ -34,4 +37,9 @@ public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
     public int getItemCount() {
         return collectionsGroups.size();
     }
+
+    public String getTitle(int pos) {
+        return collectionsGroups.get(pos);
+    }
+
 }
