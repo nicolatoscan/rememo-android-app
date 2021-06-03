@@ -66,10 +66,19 @@ public class CollectionDetailsActivity extends AppCompatActivity {
     private void onAddWordClick(View v) {
         String original = binding.txtOriginalWord.getText().toString();
         String translated = binding.txtTranslatedWord.getText().toString();
+
+        if (original.length() <= 0 || translated.length() <= 0) {
+            return;
+        }
+
         binding.btnAddWord.setEnabled(false);
         collection.addWord(new CollectionWord(original, translated),
-                resW -> { adapter.add(resW); resetInputWord(); },
-                ex -> { Common.toast(this, "Couldn't create a new word"); resetInputWord(); }
+            resW -> {
+                adapter.add(resW);
+                binding.wordsRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
+                resetInputWord();
+            },
+            ex -> { Common.toast(this, "Couldn't create a new word"); resetInputWord(); }
         );
     }
     private void resetInputWord() {

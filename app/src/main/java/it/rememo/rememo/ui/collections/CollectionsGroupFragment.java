@@ -108,6 +108,7 @@ public class CollectionsGroupFragment extends Fragment {
         collection.addToFirestore(
             doc -> {
                 adapter.add(collection);
+                binding.collectionRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
             },
             ex -> Common.toast(getContext(), "Error creating collection, please try again later")
         );
