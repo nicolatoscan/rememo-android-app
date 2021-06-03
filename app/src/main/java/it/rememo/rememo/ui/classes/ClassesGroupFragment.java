@@ -44,20 +44,15 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
     }
 
     protected void updateList() {
-        Common.toast(getContext(), "CALSS");
-        db
-            .collection(StudentClass.COLLECTION_NAME)
-            .whereEqualTo(StudentClass.KEY_OWNER_ID, Common.getUserId())
-            .get()
-            .addOnSuccessListener(docs -> {
-                ArrayList<StudentClass> updatedCollections = new ArrayList();
-                for (QueryDocumentSnapshot document : docs) {
-                    updatedCollections.add(new StudentClass(document));
-                }
+        if (!(position == 0 || position == 1)) {
+            return;
+        }
+        StudentClass.getClasses(position == 1,
+            (updatedCollections) -> {
                 adapter.resetAll(updatedCollections);
                 binding.collectionSwipeContainer.setRefreshing(false);
-            })
-            .addOnFailureListener(ex -> {
+            },
+            (ex) -> {
                 Common.toast(getContext(), "Couldn't update collections");
                 binding.collectionSwipeContainer.setRefreshing(false);
             });

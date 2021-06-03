@@ -36,6 +36,7 @@ public abstract class GroupFragment<T extends FirebaseModel> extends Fragment {
     protected FragmentCollectionGroupBinding binding;
     protected FirebaseFirestore db;
     protected ArrayList<T> list = new ArrayList<>();
+    protected int position;
 
     protected abstract boolean isFloatingAddVisible(int index);
     protected abstract void setupAdapter();
@@ -52,7 +53,7 @@ public abstract class GroupFragment<T extends FirebaseModel> extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         db = FirebaseFirestore.getInstance();
         Bundle args = getArguments();
-        int position = args.getInt(ARG_POSITION, -1);
+        position = args.getInt(ARG_POSITION, -1);
         if (isFloatingAddVisible(position)) {
             binding.addCollectionFloatingButton.setVisibility(View.VISIBLE);
             binding.addCollectionFloatingButton.setOnClickListener(v -> onAddClicked());

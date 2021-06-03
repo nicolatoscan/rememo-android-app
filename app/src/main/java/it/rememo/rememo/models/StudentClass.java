@@ -107,6 +107,24 @@ public class StudentClass extends FirebaseModel {
                 .addOnFailureListener(fail);
     }
 
+    static public void getClasses(boolean createdJoined,
+            @NonNull OnSuccessListener<? super ArrayList<StudentClass>> success,
+           @NonNull OnFailureListener fail
+    ) {
+        String whereField = createdJoined ? (KEY_OWNER_ID) : (KEY_STUDENTS_ID + "." + Common.getUserId());
+        Object whereValue = createdJoined ? Common.getUserId() : true;
 
+        FirebaseFirestore.getInstance().collection(StudentClass.COLLECTION_NAME)
+            .whereEqualTo(whereField, whereValue)
+            .get()
+            .addOnSuccessListener(docs -> {
+                ArrayList<StudentClass> updatedCollections = new ArrayList();
+                for (QueryDocumentSnapshot document : docs) {
+                    updatedCollections.add(new StudentClass(document));
+                }
+                success.onSuccess(updatedCollections);
+            })
+            .addOnFailureListener(fail);
+    }
 
 }
