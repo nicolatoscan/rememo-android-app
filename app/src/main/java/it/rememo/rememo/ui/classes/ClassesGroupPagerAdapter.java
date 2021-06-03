@@ -23,9 +23,9 @@ public class ClassesGroupPagerAdapter extends FragmentStateAdapter {
     @NotNull
     @Override
     public Fragment createFragment(int i) {
-        Fragment fragment = new CollectionsGroupFragment();
+        Fragment fragment = new ClassesGroupFragment();
         Bundle args = new Bundle();
-        args.putInt(CollectionsGroupFragment.ARG_POSITION, i);
+        args.putInt(ClassesGroupFragment.ARG_POSITION, i);
         fragment.setArguments(args);
         return fragment;
     }

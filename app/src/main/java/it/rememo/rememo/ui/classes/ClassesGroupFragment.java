@@ -44,14 +44,15 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
     }
 
     protected void updateList() {
+        Common.toast(getContext(), "CALSS");
         db
-            .collection(Collection.COLLECTION_NAME)
-            .whereEqualTo(Collection.KEY_OWNER_ID, Common.getUserId())
+            .collection(StudentClass.COLLECTION_NAME)
+            .whereEqualTo(StudentClass.KEY_OWNER_ID, Common.getUserId())
             .get()
             .addOnSuccessListener(docs -> {
-                ArrayList<Collection> updatedCollections = new ArrayList();
+                ArrayList<StudentClass> updatedCollections = new ArrayList();
                 for (QueryDocumentSnapshot document : docs) {
-                    updatedCollections.add(new Collection(document));
+                    updatedCollections.add(new StudentClass(document));
                 }
                 adapter.resetAll(updatedCollections);
                 binding.collectionSwipeContainer.setRefreshing(false);
@@ -65,30 +66,30 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
     protected void onAddClicked() {
         final EditText textInput = new EditText(getContext());
         textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        textInput.setHint("Collection name");
+        textInput.setHint("Class name");
 
         Alerts
                 .getInputTextAlert(getContext(), textInput)
-                .setTitle("Create a new collection")
+                .setTitle("Create a new class")
                 .setPositiveButton("Create", (dialog, which) -> {
                     String title = textInput.getText().toString();
                     if (title.length() > 0) {
-                        createCollection(title);
+                        createClass(title);
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
                 .show();
     }
 
-    private Collection createCollection(String name) {
-        Collection collection = new Collection(name, null, 0);
-        collection.addToFirestore(
+    private StudentClass createClass(String name) {
+        StudentClass cl = new StudentClass(name);
+        cl.addToFirestore(
                 doc -> {
-                    adapter.add(collection);
+                    adapter.add(cl);
                     binding.collectionRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
                 },
                 ex -> Common.toast(getContext(), "Error creating collection, please try again later")
         );
-        return collection;
+        return cl;
     }
 }

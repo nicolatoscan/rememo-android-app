@@ -1,12 +1,17 @@
 package it.rememo.rememo.models;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,26 +33,31 @@ public class StudentClass extends FirebaseModel {
         return COLLECTION_NAME;
     }
 
+
+
+    private String name;
+    private String ownerId;
+    private Map<String, Object> studentsIds = new HashMap<>();
+    private Map<String, Object> collectionsIds = new HashMap<>();
+
     @Override
     public String getName() {
         return name;
     }
-
-    private String name;
-    private String ownerId;
-    private ArrayList<String> studentsIds = new ArrayList<>();
-    private ArrayList<String> collectionsIds = new ArrayList<>();
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public StudentClass(String name) {
         this.Init(null, name, null, null, null);
     }
 
-    public StudentClass(QueryDocumentSnapshot doc) {
+    public StudentClass(DocumentSnapshot doc) {
         Map<String, Object> data = doc.getData();
-        Init(doc.getId(), (String) data.get(KEY_NAME), (String) data.get(KEY_OWNER_ID), (ArrayList<String>) data.get(KEY_STUDENTS_ID), (ArrayList<String>) data.get(COLLECTION_NAME));
+        Init(doc.getId(), (String) data.get(KEY_NAME), (String) data.get(KEY_OWNER_ID), (HashMap<String, Object>) data.get(KEY_STUDENTS_ID), (HashMap<String, Object>) data.get(COLLECTION_NAME));
     }
 
-    public void Init(String id, String name, String ownerId, ArrayList<String> studentsIds, ArrayList<String> collectionsIds) {
+    public void Init(String id, String name, String ownerId, HashMap<String, Object> studentsIds, HashMap<String, Object> collectionsIds) {
         setId(id);
         this.name = name;
         this.ownerId = ownerId;
@@ -63,5 +73,40 @@ public class StudentClass extends FirebaseModel {
         if (collectionsIds != null) stClass.put(KEY_COLLECTIONS_ID, collectionsIds);
         return stClass;
     }
+
+    public void joinClass(
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail
+    ) {
+        toggleClass(true, success, fail);
+    }
+
+    public void leaveClass(
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail
+    ) {
+        toggleClass(false, success, fail);
+    }
+
+    public void toggleClass(
+            boolean joinLeave,
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail
+    ) {
+        String userId = Common.getUserId();
+
+        Map<String, Object> studentId = new HashMap<>();
+        studentId.put(userId, joinLeave);
+        Map<String, Object> updateData = new HashMap<>();
+        updateData.put(KEY_STUDENTS_ID, studentId);
+
+        FirebaseFirestore.getInstance().collection(getFirebaseCollectionName())
+                .document(getId())
+                .update(updateData)
+                .addOnSuccessListener(success)
+                .addOnFailureListener(fail);
+    }
+
+
 
 }

@@ -1,13 +1,13 @@
 package it.rememo.rememo.ui.classes;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ShareCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
@@ -16,43 +16,57 @@ import java.util.Map;
 
 import it.rememo.rememo.databinding.RowCollectionItemBinding;
 import it.rememo.rememo.models.Collection;
+import it.rememo.rememo.models.StudentClass;
 import it.rememo.rememo.ui.shared.GroupRecyclerViewAdapter;
 import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
 
 public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collection, ClassesRecyclerViewAdapter.ViewHolder> {
-
+    Context context;
     ClassesRecyclerViewAdapter(Context context, List<Collection> collections) {
         super(context, collections);
+        this.context = context;
+
     }
 
     protected RecyclerView.ViewHolder getViewHolder(RowCollectionItemBinding binding, GroupRecyclerViewAdapter adapter) {
-        return new ClassesRecyclerViewAdapter.ViewHolder(binding, this);
+        return new ClassesRecyclerViewAdapter.ViewHolder(binding, this, context);
     }
 
     public class ViewHolder extends GroupRecyclerViewAdapter.ViewHolder {
+        Context context;
 
-        ViewHolder(RowCollectionItemBinding binding, ClassesRecyclerViewAdapter adapterReference) {
+        ViewHolder(RowCollectionItemBinding binding, ClassesRecyclerViewAdapter adapterReference, Context context) {
             super(binding, adapterReference);
-
+            this.context = context;
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                 // menu.setHeaderTitle("Select The Action");
-                menu.add(0, view.getId(), 0, "Rename").setOnMenuItemClickListener((mItem) -> renameCollection());
+                menu.add(0, view.getId(), 0, "Share").setOnMenuItemClickListener((mItem) -> shareClass());
+                menu.add(0, view.getId(), 0, "Rename").setOnMenuItemClickListener((mItem) -> renameClasses());
                 menu.add(0, view.getId(), 0, "Delete").setOnMenuItemClickListener((mItem) -> deleteCollection());
             });
         }
 
-        private boolean renameCollection() {
+        private boolean shareClass() {
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
+            i.putExtra(Intent.EXTRA_TEXT, "https://www.rememo.it/joinclass/" + element.getId());
+            context.startActivity(Intent.createChooser(i, "Share URL"));
+            return true;
+        }
+
+        private boolean renameClasses() {
             final EditText textInput = new EditText(itemView.getContext());
             textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-            textInput.setHint("Collection name");
+            textInput.setHint("Class name");
             if (element != null) {
                 textInput.setText(element.getName());
             }
 
             Alerts
                     .getInputTextAlert(itemView.getContext(), textInput)
-                    .setTitle("Rename collection")
+                    .setTitle("Rename class")
                     .setPositiveButton("Rename", (dialog, which) -> {
                         String title = textInput.getText().toString();
 
@@ -60,10 +74,10 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
                         updateColl.put(Collection.KEY_NAME, title);
                         element.updateFirestore(updateColl,
                                 x -> {
-                                    ((Collection) element).setName(title);
+                                    ((StudentClass) element).setName(title);
                                     updateUI();
                                 },
-                                ex -> Common.toast(itemView.getContext(), "Couldn't rename collection")
+                                ex -> Common.toast(itemView.getContext(), "Couldn't rename class")
                         );
                     })
                     .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
@@ -73,13 +87,12 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
 
         private boolean deleteCollection() {
             new AlertDialog.Builder(itemView.getContext())
-                    .setTitle("Delete word")
-                    .setMessage("Are you sure you want to delete " + element.getName() + " and all it's words?")
-                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Delete class")
+                    .setMessage("Are you sure you want to delete " + element.getName() + "?")
                     .setPositiveButton("I'm sure", (dialog, whichButton) -> {
                         element.deleteFromFirestore(
-                                x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), "Collection deleted"); },
-                                ex -> Common.toast(itemView.getContext(), "Couldn't delete this collection")
+                                x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), "Class deleted"); },
+                                ex -> Common.toast(itemView.getContext(), "Couldn't delete this class")
                         );
                     })
                     .setNegativeButton("Cancel", null).show();

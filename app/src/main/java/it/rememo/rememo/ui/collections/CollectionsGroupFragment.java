@@ -45,6 +45,7 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
     }
 
     protected void updateList() {
+        Common.toast(getContext(), "COLL");
         db
             .collection(Collection.COLLECTION_NAME)
             .whereEqualTo(Collection.KEY_OWNER_ID, Common.getUserId())
