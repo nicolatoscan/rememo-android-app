@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             signInWithEmailLink(intentData.toString());
         }
 
+        btnSendEmail = findViewById(R.id.loginBtnSendEmail);
         txtEmail = findViewById(R.id.loginEmailTextField);
         progressSendingEmail = findViewById(R.id.loginProgressSendingEmail);
 

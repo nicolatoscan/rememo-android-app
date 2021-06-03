@@ -3,4 +3,10 @@
     <string name="title_home">Home</string>
     <string name="title_collections">Collections</string>
     <string name="title_profile">Profile</string>
+
+    <!-- login -->
+    <string name="login_instructions">Login or signup with email</string>
+    <string name="login_email_addr">Email</string>
+    <string name="login_send_email">Send Email</string>
+    <string name="login_or">Or</string>
 </resources>
