@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rememo">
+        <activity android:name=".ui.classes.ClassCollectionsActivity"></activity>
+        <activity android:name=".ui.classes.ClassDetailsActivity" />
         <activity android:name=".ui.classes.JoinClassActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -17,9 +19,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:scheme="https"
                     android:host="www.rememo.it"
-                    android:pathPrefix="/joinclass" />
+                    android:pathPrefix="/joinclass"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity

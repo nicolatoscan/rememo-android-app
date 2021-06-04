@@ -36,9 +36,11 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
     protected void setupAdapter() {
         adapter = new ClassesRecyclerViewAdapter(getContext(), list);
         adapter.setClickListener((v, i) -> {
-            // Intent intent = new Intent(getContext(), CollectionDetailsActivity.class);
-            // intent.putExtra(CollectionDetailsActivity.ARG_COLLECTION, adapter.getItem(i));
-            // startActivity(intent);
+            Intent intent = new Intent(getContext(), ClassDetailsActivity.class);
+            StudentClass c = (StudentClass) adapter.getItem(i);
+            intent.putExtra(ClassDetailsActivity.ARG_CLASS, c);
+            intent.putExtra("CIAO", "CIAO");
+            startActivity(intent);
         });
         binding.collectionRecyclerView.setAdapter(adapter);
     }

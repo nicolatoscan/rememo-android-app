@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -37,8 +38,8 @@ public class StudentClass extends FirebaseModel {
 
     private String name;
     private String ownerId;
-    private Map<String, Object> studentsIds = new HashMap<>();
-    private Map<String, Object> collectionsIds = new HashMap<>();
+    private Map<String, Boolean> studentsIds = new HashMap<>();
+    private Map<String, Boolean> collectionsIds = new HashMap<>();
 
     @Override
     public String getName() {
@@ -54,15 +55,15 @@ public class StudentClass extends FirebaseModel {
 
     public StudentClass(DocumentSnapshot doc) {
         Map<String, Object> data = doc.getData();
-        Init(doc.getId(), (String) data.get(KEY_NAME), (String) data.get(KEY_OWNER_ID), (HashMap<String, Object>) data.get(KEY_STUDENTS_ID), (HashMap<String, Object>) data.get(COLLECTION_NAME));
+        Init(doc.getId(), (String) data.get(KEY_NAME), (String) data.get(KEY_OWNER_ID), (HashMap<String, Boolean>) data.get(KEY_STUDENTS_ID), (HashMap<String, Boolean>) data.get(COLLECTION_NAME));
     }
 
-    public void Init(String id, String name, String ownerId, HashMap<String, Object> studentsIds, HashMap<String, Object> collectionsIds) {
+    public void Init(String id, String name, String ownerId, HashMap<String, Boolean> studentsIds, HashMap<String, Boolean> collectionsIds) {
         setId(id);
         this.name = name;
         this.ownerId = ownerId;
-        this.studentsIds = studentsIds;
-        this.collectionsIds = collectionsIds;
+        this.studentsIds = studentsIds != null ? studentsIds : new HashMap<String, Boolean>();
+        this.collectionsIds = collectionsIds != null ? collectionsIds : new HashMap<String, Boolean>();
     }
 
     public Map<String, Object>  getHashMap() {
@@ -72,6 +73,22 @@ public class StudentClass extends FirebaseModel {
         if (studentsIds != null) stClass.put(KEY_STUDENTS_ID, studentsIds);
         if (collectionsIds != null) stClass.put(KEY_COLLECTIONS_ID, collectionsIds);
         return stClass;
+    }
+
+    private List<String> getListFromHashMap(Map<String, Boolean> hash) {
+        ArrayList<String> res = new ArrayList<>();
+        Iterator it = hash.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, Boolean> pair = (Map.Entry)it.next();
+            if (pair.getValue()) {
+                res.add(pair.getKey());
+            }
+        }
+        return res;
+    }
+
+    public List<String> getCollectionIds() {
+        return  this.getListFromHashMap(this.collectionsIds);
     }
 
     public void joinClass(
