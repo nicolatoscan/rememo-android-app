@@ -46,22 +46,16 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
 
     protected void updateList() {
         Common.toast(getContext(), "COLL");
-        db
-            .collection(Collection.COLLECTION_NAME)
-            .whereEqualTo(Collection.KEY_OWNER_ID, Common.getUserId())
-            .get()
-            .addOnSuccessListener(docs -> {
-                ArrayList<Collection> updatedCollections = new ArrayList();
-                for (QueryDocumentSnapshot document : docs) {
-                    updatedCollections.add(new Collection(document));
+        Collection.getMyCollections(
+                colls -> {
+                    adapter.resetAll(colls);
+                    binding.collectionSwipeContainer.setRefreshing(false);
+                },
+                ex -> {
+                    Common.toast(getContext(), "Couldn't update collections");
+                    binding.collectionSwipeContainer.setRefreshing(false);
                 }
-                adapter.resetAll(updatedCollections);
-                binding.collectionSwipeContainer.setRefreshing(false);
-            })
-            .addOnFailureListener(ex -> {
-                Common.toast(getContext(), "Couldn't update collections");
-                binding.collectionSwipeContainer.setRefreshing(false);
-            });
+        );
     }
 
     protected void onAddClicked() {

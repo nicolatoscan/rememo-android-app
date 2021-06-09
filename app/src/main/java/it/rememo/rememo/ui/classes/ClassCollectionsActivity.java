@@ -1,17 +1,13 @@
 package it.rememo.rememo.ui.classes;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
 
-import com.google.firebase.firestore.FieldPath;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
 import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Collectors;
 
-import it.rememo.rememo.databinding.ActivityClassDetailsBinding;
 import it.rememo.rememo.databinding.ActivityListWithAddBinding;
 import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.FirebaseModel;
@@ -23,49 +19,66 @@ public class ClassCollectionsActivity extends AppCompatActivity {
     public static String ARG_COLLECTIONS;
     ActivityListWithAddBinding binding;
     StudentClass stClass = null;
+    ArrayList<FirebaseModel> collList;
+    ListWithRemoveAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityListWithAddBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.addBtn.setText("Add collection");
-        String classId = getIntent().getStringExtra(ARG_COLLECTIONS);
-        ArrayList<FirebaseModel> collList = new ArrayList<>();
 
-        ListWithRemoveAdapter adapter = new ListWithRemoveAdapter(this, collList);
+        binding.addBtn.setText("Add collection");
+
+        String classId = getIntent().getStringExtra(ARG_COLLECTIONS);
+        collList = new ArrayList<>();
+        adapter = new ListWithRemoveAdapter(this, collList);
         adapter.setDeleteClickListener((v, i) -> {
 
         });
+        binding.list.setLayoutManager(new LinearLayoutManager(this));
         binding.list.setAdapter(adapter);
 
+        StudentClass.getClassById(
+                classId,
+                (cl) -> {
+                    stClass = cl;
+                    cl.getClassCollections(
+                            collections -> adapter.addAll(collections),
+                            ex -> Common.toast(this, "Couldn't load collections")
+                    );
+                },
+                (ex) -> Common.toast(this, "Couldn't load collections")
+        );
 
-        FirebaseFirestore.getInstance().collection(StudentClass.COLLECTION_NAME)
-            .document(classId)
-            .get()
-            .addOnSuccessListener((doc) -> {
-                stClass = new StudentClass(doc);
-                List<String> collIds = stClass.getCollectionIds();
+        binding.addBtn.setOnClickListener(v -> onAddCollectionClick() );
 
-                if (collIds.size() > 0) {
-                    FirebaseFirestore.getInstance()
-                            .collection(Collection.COLLECTION_NAME)
-                            .whereIn(FieldPath.documentId(), stClass.getCollectionIds())
-                            .get()
-                            .addOnSuccessListener((docs) -> {
-                                for (QueryDocumentSnapshot d : docs) {
-                                    collList.add(new Collection(d));
-                                }
-                                adapter.notifyDataSetChanged();
-                            })
-                            .addOnFailureListener((ex) -> {
-                                Common.toast(this, "Couldn't load collections");
-                            });
-                }
+    }
 
-            })
-            .addOnFailureListener((ex) -> {
-                Common.toast(this, "Couldn't load collections");
-            });
+    void onAddCollectionClick() {
+        Collection.getMyCollections(
+                colls -> {
+                    colls = colls
+                            .stream()
+                            .filter(c -> collList.stream().noneMatch(streamC -> streamC.getId().equals(c.getId())))
+                            .collect(Collectors.toList());
+
+                    if (colls.size() > 0) {
+                        new AddCollectionDialogFragment(colls,
+                            selectedCollections -> {
+                                stClass.addCollections(
+                                        selectedCollections,
+                                        s -> adapter.addAll(selectedCollections),
+                                        ex -> Common.toast(this, "Couldn't add collections")
+                                );
+                            }
+                        ).show(getSupportFragmentManager(), "PIPPO");
+                    } else {
+                        Common.toast(this, "No other collection to add");
+                    }
+                },
+                ex -> Common.toast(this, "Couldn't load collections")
+        );
+
     }
 }

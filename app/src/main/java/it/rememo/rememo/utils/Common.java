@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Common {
     private static String userId = null;
@@ -19,5 +20,9 @@ public class Common {
     }
     public static void toast(Context ctx, String error, int lenght) {
         Toast.makeText(ctx, error, lenght).show();
+    }
+
+    public static FirebaseFirestore db() {
+        return FirebaseFirestore.getInstance();
     }
 }

@@ -1,5 +1,6 @@
 package it.rememo.rememo.models;
 
+import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,8 +15,10 @@ import com.google.firebase.firestore.SetOptions;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import it.rememo.rememo.MainActivity;
 import it.rememo.rememo.utils.Common;
 
 public class Collection extends FirebaseModel {
@@ -110,8 +113,8 @@ public class Collection extends FirebaseModel {
     }
 
     public void addWord(CollectionWord word,
-                @NonNull OnSuccessListener<? super CollectionWord> success,
-                @NonNull OnFailureListener fail) {
+            @NonNull OnSuccessListener<? super CollectionWord> success,
+            @NonNull OnFailureListener fail) {
         FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
                 .document(getId())
                 .collection(CollectionWord.COLLECTION_NAME)
@@ -126,8 +129,8 @@ public class Collection extends FirebaseModel {
     }
 
     public void deleteWord(CollectionWord word,
-                        @NonNull OnSuccessListener<? super Void> success,
-                        @NonNull OnFailureListener fail) {
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail) {
         if (words.remove(word)) {
             word.setCollectionParent(null);
             FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
@@ -139,4 +142,24 @@ public class Collection extends FirebaseModel {
                     .addOnFailureListener(fail);
         }
     }
+
+    public static void getMyCollections(
+            @NonNull OnSuccessListener<? super List<Collection>> success,
+            @NonNull OnFailureListener fail
+    ) {
+        FirebaseFirestore.getInstance()
+                .collection(Collection.COLLECTION_NAME)
+                .whereEqualTo(Collection.KEY_OWNER_ID, Common.getUserId())
+                .get()
+                .addOnSuccessListener(docs -> {
+                    ArrayList<Collection> colls = new ArrayList();
+                    for (QueryDocumentSnapshot document : docs) {
+                        colls.add(new Collection(document));
+                    }
+                    success.onSuccess(colls);
+                })
+                .addOnFailureListener(fail);
+
+    }
+
 }

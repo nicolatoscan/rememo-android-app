@@ -60,6 +60,12 @@ public class ListWithRemoveAdapter extends RecyclerView.Adapter<ListWithRemoveAd
         notifyItemInserted(list.size() - 1);
     }
 
+    public void addAll(ArrayList<? extends FirebaseModel> c) {
+        int sizeBefore = list.size();
+        list.addAll(c);
+        notifyItemRangeInserted(sizeBefore, c.size());
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         RowCollectionItemBinding binding;
 

@@ -36,19 +36,16 @@ public class JoinClassActivity extends AppCompatActivity {
             String[] urlParts = url.split("/");
             String id = urlParts[urlParts.length - 1];
 
-            FirebaseFirestore.getInstance()
-                    .collection(StudentClass.COLLECTION_NAME)
-                    .document(id)
-                    .get()
-                    .addOnSuccessListener(doc -> {
-                        StudentClass sc = new StudentClass(doc);
-                        updateUI(sc);
-                    })
-                    .addOnFailureListener(ex -> {
-                       Common.toast(this, "Class not found");
-                       startActivity(new Intent(this, MainActivity.class));
-                       finish();
-                    });
+
+            StudentClass.getClassById(
+                    id,
+                    sc -> updateUI(sc),
+                    ex -> {
+                        Common.toast(this, "Class not found");
+                        startActivity(new Intent(this, MainActivity.class));
+                        finish();
+                    }
+            );
 
         }
     }

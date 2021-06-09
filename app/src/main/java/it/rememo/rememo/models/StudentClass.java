@@ -1,6 +1,8 @@
 package it.rememo.rememo.models;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -8,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -21,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import it.rememo.rememo.MainActivity;
 import it.rememo.rememo.utils.Common;
 
 public class StudentClass extends FirebaseModel {
@@ -55,7 +59,7 @@ public class StudentClass extends FirebaseModel {
 
     public StudentClass(DocumentSnapshot doc) {
         Map<String, Object> data = doc.getData();
-        Init(doc.getId(), (String) data.get(KEY_NAME), (String) data.get(KEY_OWNER_ID), (HashMap<String, Boolean>) data.get(KEY_STUDENTS_ID), (HashMap<String, Boolean>) data.get(COLLECTION_NAME));
+        Init(doc.getId(), (String) data.get(KEY_NAME), (String) data.get(KEY_OWNER_ID), (HashMap<String, Boolean>) data.get(KEY_STUDENTS_ID), (HashMap<String, Boolean>) data.get(KEY_COLLECTIONS_ID));
     }
 
     public void Init(String id, String name, String ownerId, HashMap<String, Boolean> studentsIds, HashMap<String, Boolean> collectionsIds) {
@@ -117,11 +121,72 @@ public class StudentClass extends FirebaseModel {
         Map<String, Object> updateData = new HashMap<>();
         updateData.put(KEY_STUDENTS_ID, studentId);
 
+        this.updateFirestore(updateData, success, fail);
+    }
+
+    public void addCollections(
+            List<Collection> collections,
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail
+    ) {
+        toggleCollections(true, collections, success, fail);
+    }
+
+    public void removeCollections(
+            List<Collection> collections,
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail
+    ) {
+        toggleCollections(false, collections, success, fail);
+    }
+
+    private void toggleCollections(
+            boolean addRemove,
+            List<Collection> collections,
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail
+    ) {
+        for (Collection c : collections) {
+            this.collectionsIds.put(c.getId(), addRemove);
+        }
+        Map<String, Object> updateData = new HashMap<>();
+        updateData.put(KEY_COLLECTIONS_ID, this.collectionsIds);
+        this.updateFirestore(updateData, success, fail);
+    }
+
+    private void updateStudentClass(
+        Map<String, Object> updateData,
+        @NonNull OnSuccessListener<? super Void> success,
+        @NonNull OnFailureListener fail
+    ) {
         FirebaseFirestore.getInstance().collection(getFirebaseCollectionName())
                 .document(getId())
                 .update(updateData)
                 .addOnSuccessListener(success)
                 .addOnFailureListener(fail);
+    }
+
+    public void getClassCollections(
+        @NonNull OnSuccessListener<? super ArrayList<Collection>> success,
+        @NonNull OnFailureListener fail
+    ) {
+        List collsIds = this.getCollectionIds();
+        if (collsIds.size() > 0) {
+            Common.db()
+                    .collection(Collection.COLLECTION_NAME)
+                    .whereIn(FieldPath.documentId(), this.getCollectionIds())
+                    .get()
+                    .addOnSuccessListener((docs) -> {
+                        ArrayList<Collection> colls = new ArrayList();
+                        for (QueryDocumentSnapshot d : docs) {
+                            colls.add(new Collection(d));
+                        }
+                        success.onSuccess(colls);
+                    })
+                    .addOnFailureListener(fail);
+        } else {
+            success.onSuccess(new ArrayList<Collection>());
+        }
     }
 
     static public void getClasses(boolean createdJoined,
@@ -131,7 +196,7 @@ public class StudentClass extends FirebaseModel {
         String whereField = createdJoined ? (KEY_OWNER_ID) : (KEY_STUDENTS_ID + "." + Common.getUserId());
         Object whereValue = createdJoined ? Common.getUserId() : true;
 
-        FirebaseFirestore.getInstance().collection(StudentClass.COLLECTION_NAME)
+        Common.db().collection(StudentClass.COLLECTION_NAME)
             .whereEqualTo(whereField, whereValue)
             .get()
             .addOnSuccessListener(docs -> {
@@ -142,6 +207,20 @@ public class StudentClass extends FirebaseModel {
                 success.onSuccess(updatedCollections);
             })
             .addOnFailureListener(fail);
+    }
+
+    static public void getClassById(
+            String classId,
+            @NonNull OnSuccessListener<? super StudentClass> success,
+            @NonNull OnFailureListener fail
+    ) {
+        Common.db().collection(StudentClass.COLLECTION_NAME)
+                .document(classId)
+                .get()
+                .addOnSuccessListener((doc) -> {
+                    success.onSuccess(new StudentClass(doc));
+                })
+                .addOnFailureListener(fail);
     }
 
 }
