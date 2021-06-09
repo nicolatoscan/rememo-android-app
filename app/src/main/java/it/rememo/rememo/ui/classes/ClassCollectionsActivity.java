@@ -1,61 +1,26 @@
 package it.rememo.rememo.ui.classes;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.annotation.NonNull;
 
-import android.os.Bundle;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
-
-import it.rememo.rememo.databinding.ActivityListWithAddBinding;
 import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.FirebaseModel;
 import it.rememo.rememo.models.StudentClass;
-import it.rememo.rememo.ui.shared.ListWithRemoveAdapter;
 import it.rememo.rememo.utils.Common;
 
-public class ClassCollectionsActivity extends AppCompatActivity {
-    public static String ARG_COLLECTIONS;
-    ActivityListWithAddBinding binding;
-    StudentClass stClass = null;
-    ArrayList<FirebaseModel> collList;
-    ListWithRemoveAdapter adapter;
+public class ClassCollectionsActivity extends ClassListActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityListWithAddBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        binding.addBtn.setText("Add collection");
-
-        String classId = getIntent().getStringExtra(ARG_COLLECTIONS);
-        collList = new ArrayList<>();
-        adapter = new ListWithRemoveAdapter(this, collList);
-        adapter.setDeleteClickListener((v, i) -> {
-
-        });
-        binding.list.setLayoutManager(new LinearLayoutManager(this));
-        binding.list.setAdapter(adapter);
-
-        StudentClass.getClassById(
-                classId,
-                (cl) -> {
-                    stClass = cl;
-                    cl.getClassCollections(
-                            collections -> adapter.addAll(collections),
-                            ex -> Common.toast(this, "Couldn't load collections")
-                    );
-                },
-                (ex) -> Common.toast(this, "Couldn't load collections")
-        );
-
-        binding.addBtn.setOnClickListener(v -> onAddCollectionClick() );
-
+    protected String getBtnName() {
+        return "Add collections";
     }
 
-    void onAddCollectionClick() {
+    public void onBtnClick() {
         Collection.getMyCollections(
                 colls -> {
                     colls = colls
@@ -79,6 +44,23 @@ public class ClassCollectionsActivity extends AppCompatActivity {
                 },
                 ex -> Common.toast(this, "Couldn't load collections")
         );
+    }
 
+    @Override
+    protected void updateList(StudentClass cl) {
+        cl.getClassCollections(
+                collections -> adapter.addAll(collections),
+                ex -> Common.toast(this, "Couldn't load collections")
+        );
+    }
+
+    @Override
+    protected void removeItemHandler(FirebaseModel item) {
+        ArrayList<Collection> c = new ArrayList<>();
+        c.add((Collection) item);
+        this.stClass.removeCollections(c,
+                success -> {},
+                ex -> Common.toast(getApplicationContext(), "Couldn't remove collection")
+        );
     }
 }

@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.firestore.auth.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -95,6 +96,10 @@ public class StudentClass extends FirebaseModel {
         return  this.getListFromHashMap(this.collectionsIds);
     }
 
+    public List<String> getStudentsIds() {
+        return  this.getListFromHashMap(this.studentsIds);
+    }
+
     public void joinClass(
             @NonNull OnSuccessListener<? super Void> success,
             @NonNull OnFailureListener fail
@@ -154,6 +159,19 @@ public class StudentClass extends FirebaseModel {
         this.updateFirestore(updateData, success, fail);
     }
 
+    public void removeStudents(
+            List<Username> usernames,
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail
+    ) {
+        for (Username u : usernames) {
+            this.studentsIds.put(u.getUserId(), false);
+        }
+        Map<String, Object> updateData = new HashMap<>();
+        updateData.put(KEY_STUDENTS_ID, this.studentsIds);
+        this.updateFirestore(updateData, success, fail);
+    }
+
     private void updateStudentClass(
         Map<String, Object> updateData,
         @NonNull OnSuccessListener<? super Void> success,
@@ -174,7 +192,7 @@ public class StudentClass extends FirebaseModel {
         if (collsIds.size() > 0) {
             Common.db()
                     .collection(Collection.COLLECTION_NAME)
-                    .whereIn(FieldPath.documentId(), this.getCollectionIds())
+                    .whereIn(FieldPath.documentId(), collsIds)
                     .get()
                     .addOnSuccessListener((docs) -> {
                         ArrayList<Collection> colls = new ArrayList();
@@ -186,6 +204,30 @@ public class StudentClass extends FirebaseModel {
                     .addOnFailureListener(fail);
         } else {
             success.onSuccess(new ArrayList<Collection>());
+        }
+    }
+
+    public void getClassStudents(
+            @NonNull OnSuccessListener<? super ArrayList<Username>> success,
+            @NonNull OnFailureListener fail
+    ) {
+        List studIds = this.getStudentsIds();
+        if (studIds.size() > 0) {
+            Common.db()
+                    .collection(Username.COLLECTION_NAME)
+                    .whereIn(Username.KEY_USERID, studIds)
+                    .get()
+                    .addOnSuccessListener((docs) -> {
+                        ArrayList<Username> colls = new ArrayList();
+                        for (QueryDocumentSnapshot d : docs) {
+                            Log.d("KKKKKK", new Username(d).getName());
+                            colls.add(new Username(d));
+                        }
+                        success.onSuccess(colls);
+                    })
+                    .addOnFailureListener(fail);
+        } else {
+            success.onSuccess(new ArrayList<Username>());
         }
     }
 

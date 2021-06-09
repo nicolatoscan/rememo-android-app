@@ -27,7 +27,13 @@ public class ClassDetailsActivity extends AppCompatActivity {
 
         binding.btnCollections.setOnClickListener((v) -> {
             Intent i = new Intent(this, ClassCollectionsActivity.class);
-            i.putExtra(ClassCollectionsActivity.ARG_COLLECTIONS, studentClass.getId());
+            i.putExtra(ClassCollectionsActivity.ARG_CLASS_ID, studentClass.getId());
+            startActivity(i);
+        });
+
+        binding.btnStudents.setOnClickListener((v) -> {
+            Intent i = new Intent(this, ClassStudentActivity.class);
+            i.putExtra(ClassCollectionsActivity.ARG_CLASS_ID, studentClass.getId());
             startActivity(i);
         });
     }

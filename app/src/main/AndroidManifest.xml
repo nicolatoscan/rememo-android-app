@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Rememo">
         <activity android:name=".ui.classes.ClassCollectionsActivity"></activity>
+        <activity android:name=".ui.classes.ClassStudentActivity"></activity>
         <activity android:name=".ui.classes.ClassDetailsActivity" />
         <activity android:name=".ui.classes.JoinClassActivity">
             <intent-filter>

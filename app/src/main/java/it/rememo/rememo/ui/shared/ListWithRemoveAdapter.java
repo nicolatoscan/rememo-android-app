@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.rememo.rememo.databinding.RowCollectionItemBinding;
+import it.rememo.rememo.databinding.RowDeletableItemBinding;
 import it.rememo.rememo.models.FirebaseModel;
 
 public class ListWithRemoveAdapter extends RecyclerView.Adapter<ListWithRemoveAdapter.ViewHolder> {
@@ -27,7 +28,7 @@ public class ListWithRemoveAdapter extends RecyclerView.Adapter<ListWithRemoveAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RowCollectionItemBinding binding = RowCollectionItemBinding.inflate(mInflater, parent, false);
+        RowDeletableItemBinding binding = RowDeletableItemBinding.inflate(mInflater, parent, false);
         return new ViewHolder(binding);
     }
 
@@ -67,13 +68,13 @@ public class ListWithRemoveAdapter extends RecyclerView.Adapter<ListWithRemoveAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        RowCollectionItemBinding binding;
+        RowDeletableItemBinding binding;
 
-        public ViewHolder(RowCollectionItemBinding binding) {
+        public ViewHolder(RowDeletableItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 
-            itemView.setOnClickListener(view -> {
+            binding.btnDelete.setOnClickListener(view -> {
                 if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
             });
         }
