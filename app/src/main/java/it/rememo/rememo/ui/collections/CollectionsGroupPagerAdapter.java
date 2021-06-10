@@ -1,13 +1,8 @@
 package it.rememo.rememo.ui.collections;
 
 import android.os.Bundle;
-import android.util.Pair;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,9 +20,7 @@ public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
 
         StudentClass.getClasses(false,
             (classes) -> {
-                for (StudentClass cl : classes) {
-                    collectionsGroups.add(cl);
-                }
+                collectionsGroups.addAll(classes);
                 notifyDataSetChanged();
             },
             (ex) -> { }
@@ -40,6 +33,7 @@ public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
         Fragment fragment = new CollectionsGroupFragment();
         Bundle args = new Bundle();
         args.putInt(CollectionsGroupFragment.ARG_POSITION, i);
+        args.putSerializable(CollectionsGroupFragment.ARG_CLASS, collectionsGroups.get(i));
         fragment.setArguments(args);
         return fragment;
     }

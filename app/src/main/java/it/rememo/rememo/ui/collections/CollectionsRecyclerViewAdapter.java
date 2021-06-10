@@ -2,7 +2,6 @@ package it.rememo.rememo.ui.collections;
 
 import android.content.Context;
 import android.text.InputType;
-import android.view.LayoutInflater;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
@@ -20,8 +19,11 @@ import it.rememo.rememo.utils.Common;
 
 public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collection, CollectionsRecyclerViewAdapter.ViewHolder> {
 
-    CollectionsRecyclerViewAdapter(Context context, List<Collection> collections) {
+    private boolean isMine;
+
+    CollectionsRecyclerViewAdapter(Context context, List<Collection> collections, boolean isMine) {
         super(context, collections);
+        this.isMine = isMine;
     }
 
     protected RecyclerView.ViewHolder getViewHolder(RowCollectionItemBinding binding, GroupRecyclerViewAdapter adapter) {
@@ -32,12 +34,13 @@ public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Col
 
         ViewHolder(RowCollectionItemBinding binding, CollectionsRecyclerViewAdapter adapterReference) {
             super(binding, adapterReference);
-
-            itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
-                // menu.setHeaderTitle("Select The Action");
-                menu.add(0, view.getId(), 0, "Rename").setOnMenuItemClickListener((mItem) -> renameCollection());
-                menu.add(0, view.getId(), 0, "Delete").setOnMenuItemClickListener((mItem) -> deleteCollection());
-            });
+            if (isMine) {
+                itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
+                    // menu.setHeaderTitle("Select The Action");
+                    menu.add(0, view.getId(), 0, "Rename").setOnMenuItemClickListener((mItem) -> renameCollection());
+                    menu.add(0, view.getId(), 0, "Delete").setOnMenuItemClickListener((mItem) -> deleteCollection());
+                });
+            }
         }
 
         private boolean renameCollection() {

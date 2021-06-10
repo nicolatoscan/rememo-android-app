@@ -29,6 +29,9 @@ import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
 public class ClassesGroupFragment extends GroupFragment<Collection> {
 
+    @Override
+    protected void parseArgs(Bundle args) { }
+
     protected boolean isFloatingAddVisible(int index) {
         return index == 1;
     }

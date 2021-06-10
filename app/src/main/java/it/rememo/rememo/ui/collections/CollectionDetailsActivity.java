@@ -21,8 +21,10 @@ import it.rememo.rememo.utils.Common;
 
 public class CollectionDetailsActivity extends AppCompatActivity {
     public final static String ARG_COLLECTION = "collection";
+    public final static String ARG_EDITABLE = "isEditable";
     private ActivityCollectionDetailsBinding binding;
     private Collection collection;
+    private boolean isEditable;
     WordsRecyclerViewAdapter adapter;
     FirebaseFirestore db;
 
@@ -34,7 +36,10 @@ public class CollectionDetailsActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        collection = (Collection) getIntent().getSerializableExtra(CollectionDetailsActivity.ARG_COLLECTION);
+        Intent intent = getIntent();
+        collection = (Collection) intent.getSerializableExtra(CollectionDetailsActivity.ARG_COLLECTION);
+        isEditable = intent.getBooleanExtra(CollectionDetailsActivity.ARG_EDITABLE, false);
+
         setTitle(collection.getName());
 
         // Recycler View
@@ -48,6 +53,10 @@ public class CollectionDetailsActivity extends AppCompatActivity {
         updateWordList();
 
         binding.btnAddWord.setOnClickListener(v -> onAddWordClick(v));
+
+        if (!isEditable) {
+            binding.constraintLayout.setVisibility(View.GONE);
+        }
     }
 
     private void updateWordList() {

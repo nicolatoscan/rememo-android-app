@@ -42,6 +42,7 @@ public abstract class GroupFragment<T extends FirebaseModel> extends Fragment {
     protected abstract void setupAdapter();
     protected abstract void updateList();
     protected abstract void onAddClicked();
+    protected abstract void parseArgs(Bundle args);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public abstract class GroupFragment<T extends FirebaseModel> extends Fragment {
         db = FirebaseFirestore.getInstance();
         Bundle args = getArguments();
         position = args.getInt(ARG_POSITION, -1);
+        parseArgs(args);
         if (isFloatingAddVisible(position)) {
             binding.addCollectionFloatingButton.setVisibility(View.VISIBLE);
             binding.addCollectionFloatingButton.setOnClickListener(v -> onAddClicked());

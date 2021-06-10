@@ -3,59 +3,62 @@ package it.rememo.rememo.ui.collections;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import it.rememo.rememo.R;
-import it.rememo.rememo.databinding.FragmentCollectionGroupBinding;
 import it.rememo.rememo.models.Collection;
-import it.rememo.rememo.ui.classes.ClassesRecyclerViewAdapter;
+import it.rememo.rememo.models.StudentClass;
 import it.rememo.rememo.ui.shared.GroupFragment;
 import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
 
 public class CollectionsGroupFragment extends GroupFragment<Collection> {
 
+    public static String ARG_CLASS = "class";
+    private StudentClass stClass = null;
+
+    @Override
+    protected void parseArgs(Bundle args) {
+        this.stClass = (StudentClass) args.getSerializable(ARG_CLASS);
+    }
+
     protected boolean isFloatingAddVisible(int index) {
         return index == 0;
     }
 
     protected void setupAdapter() {
-        adapter = new CollectionsRecyclerViewAdapter(getContext(), list);
+        adapter = new CollectionsRecyclerViewAdapter(getContext(), list, this.stClass == null);
         adapter.setClickListener((v, i) -> {
             Intent intent = new Intent(getContext(), CollectionDetailsActivity.class);
             intent.putExtra(CollectionDetailsActivity.ARG_COLLECTION, adapter.getItem(i));
+            intent.putExtra(CollectionDetailsActivity.ARG_EDITABLE, this.stClass == null);
             startActivity(intent);
         });
         binding.collectionRecyclerView.setAdapter(adapter);
     }
 
     protected void updateList() {
-        Common.toast(getContext(), "COLL");
-        Collection.getMyCollections(
-                colls -> {
-                    adapter.resetAll(colls);
-                    binding.collectionSwipeContainer.setRefreshing(false);
-                },
-                ex -> {
-                    Common.toast(getContext(), "Couldn't update collections");
-                    binding.collectionSwipeContainer.setRefreshing(false);
-                }
-        );
+        @NonNull OnSuccessListener<? super List<Collection>> success = colls -> {
+            adapter.resetAll(colls);
+            binding.collectionSwipeContainer.setRefreshing(false);
+        };
+        @NonNull OnFailureListener fail = ex -> {
+            Common.toast(getContext(), "Couldn't update collections");
+            binding.collectionSwipeContainer.setRefreshing(false);
+        };
+
+        if (stClass == null) {
+            Collection.getMyCollections(success, fail);
+        } else {
+            stClass.getClassCollections(success, fail);
+        }
     }
 
     protected void onAddClicked() {

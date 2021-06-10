@@ -185,7 +185,7 @@ public class StudentClass extends FirebaseModel {
     }
 
     public void getClassCollections(
-        @NonNull OnSuccessListener<? super ArrayList<Collection>> success,
+        @NonNull OnSuccessListener<? super List<Collection>> success,
         @NonNull OnFailureListener fail
     ) {
         List collsIds = this.getCollectionIds();
