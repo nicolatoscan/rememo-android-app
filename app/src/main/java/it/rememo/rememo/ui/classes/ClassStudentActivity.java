@@ -6,6 +6,7 @@ import it.rememo.rememo.models.FirebaseModel;
 import it.rememo.rememo.models.StudentClass;
 import it.rememo.rememo.models.Username;
 import it.rememo.rememo.utils.Common;
+import it.rememo.rememo.utils.ShareUrls;
 
 public class ClassStudentActivity extends ClassListActivity {
 
@@ -13,10 +14,14 @@ public class ClassStudentActivity extends ClassListActivity {
     protected String getBtnName() {
         return "Share class";
     }
+    @Override
+    protected String getPageTitle() {
+        return "Students";
+    }
 
     @Override
     protected void  onBtnClick() {
-
+        ShareUrls.shareClass(this, this.stClass.getId());
     }
 
     @Override

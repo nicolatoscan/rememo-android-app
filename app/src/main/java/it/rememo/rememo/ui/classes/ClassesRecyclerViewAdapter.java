@@ -20,13 +20,18 @@ import it.rememo.rememo.models.StudentClass;
 import it.rememo.rememo.ui.shared.GroupRecyclerViewAdapter;
 import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
+import it.rememo.rememo.utils.ShareUrls;
 
 public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collection, ClassesRecyclerViewAdapter.ViewHolder> {
+
+
+    private boolean isCreated;
     Context context;
-    ClassesRecyclerViewAdapter(Context context, List<Collection> collections) {
+
+    ClassesRecyclerViewAdapter(Context context, List<Collection> collections, boolean isCreated) {
         super(context, collections);
         this.context = context;
-
+        this.isCreated = isCreated;
     }
 
     protected RecyclerView.ViewHolder getViewHolder(RowCollectionItemBinding binding, GroupRecyclerViewAdapter adapter) {
@@ -39,20 +44,18 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
         ViewHolder(RowCollectionItemBinding binding, ClassesRecyclerViewAdapter adapterReference, Context context) {
             super(binding, adapterReference);
             this.context = context;
-            itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
-                // menu.setHeaderTitle("Select The Action");
-                menu.add(0, view.getId(), 0, "Share").setOnMenuItemClickListener((mItem) -> shareClass());
-                menu.add(0, view.getId(), 0, "Rename").setOnMenuItemClickListener((mItem) -> renameClasses());
-                menu.add(0, view.getId(), 0, "Delete").setOnMenuItemClickListener((mItem) -> deleteCollection());
-            });
+            if (isCreated) {
+                itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
+                    // menu.setHeaderTitle("Select The Action");
+                    menu.add(0, view.getId(), 0, "Share").setOnMenuItemClickListener((mItem) -> shareClass());
+                    menu.add(0, view.getId(), 0, "Rename").setOnMenuItemClickListener((mItem) -> renameClasses());
+                    menu.add(0, view.getId(), 0, "Delete").setOnMenuItemClickListener((mItem) -> deleteCollection());
+                });
+            }
         }
 
         private boolean shareClass() {
-            Intent i = new Intent(Intent.ACTION_SEND);
-            i.setType("text/plain");
-            i.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
-            i.putExtra(Intent.EXTRA_TEXT, "https://www.rememo.it/joinclass/" + element.getId());
-            context.startActivity(Intent.createChooser(i, "Share URL"));
+            ShareUrls.shareClass(context, element.getId());
             return true;
         }
 

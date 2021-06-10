@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import it.rememo.rememo.databinding.ActivityClassDetailsBinding;
@@ -14,6 +15,7 @@ import it.rememo.rememo.utils.Common;
 
 public class ClassDetailsActivity extends AppCompatActivity {
     public static String ARG_CLASS = "class";
+    public static String ARG_IS_CREATED = "isCreated";
     ActivityClassDetailsBinding binding;
     private StudentClass studentClass;
 
@@ -22,19 +24,27 @@ public class ClassDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityClassDetailsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        studentClass = (StudentClass) getIntent().getSerializableExtra(ClassDetailsActivity.ARG_CLASS);
+
+        Intent intent = getIntent();
+        studentClass = (StudentClass) intent.getSerializableExtra(ClassDetailsActivity.ARG_CLASS);
+        boolean isCreated = intent.getBooleanExtra(ClassDetailsActivity.ARG_IS_CREATED, false);
         setTitle(studentClass.getName());
 
-        binding.btnCollections.setOnClickListener((v) -> {
-            Intent i = new Intent(this, ClassCollectionsActivity.class);
-            i.putExtra(ClassCollectionsActivity.ARG_CLASS_ID, studentClass.getId());
-            startActivity(i);
-        });
+        if (isCreated) {
+            binding.btnCollections.setOnClickListener((v) -> {
+                Intent i = new Intent(this, ClassCollectionsActivity.class);
+                i.putExtra(ClassCollectionsActivity.ARG_CLASS_ID, studentClass.getId());
+                startActivity(i);
+            });
 
-        binding.btnStudents.setOnClickListener((v) -> {
-            Intent i = new Intent(this, ClassStudentActivity.class);
-            i.putExtra(ClassCollectionsActivity.ARG_CLASS_ID, studentClass.getId());
-            startActivity(i);
-        });
+            binding.btnStudents.setOnClickListener((v) -> {
+                Intent i = new Intent(this, ClassStudentActivity.class);
+                i.putExtra(ClassCollectionsActivity.ARG_CLASS_ID, studentClass.getId());
+                startActivity(i);
+            });
+        } else {
+            binding.btnCollections.setVisibility(View.GONE);
+            binding.btnStudents.setVisibility(View.GONE);
+        }
     }
 }

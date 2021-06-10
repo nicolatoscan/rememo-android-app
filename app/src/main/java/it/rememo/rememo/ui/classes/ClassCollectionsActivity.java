@@ -19,6 +19,10 @@ public class ClassCollectionsActivity extends ClassListActivity {
     protected String getBtnName() {
         return "Add collections";
     }
+    @Override
+    protected String getPageTitle() {
+        return "Collections";
+    }
 
     public void onBtnClick() {
         Collection.getMyCollections(

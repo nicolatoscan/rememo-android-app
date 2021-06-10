@@ -32,6 +32,8 @@ public abstract class ClassListActivity extends AppCompatActivity {
         binding = ActivityListWithAddBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        setTitle(getPageTitle());
+
         binding.addBtn.setText(getBtnName());
 
         String classId = getIntent().getStringExtra(ARG_CLASS_ID);
@@ -69,5 +71,6 @@ public abstract class ClassListActivity extends AppCompatActivity {
     protected abstract String getBtnName();
     protected abstract void updateList(StudentClass cl);
     protected abstract void removeItemHandler(FirebaseModel item);
+    protected abstract String getPageTitle();
 
 }
