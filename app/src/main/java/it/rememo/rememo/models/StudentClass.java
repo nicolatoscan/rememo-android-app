@@ -60,7 +60,13 @@ public class StudentClass extends FirebaseModel {
 
     public StudentClass(DocumentSnapshot doc) {
         Map<String, Object> data = doc.getData();
-        Init(doc.getId(), (String) data.get(KEY_NAME), (String) data.get(KEY_OWNER_ID), (HashMap<String, Boolean>) data.get(KEY_STUDENTS_ID), (HashMap<String, Boolean>) data.get(KEY_COLLECTIONS_ID));
+        Init(
+                doc.getId(),
+                (String) data.get(KEY_NAME),
+                (String) data.get(KEY_OWNER_ID),
+                (HashMap<String, Boolean>) data.get(KEY_STUDENTS_ID),
+                (HashMap<String, Boolean>) data.get(KEY_COLLECTIONS_ID)
+        );
     }
 
     public void Init(String id, String name, String ownerId, HashMap<String, Boolean> studentsIds, HashMap<String, Boolean> collectionsIds) {
@@ -220,7 +226,6 @@ public class StudentClass extends FirebaseModel {
                     .addOnSuccessListener((docs) -> {
                         ArrayList<Username> colls = new ArrayList();
                         for (QueryDocumentSnapshot d : docs) {
-                            Log.d("KKKKKK", new Username(d).getName());
                             colls.add(new Username(d));
                         }
                         success.onSuccess(colls);

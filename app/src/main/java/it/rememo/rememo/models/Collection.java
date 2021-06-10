@@ -48,7 +48,13 @@ public class Collection extends FirebaseModel {
 
     public Collection(QueryDocumentSnapshot doc) {
         Map<String, Object> data = doc.getData();
-        Init(doc.getId(), (String) data.get(KEY_NAME), (String) data.get(KEY_DESCRIPTION), ((Long) data.get(KEY_NUMBER_OF_ITEMS)).intValue(), (String) data.get(KEY_OWNER_ID));
+        Init(
+                doc.getId(),
+                (String) data.get(KEY_NAME),
+                (String) data.get(KEY_DESCRIPTION),
+                ((Long) data.get(KEY_NUMBER_OF_ITEMS)).intValue(),
+                (String) data.get(KEY_OWNER_ID)
+        );
     }
 
     public void Init(String id, String name, String description, int numberOfItems, String ownerId) {
@@ -92,30 +98,27 @@ public class Collection extends FirebaseModel {
     }
 
     public void fetchWords(
-            @NonNull OnSuccessListener<? super ArrayList<CollectionWord>> success,
+            @NonNull OnSuccessListener<? super List<CollectionWord>> success,
             @NonNull OnFailureListener fail) {
-
-        FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
+        Common.db()
+                .collection(COLLECTION_NAME)
                 .document(getId())
                 .collection(CollectionWord.COLLECTION_NAME)
                 .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        words.clear();
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            words.add(new CollectionWord(this, document));
-                        }
-                        success.onSuccess(words);
-                    } else {
-                        fail.onFailure(null);
+                .addOnSuccessListener(docs -> {
+                    words.clear();
+                    for (QueryDocumentSnapshot document : docs) {
+                        words.add(new CollectionWord(this, document));
                     }
-                });
+                    success.onSuccess(words);
+                })
+                .addOnFailureListener(fail);
     }
 
     public void addWord(CollectionWord word,
             @NonNull OnSuccessListener<? super CollectionWord> success,
             @NonNull OnFailureListener fail) {
-        FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
+        Common.db().collection(COLLECTION_NAME)
                 .document(getId())
                 .collection(CollectionWord.COLLECTION_NAME)
                 .add(word.getHashMap())
@@ -133,7 +136,7 @@ public class Collection extends FirebaseModel {
             @NonNull OnFailureListener fail) {
         if (words.remove(word)) {
             word.setCollectionParent(null);
-            FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
+            Common.db().collection(COLLECTION_NAME)
                     .document(getId())
                     .collection(CollectionWord.COLLECTION_NAME)
                     .document(word.getId())
@@ -147,7 +150,7 @@ public class Collection extends FirebaseModel {
             @NonNull OnSuccessListener<? super List<Collection>> success,
             @NonNull OnFailureListener fail
     ) {
-        FirebaseFirestore.getInstance()
+        Common.db()
                 .collection(Collection.COLLECTION_NAME)
                 .whereEqualTo(Collection.KEY_OWNER_ID, Common.getUserId())
                 .get()

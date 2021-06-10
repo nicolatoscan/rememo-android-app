@@ -35,7 +35,6 @@ public abstract class FirebaseModel implements Serializable {
                     success.onSuccess(doc);
                 })
                 .addOnFailureListener(fail);
-
     }
 
     public void updateFirestore(
@@ -47,7 +46,6 @@ public abstract class FirebaseModel implements Serializable {
                 .set(updateData, SetOptions.merge())
                 .addOnSuccessListener(success)
                 .addOnFailureListener(fail);
-
     }
 
     public void deleteFromFirestore(

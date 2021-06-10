@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
 
     void startStudy(int type) {
         Intent i = new Intent(getContext(), ChooseCollectionsActivity.class);
-        i.getIntExtra(ChooseCollectionsActivity.ARG_STUDY_TYPE, type);
+        i.putExtra(ChooseCollectionsActivity.ARG_STUDY_TYPE, type);
         startActivity(i);
     }
 
