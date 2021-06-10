@@ -20,7 +20,7 @@ import it.rememo.rememo.ui.shared.ListWithRemoveAdapter;
 import it.rememo.rememo.utils.Common;
 
 public abstract class ClassListActivity extends AppCompatActivity {
-    public static String ARG_CLASS_ID = "classId";
+    public final static String ARG_CLASS_ID = "classId";
     ActivityListWithAddBinding binding;
     StudentClass stClass = null;
     ArrayList<FirebaseModel> collList;

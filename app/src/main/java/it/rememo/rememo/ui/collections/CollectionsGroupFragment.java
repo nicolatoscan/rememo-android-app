@@ -21,7 +21,7 @@ import it.rememo.rememo.utils.Common;
 
 public class CollectionsGroupFragment extends GroupFragment<Collection> {
 
-    public static String ARG_CLASS = "class";
+    public static final String ARG_CLASS = "class";
     private StudentClass stClass = null;
 
     @Override

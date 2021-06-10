@@ -31,7 +31,7 @@ import it.rememo.rememo.utils.Common;
 // Instances of this class are fragments representing a single
 // object in our collection.
 public abstract class GroupFragment<T extends FirebaseModel> extends Fragment {
-    public static final String ARG_POSITION = "position";
+    public final static String ARG_POSITION = "position";
     protected GroupRecyclerViewAdapter adapter;
     protected FragmentCollectionGroupBinding binding;
     protected FirebaseFirestore db;

@@ -14,8 +14,8 @@ import it.rememo.rememo.ui.collections.CollectionDetailsActivity;
 import it.rememo.rememo.utils.Common;
 
 public class ClassDetailsActivity extends AppCompatActivity {
-    public static String ARG_CLASS = "class";
-    public static String ARG_IS_CREATED = "isCreated";
+    public final static String ARG_CLASS = "class";
+    public final static String ARG_IS_CREATED = "isCreated";
     ActivityClassDetailsBinding binding;
     private StudentClass studentClass;
 
