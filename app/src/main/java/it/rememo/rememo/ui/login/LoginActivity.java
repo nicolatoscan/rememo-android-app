@@ -33,6 +33,8 @@ import it.rememo.rememo.MainActivity;
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityCollectionDetailsBinding;
 import it.rememo.rememo.databinding.ActivityLoginBinding;
+import it.rememo.rememo.models.Username;
+import it.rememo.rememo.utils.Common;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -153,8 +155,14 @@ public class LoginActivity extends AppCompatActivity {
     private void openAfterLogin(AuthResult result) {
         FirebaseUser user = result.getUser();
         String name = result.getUser().getDisplayName();
-        Toast.makeText(LoginActivity.this, "Logged in as " + (name == null ? user.getEmail() : name), Toast.LENGTH_LONG).show();
-        startActivity(new Intent(getApplicationContext(), name == null ? AfterSignUpActivity.class : MainActivity.class));
-        finish();
+        Username.setUsername(user.getUid(), name == null ? "Unknown user" : name,
+                success -> {
+                    Common.toast(this, "Logged in as " + (name == null ? user.getEmail() : name));
+                    startActivity(new Intent(getApplicationContext(), name == null ? AfterSignUpActivity.class : MainActivity.class));
+                    finish();
+                },
+                ex -> {
+                    Common.toast(this, "Error logging in");
+                });
     }
 }

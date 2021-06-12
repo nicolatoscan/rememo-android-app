@@ -171,7 +171,7 @@ public class StudentClass extends FirebaseModel {
             @NonNull OnFailureListener fail
     ) {
         for (Username u : usernames) {
-            this.studentsIds.put(u.getUserId(), false);
+            this.studentsIds.put(u.getId(), false);
         }
         Map<String, Object> updateData = new HashMap<>();
         updateData.put(KEY_STUDENTS_ID, this.studentsIds);
@@ -221,14 +221,14 @@ public class StudentClass extends FirebaseModel {
         if (studIds.size() > 0) {
             Common.db()
                     .collection(Username.COLLECTION_NAME)
-                    .whereIn(Username.KEY_USERID, studIds)
+                    .whereIn(FieldPath.documentId(), studIds)
                     .get()
                     .addOnSuccessListener((docs) -> {
-                        ArrayList<Username> colls = new ArrayList();
+                        ArrayList<Username> users = new ArrayList();
                         for (QueryDocumentSnapshot d : docs) {
-                            colls.add(new Username(d));
+                            users.add(new Username(d));
                         }
-                        success.onSuccess(colls);
+                        success.onSuccess(users);
                     })
                     .addOnFailureListener(fail);
         } else {

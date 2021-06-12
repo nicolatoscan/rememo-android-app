@@ -1,5 +1,7 @@
 package it.rememo.rememo.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -15,21 +17,18 @@ import it.rememo.rememo.utils.Common;
 public class Username extends FirebaseModel {
 
     public final static String KEY_NAME = "name";
-    public final static String KEY_USERID = "userid";
     public final static String COLLECTION_NAME = "usernames";
 
     private String name;
-    private String userId;
 
     public Username(DocumentSnapshot doc) {
         Map<String, Object> data = doc.getData();
-        Init(doc.getId(), (String) data.get(KEY_NAME), (String) data.get(KEY_USERID));
+        Init(doc.getId(), (String) data.get(KEY_NAME));
     }
 
-    public void Init(String id, String name, String userId) {
+    public void Init(String id, String name) {
         setId(id);
         this.name = name;
-        this.userId = userId;
     }
 
     @Override
@@ -49,8 +48,20 @@ public class Username extends FirebaseModel {
         return name;
     }
 
-    public String getUserId() {
-        return userId;
+    static public void setUsername(
+            String userId, String username,
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail
+    ) {
+        Map<String, String> data = new HashMap<>();
+        data.put(KEY_NAME, username);
+        Log.d("SETTING", userId);
+        Log.d("SETTING", username);
+        Common.db().collection(COLLECTION_NAME)
+                .document(userId)
+                .set(data)
+                .addOnSuccessListener(success)
+                .addOnFailureListener(fail);
     }
 
     static public void getUsernameByUserId(
@@ -59,14 +70,9 @@ public class Username extends FirebaseModel {
             @NonNull OnFailureListener fail
     ) {
         Common.db().collection(COLLECTION_NAME)
-                .whereEqualTo(KEY_USERID, userId)
+                .document(userId)
                 .get()
-                .addOnSuccessListener((docs) -> {
-                    for (QueryDocumentSnapshot document : docs) {
-                        success.onSuccess(new Username(document));
-                        break;
-                    }
-                })
+                .addOnSuccessListener((user) -> success.onSuccess(new Username(user)))
                 .addOnFailureListener(fail);
     }
 }

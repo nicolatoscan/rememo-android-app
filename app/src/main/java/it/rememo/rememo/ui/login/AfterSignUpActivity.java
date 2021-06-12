@@ -15,6 +15,8 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 
 import it.rememo.rememo.MainActivity;
 import it.rememo.rememo.R;
+import it.rememo.rememo.models.Username;
+import it.rememo.rememo.utils.Common;
 
 public class AfterSignUpActivity extends AppCompatActivity {
 
@@ -41,11 +43,22 @@ public class AfterSignUpActivity extends AppCompatActivity {
             txtName.setError("Name can't be this long");
             return;
         }
+
         txtName.setError(null);
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
         fAuth.getCurrentUser().updateProfile(profileUpdates);
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        finish();
+
+        Username.setUsername(Common.getUserId(), name,
+            success -> {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+            },
+            ex -> {
+                Common.toast(this, "Error saving name, please try again");
+            }
+        );
+
+
     }
 
 
