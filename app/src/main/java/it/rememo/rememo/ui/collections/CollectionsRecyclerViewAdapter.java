@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.RowCollectionItemBinding;
 import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.ui.shared.GroupRecyclerViewAdapter;
@@ -37,8 +38,8 @@ public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Col
             if (isMine) {
                 itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                     // menu.setHeaderTitle("Select The Action");
-                    menu.add(0, view.getId(), 0, "Rename").setOnMenuItemClickListener((mItem) -> renameCollection());
-                    menu.add(0, view.getId(), 0, "Delete").setOnMenuItemClickListener((mItem) -> deleteCollection());
+                    menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_rename)).setOnMenuItemClickListener((mItem) -> renameCollection());
+                    menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteCollection());
                 });
             }
         }
@@ -46,15 +47,15 @@ public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Col
         private boolean renameCollection() {
             final EditText textInput = new EditText(itemView.getContext());
             textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-            textInput.setHint("Collection name");
+            textInput.setHint(Common.resStr(itemView.getContext(), R.string.coll_name));
             if (element != null) {
                 textInput.setText(element.getName());
             }
 
             Alerts
                 .getInputTextAlert(itemView.getContext(), textInput)
-                .setTitle("Rename collection")
-                .setPositiveButton("Rename", (dialog, which) -> {
+                .setTitle(Common.resStr(itemView.getContext(), R.string.coll_rename))
+                .setPositiveButton(Common.resStr(itemView.getContext(), R.string.basic_rename), (dialog, which) -> {
                     String title = textInput.getText().toString();
 
                     Map<String, Object> updateColl = new HashMap<>();
@@ -64,26 +65,26 @@ public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Col
                                 ((Collection) element).setName(title);
                                 updateUI();
                             },
-                            ex -> Common.toast(itemView.getContext(), "Couldn't rename collection")
+                            ex -> Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.coll_cant_rename))
                     );
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                .setNegativeButton(Common.resStr(itemView.getContext(), R.string.basic_cancel), (dialog, which) -> dialog.cancel())
                 .show();
             return true;
         }
 
         private boolean deleteCollection() {
             new AlertDialog.Builder(itemView.getContext())
-                    .setTitle("Delete word")
-                    .setMessage("Are you sure you want to delete " + element.getName() + " and all it's words?")
+                    .setTitle(Common.resStr(itemView.getContext(), R.string.word_delete))
+                    .setMessage(String.format(Common.resStr(itemView.getContext(), R.string.form_sure_to_delete_coll_STR_and_words), element.getName()))
                     .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton("I'm sure", (dialog, whichButton) -> {
+                    .setPositiveButton(Common.resStr(itemView.getContext(), R.string.form_im_sure), (dialog, whichButton) -> {
                         element.deleteFromFirestore(
-                                x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), "Collection deleted"); },
-                                ex -> Common.toast(itemView.getContext(), "Couldn't delete this collection")
+                                x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.coll_deleted)); },
+                                ex -> Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.coll_cant_delete))
                         );
                     })
-                    .setNegativeButton("Cancel", null).show();
+                    .setNegativeButton(Common.resStr(itemView.getContext(), R.string.basic_cancel), null).show();
             return true;
         }
 

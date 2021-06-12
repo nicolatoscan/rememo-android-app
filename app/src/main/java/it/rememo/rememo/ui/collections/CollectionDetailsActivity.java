@@ -66,7 +66,7 @@ public class CollectionDetailsActivity extends AppCompatActivity {
                 binding.wordsSwipeContainer.setRefreshing(false);
             },
             ex -> {
-                Common.toast(this, "Couldn't load words");
+                Common.toast(this, Common.resStr(this, R.string.words_cant_load));
                 binding.wordsSwipeContainer.setRefreshing(false);
             }
         );
@@ -87,7 +87,7 @@ public class CollectionDetailsActivity extends AppCompatActivity {
                 binding.wordsRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
                 resetInputWord();
             },
-            ex -> { Common.toast(this, "Couldn't create a new word"); resetInputWord(); }
+            ex -> { Common.toast(this, Common.resStr(this, R.string.word_cant_create_new)); resetInputWord(); }
         );
     }
     private void resetInputWord() {

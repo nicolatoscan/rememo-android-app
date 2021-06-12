@@ -96,8 +96,8 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
 
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                 // menu.setHeaderTitle("Select The Action");
-                menu.add(0, view.getId(), 0, "Edit").setOnMenuItemClickListener((mItem) -> renameWord());
-                menu.add(0, view.getId(), 0, "Delete").setOnMenuItemClickListener((mItem) -> deleteWord());
+                menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_edit)).setOnMenuItemClickListener((mItem) -> renameWord());
+                menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteWord());
             });
         }
 
@@ -106,8 +106,8 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
             final EditText txtTranslated = new EditText(itemView.getContext());
             txtOriginal.setInputType(InputType.TYPE_CLASS_TEXT);
             txtTranslated.setInputType(InputType.TYPE_CLASS_TEXT);
-            txtOriginal.setHint("Original");
-            txtTranslated.setHint("Translated");
+            txtOriginal.setHint(Common.resStr(itemView.getContext(), R.string.word_original));
+            txtTranslated.setHint(Common.resStr(itemView.getContext(), R.string.word_translated));
             if (word != null) {
                 txtOriginal.setText(word.getOriginal());
                 txtTranslated.setText(word.getTranslated());
@@ -115,8 +115,8 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
 
             Alerts
                     .getInputTextAlert(itemView.getContext(), txtOriginal, txtTranslated)
-                    .setTitle("Edit word")
-                    .setPositiveButton("Rename", (dialog, which) -> {
+                    .setTitle(Common.resStr(itemView.getContext(), R.string.word_edit))
+                    .setPositiveButton(Common.resStr(itemView.getContext(), R.string.basic_rename), (dialog, which) -> {
                         String original = txtOriginal.getText().toString();
                         String translated = txtTranslated.getText().toString();
 
@@ -129,10 +129,10 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
                                 word.setTranslated(translated);
                                 updateUI();
                             },
-                            ex -> Common.toast(itemView.getContext(), "Couldn't rename collection")
+                            ex -> Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.coll_cant_rename))
                         );
                     })
-                    .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                    .setNegativeButton(Common.resStr(itemView.getContext(), R.string.basic_cancel), (dialog, which) -> dialog.cancel())
                     .show();
             return true;
         }
@@ -143,16 +143,16 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
                 return false;
             }
             new AlertDialog.Builder(itemView.getContext())
-                .setTitle("Delete word")
-                .setMessage("Are you sure you want to delete " + word.getOriginal() + "?")
+                .setTitle(Common.resStr(itemView.getContext(), R.string.word_delete))
+                .setMessage(String.format(Common.resStr(itemView.getContext(), R.string.form_sure_to_delete_STR), word.getOriginal()))
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton("I'm sure", (dialog, whichButton) -> {
+                .setPositiveButton(Common.resStr(itemView.getContext(), R.string.form_im_sure), (dialog, whichButton) -> {
                     coll.deleteWord(word,
-                            x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), "Word deleted"); },
-                            ex -> Common.toast(itemView.getContext(), "Couldn't delete this word")
+                            x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.word_deleted)); },
+                            ex -> Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.word_cant_delete))
                     );
                 })
-                .setNegativeButton("Cancel", null).show();
+                .setNegativeButton(Common.resStr(itemView.getContext(), R.string.basic_cancel), null).show();
             return true;
         }
 

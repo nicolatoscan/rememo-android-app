@@ -39,7 +39,7 @@ public class ClassStudentActivity extends ClassListActivity {
         u.add((Username) item);
         this.stClass.removeStudents(u,
                 success -> {},
-                ex -> Common.toast(getApplicationContext(), Common.resStr(this, R.string.coll_cant_remove_coll))
+                ex -> Common.toast(getApplicationContext(), Common.resStr(this, R.string.coll_cant_remove))
         );
     }
 }

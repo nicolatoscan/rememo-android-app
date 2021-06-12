@@ -1,12 +1,6 @@
 package it.rememo.rememo.ui.classes;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import it.rememo.rememo.R;
@@ -66,7 +60,7 @@ public class ClassCollectionsActivity extends ClassListActivity {
         c.add((Collection) item);
         this.stClass.removeCollections(c,
                 success -> {},
-                ex -> Common.toast(getApplicationContext(), Common.resStr(this, R.string.coll_cant_remove_coll))
+                ex -> Common.toast(getApplicationContext(), Common.resStr(this, R.string.coll_cant_remove))
         );
     }
 }

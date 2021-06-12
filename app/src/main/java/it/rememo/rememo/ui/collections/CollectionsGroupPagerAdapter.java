@@ -9,12 +9,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import it.rememo.rememo.R;
 import it.rememo.rememo.models.StudentClass;
+import it.rememo.rememo.utils.Common;
 
 public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
     ArrayList<StudentClass> collectionsGroups;
+    Fragment fragment;
+
     public CollectionsGroupPagerAdapter(Fragment fa) {
         super(fa);
+        fragment = fa;
+
         collectionsGroups = new ArrayList<StudentClass>();
         collectionsGroups.add(null);
 
@@ -46,7 +52,7 @@ public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
     public String getTitle(int pos) {
         StudentClass cl = collectionsGroups.get(pos);
         if (cl == null) {
-            return "Mine";
+            return Common.resStr(fragment.getContext(), R.string.colls_mine);
         }
         return cl.getName();
     }

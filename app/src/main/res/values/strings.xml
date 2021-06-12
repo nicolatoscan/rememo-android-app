@@ -5,41 +5,67 @@
     <string name="title_classes">#Classes</string>
     <string name="title_students">#Students</string>
 
+
     <!-- login -->
     <string name="login_instructions">#Login or signup with email</string>
     <string name="login_email_addr">#Email</string>
     <string name="login_send_email">#Send Email</string>
     <string name="login_or">#Or</string>
 
+
     <!-- basic -->
     <string name="basic_add">#Add</string>
     <string name="basic_cancel">#Cancel</string>
     <string name="basic_create">#Create</string>
+    <string name="basic_edit">#Edit</string>
     <string name="basic_rename">#Rename</string>
     <string name="basic_share">#Share</string>
     <string name="basic_delete">#Delete</string>
     <string name="basic_">#</string>
 
+
     <!-- form -->
-    <string name="form_title_delete_STR">#Remove %s</string>
+    <string name="form_title_remove_STR">#Remove %s</string>
     <string name="form_im_sure">#I\'m sure</string>
-    <string name="form_sure_to_delete_STR">#Are you sure you want to delete %s ?</string>
+    <string name="form_sure_to_delete_STR">#Are you sure you want to delete %s?</string>
+    <string name="form_sure_to_delete_coll_STR_and_words">#Are you sure you want to delete %s and all its words?</string>
+
+
+    <!-- word -->
+    <string name="word_original">#Original</string>
+    <string name="word_translated">#Translated</string>
+    <string name="word_cant_create_new">#</string>
+    <string name="word_delete">#Delete word</string>
+    <string name="word_deleted">#Word deleted</string>
+    <string name="word_edit">#Edit word</string>
+    <string name="word_cant_delete">#Couldn\'t delete this word</string>
+    <string name="word_">#</string>
+
+    <string name="words_cant_load">#</string>
 
 
     <!-- collection -->
     <string name="coll_title">#Title</string>
+    <string name="coll_name">#Collection name</string>
     <string name="coll_add">#Add collection</string>
+    <string name="coll_rename">#Rename collection</string>
+    <string name="coll_create_new">#Create a new collection</string>
     <string name="coll_no_other_add">#No other collection to add</string>
-    <string name="coll_cant_remove_coll">#Couldn\'t remove collection</string>
+    <string name="coll_cant_rename">#Couldn\'t rename collection</string>
+    <string name="coll_cant_remove">#Couldn\'t remove collection</string>
+    <string name="coll_cant_delete">#Couldn\'t delete collection</string>
+    <string name="coll_deleted">#Collection deleted</string>
     <string name="coll_err_creating_retry">"#Error creating collection, please try again later"</string>
     <string name="coll_"></string>
 
+    <string name="colls_mine">#Mine</string>
     <string name="colls_collections">#Collections</string>
     <string name="colls_add">#Add collections</string>
     <string name="colls_cant_add">#Couldn\'t add collections</string>
     <string name="colls_cant_load">#Couldn\'t load collections</string>
     <string name="colls_cant_update">"#Couldn'\t update collections"</string>
     <string name="colls_">#</string>
+
 
     <!-- class -->
     <string name="class_name">#Class name</string>
