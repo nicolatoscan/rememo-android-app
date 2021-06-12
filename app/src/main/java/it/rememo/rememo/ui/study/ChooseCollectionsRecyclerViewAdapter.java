@@ -61,6 +61,24 @@ public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<C
         return list.size();
     }
 
+    public ArrayList<String> getSelectedIds() {
+        ArrayList<String> res = new ArrayList<>();
+
+        if (multiselect) {
+            for (int i = 0; i < list.size(); i++) {
+                if (checkedCheckBoxes.get(i)) {
+                    res.add(list.get(i).getId());
+                }
+            }
+        } else {
+            if (lastCheckedPositionRadio != -1) {
+                res.add(list.get(lastCheckedPositionRadio).getId());
+            }
+        }
+
+        return res;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         RowRadioCollectionBinding binding;
 

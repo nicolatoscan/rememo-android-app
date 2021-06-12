@@ -13,4 +13,5 @@
     <color name="rememo_dark">#FF009F7B</color>
     <color name="rememo_darker">#FF006f4f</color>
     <color name="rememo_light">#FF7AFFDC</color>
+    <color name="error_red">#FF5555</color>
 </resources>

@@ -100,19 +100,17 @@ public class Collection extends FirebaseModel {
     public void fetchWords(
             @NonNull OnSuccessListener<? super List<CollectionWord>> success,
             @NonNull OnFailureListener fail) {
-        Common.db()
-                .collection(COLLECTION_NAME)
-                .document(getId())
-                .collection(CollectionWord.COLLECTION_NAME)
-                .get()
-                .addOnSuccessListener(docs -> {
-                    words.clear();
-                    for (QueryDocumentSnapshot document : docs) {
-                        words.add(new CollectionWord(this, document));
+        CollectionWord.getWordsByCollectionId(
+                getId(),
+                newWords -> {
+                    for (CollectionWord w : newWords) {
+                        w.setCollectionParent(this);
                     }
-                    success.onSuccess(words);
-                })
-                .addOnFailureListener(fail);
+                    words.clear();
+                    words.addAll(newWords);
+                },
+                fail
+        );
     }
 
     public void addWord(CollectionWord word,

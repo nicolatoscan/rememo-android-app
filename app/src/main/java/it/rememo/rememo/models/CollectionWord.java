@@ -8,7 +8,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import it.rememo.rememo.utils.Common;
@@ -92,5 +95,25 @@ public class CollectionWord {
 
     public Collection getCollectionParent() {
         return collectionParent;
+    }
+
+    public static void getWordsByCollectionId(
+            String collectionId,
+            @NonNull OnSuccessListener<? super List<CollectionWord>> success,
+            @NonNull OnFailureListener fail
+    ) {
+        Common.db()
+                .collection(Collection.COLLECTION_NAME)
+                .document(collectionId)
+                .collection(CollectionWord.COLLECTION_NAME)
+                .get()
+                .addOnSuccessListener(docs -> {
+                    List<CollectionWord> w = new ArrayList();
+                    for (QueryDocumentSnapshot document : docs) {
+                        w.add(new CollectionWord(null, document));
+                    }
+                    success.onSuccess(w);
+                })
+                .addOnFailureListener(fail);
     }
 }
