@@ -11,5 +11,6 @@
     <!-- Rememo primary color scheme -->
     <color name="rememo_primary">#FF3FD1AA</color>
     <color name="rememo_dark">#FF009F7B</color>
+    <color name="rememo_darker">#FF006f4f</color>
     <color name="rememo_light">#FF7AFFDC</color>
 </resources>
