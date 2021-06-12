@@ -56,14 +56,20 @@ public class TestActivity extends AppCompatActivity {
 
     void loadTest() {
         Collections.shuffle(this.allWords);
-        this.allWords = this.allWords.subList(0, N);
+
+
+        int size = this.allWords.size();
+        if (N > size) {
+            N = size;
+        }
+        this.allWords = this.allWords.subList(0, size);
         this.adapter.addAll(this.allWords);
 
-        for (int i = 0; i < 100; i++) {
+        // for (int i = 0; i < 100; i++) {
             // RowTestItemBinding row = RowTestItemBinding.inflate(getLayoutInflater());
             // row.txtCollectionRow.setText("Pippo");
             // this.binding.list.addView(row.getRoot());
-        }
+        // }
 
     }
 
