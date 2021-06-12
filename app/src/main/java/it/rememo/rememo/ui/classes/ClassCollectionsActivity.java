@@ -8,6 +8,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import it.rememo.rememo.R;
 import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.FirebaseModel;
 import it.rememo.rememo.models.StudentClass;
@@ -17,11 +19,11 @@ public class ClassCollectionsActivity extends ClassListActivity {
 
     @Override
     protected String getBtnName() {
-        return "Add collections";
+        return Common.resStr(this, R.string.colls_add);
     }
     @Override
     protected String getPageTitle() {
-        return "Collections";
+        return Common.resStr(this, R.string.colls_collections);
     }
 
     public void onBtnClick() {
@@ -38,15 +40,15 @@ public class ClassCollectionsActivity extends ClassListActivity {
                                 stClass.addCollections(
                                         selectedCollections,
                                         s -> adapter.addAll(selectedCollections),
-                                        ex -> Common.toast(this, "Couldn't add collections")
+                                        ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_add))
                                 );
                             }
                         ).show(getSupportFragmentManager(), "PIPPO");
                     } else {
-                        Common.toast(this, "No other collection to add");
+                        Common.toast(this, Common.resStr(this, R.string.coll_no_other_add));
                     }
                 },
-                ex -> Common.toast(this, "Couldn't load collections")
+                ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
         );
     }
 
@@ -54,7 +56,7 @@ public class ClassCollectionsActivity extends ClassListActivity {
     protected void updateList(StudentClass cl) {
         cl.getClassCollections(
                 collections -> adapter.addAll(collections),
-                ex -> Common.toast(this, "Couldn't load collections")
+                ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
         );
     }
 
@@ -64,7 +66,7 @@ public class ClassCollectionsActivity extends ClassListActivity {
         c.add((Collection) item);
         this.stClass.removeCollections(c,
                 success -> {},
-                ex -> Common.toast(getApplicationContext(), "Couldn't remove collection")
+                ex -> Common.toast(getApplicationContext(), Common.resStr(this, R.string.coll_cant_remove_coll))
         );
     }
 }

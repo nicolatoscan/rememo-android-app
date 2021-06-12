@@ -15,7 +15,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.rememo.rememo.R;
 import it.rememo.rememo.models.Collection;
+import it.rememo.rememo.utils.Common;
 
 public class AddCollectionDialogFragment extends DialogFragment {
 
@@ -42,11 +44,11 @@ public class AddCollectionDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Title")
+        builder.setTitle(Common.resStr(getContext(), R.string.coll_title))
                 .setMultiChoiceItems(items, itemChecked,
                         (DialogInterface.OnMultiChoiceClickListener) (dialog, which, isChecked) -> { }
                 )
-                .setPositiveButton("Add", (dialog, id) -> {
+                .setPositiveButton(Common.resStr(getContext(), R.string.coll_add), (dialog, id) -> {
                     ArrayList<Collection> res = new ArrayList<>();
                     for (int i = 0; i < itemChecked.length; i++) {
                         if (itemChecked[i]) {
@@ -55,7 +57,7 @@ public class AddCollectionDialogFragment extends DialogFragment {
                     }
                     positiveResponse.onSuccess(res);
                 })
-                .setNegativeButton("Cancel", (dialog, id) -> { });
+                .setNegativeButton(Common.resStr(getContext(), R.string.basic_cancel), (dialog, id) -> { });
 
         return builder.create();
     }

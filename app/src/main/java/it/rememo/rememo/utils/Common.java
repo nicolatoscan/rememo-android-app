@@ -6,6 +6,8 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import it.rememo.rememo.R;
+
 public class Common {
     private static String userId = null;
     public static String getUserId() {
@@ -13,6 +15,10 @@ public class Common {
             Common.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
         return userId;
+    }
+
+    public static String resStr(Context context, int id) {
+        return context.getResources().getText(id).toString();
     }
 
     public static void toast(Context ctx, String error) {

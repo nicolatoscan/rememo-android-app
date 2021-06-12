@@ -19,6 +19,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.FragmentCollectionGroupBinding;
 import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.StudentClass;
@@ -58,7 +59,7 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
                 binding.collectionSwipeContainer.setRefreshing(false);
             },
             (ex) -> {
-                Common.toast(getContext(), "Couldn't update collections");
+                Common.toast(getContext(), Common.resStr(getContext(), R.string.colls_cant_update));
                 binding.collectionSwipeContainer.setRefreshing(false);
             });
     }
@@ -66,18 +67,18 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
     protected void onAddClicked() {
         final EditText textInput = new EditText(getContext());
         textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        textInput.setHint("Class name");
+        textInput.setHint(Common.resStr(getContext(), R.string.class_name));
 
         Alerts
                 .getInputTextAlert(getContext(), textInput)
-                .setTitle("Create a new class")
-                .setPositiveButton("Create", (dialog, which) -> {
+                .setTitle(Common.resStr(getContext(), R.string.class_create_new))
+                .setPositiveButton(Common.resStr(getContext(), R.string.basic_create), (dialog, which) -> {
                     String title = textInput.getText().toString();
                     if (title.length() > 0) {
                         createClass(title);
                     }
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                .setNegativeButton(Common.resStr(getContext(), R.string.basic_cancel), (dialog, which) -> dialog.cancel())
                 .show();
     }
 
@@ -88,7 +89,7 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
                     adapter.add(cl);
                     binding.collectionRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
                 },
-                ex -> Common.toast(getContext(), "Error creating collection, please try again later")
+                ex -> Common.toast(getContext(), Common.resStr(getContext(), R.string.coll_err_creating_retry))
         );
         return cl;
     }
