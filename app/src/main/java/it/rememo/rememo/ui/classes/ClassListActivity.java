@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityListWithAddBinding;
 import it.rememo.rememo.models.FirebaseModel;
 import it.rememo.rememo.models.StudentClass;
@@ -49,7 +50,7 @@ public abstract class ClassListActivity extends AppCompatActivity {
                     stClass = cl;
                     this.updateList(cl);
                 },
-                (ex) -> Common.toast(this, "Couldn't load collections")
+                (ex) -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
         );
 
         binding.addBtn.setOnClickListener(v -> onBtnClick() );
@@ -57,14 +58,14 @@ public abstract class ClassListActivity extends AppCompatActivity {
 
     private void removeItem(int position, FirebaseModel item) {
         new AlertDialog.Builder(this)
-                .setTitle("Remove " + item.getName())
-                .setMessage("Are you sure you want to delete " + item.getName() + "?")
-                .setPositiveButton("I'm sure", (dialog, whichButton) -> {
+                .setTitle(String.format(Common.resStr(this, R.string.class_name), item.getName()))
+                .setMessage(String.format(Common.resStr(this, R.string.form_sure_to_delete_STR), item.getName()))
+                .setPositiveButton(Common.resStr(this, R.string.form_im_sure), (dialog, whichButton) -> {
                     collList.remove(position);
                     adapter.notifyItemRemoved(position);
                     removeItemHandler(item);
                 })
-                .setNegativeButton("Cancel", null).show();
+                .setNegativeButton(Common.resStr(this, R.string.basic_cancel), null).show();
     }
 
     protected abstract void  onBtnClick();
