@@ -41,7 +41,7 @@ public class JoinClassActivity extends AppCompatActivity {
                     id,
                     sc -> updateUI(sc),
                     ex -> {
-                        Common.toast(this, "Class not found");
+                        Common.toast(this, Common.resStr(this, R.string.class_not_found));
                         startActivity(new Intent(this, MainActivity.class));
                         finish();
                     }
@@ -62,10 +62,10 @@ public class JoinClassActivity extends AppCompatActivity {
 
         stClass.joinClass(
             x -> {
-                Common.toast(this, "Class joined");
+                Common.toast(this, Common.resStr(this, R.string.class_joined));
                 startActivity(new Intent(this, MainActivity.class));
             },
-            ex -> Common.toast(this, "Couldn't join class")
+            ex -> Common.toast(this, Common.resStr(this, R.string.class_cant_join))
         );
 
     }

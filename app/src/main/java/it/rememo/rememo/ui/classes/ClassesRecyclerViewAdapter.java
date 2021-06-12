@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.RowCollectionItemBinding;
 import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.StudentClass;
@@ -47,9 +48,9 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
             if (isCreated) {
                 itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                     // menu.setHeaderTitle("Select The Action");
-                    menu.add(0, view.getId(), 0, "Share").setOnMenuItemClickListener((mItem) -> shareClass());
-                    menu.add(0, view.getId(), 0, "Rename").setOnMenuItemClickListener((mItem) -> renameClasses());
-                    menu.add(0, view.getId(), 0, "Delete").setOnMenuItemClickListener((mItem) -> deleteCollection());
+                    menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_share)).setOnMenuItemClickListener((mItem) -> shareClass());
+                    menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_rename)).setOnMenuItemClickListener((mItem) -> renameClasses());
+                    menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteCollection());
                 });
             }
         }
@@ -62,15 +63,15 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
         private boolean renameClasses() {
             final EditText textInput = new EditText(itemView.getContext());
             textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-            textInput.setHint("Class name");
+            textInput.setHint(Common.resStr(context, R.string.class_name));
             if (element != null) {
                 textInput.setText(element.getName());
             }
 
             Alerts
                     .getInputTextAlert(itemView.getContext(), textInput)
-                    .setTitle("Rename class")
-                    .setPositiveButton("Rename", (dialog, which) -> {
+                    .setTitle(Common.resStr(context, R.string.class_rename))
+                    .setPositiveButton(Common.resStr(context, R.string.basic_rename), (dialog, which) -> {
                         String title = textInput.getText().toString();
 
                         Map<String, Object> updateColl = new HashMap<>();
@@ -80,25 +81,25 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
                                     ((StudentClass) element).setName(title);
                                     updateUI();
                                 },
-                                ex -> Common.toast(itemView.getContext(), "Couldn't rename class")
+                                ex -> Common.toast(itemView.getContext(), Common.resStr(context, R.string.class_cant_rename))
                         );
                     })
-                    .setNegativeButton("Cancel", (dialog, which) -> dialog.cancel())
+                    .setNegativeButton(Common.resStr(context, R.string.basic_cancel), (dialog, which) -> dialog.cancel())
                     .show();
             return true;
         }
 
         private boolean deleteCollection() {
             new AlertDialog.Builder(itemView.getContext())
-                    .setTitle("Delete class")
-                    .setMessage("Are you sure you want to delete " + element.getName() + "?")
-                    .setPositiveButton("I'm sure", (dialog, whichButton) -> {
+                    .setTitle(Common.resStr(context, R.string.class_delete))
+                    .setMessage(String.format(Common.resStr(context, R.string.form_sure_to_delete_STR), element.getName()))
+                    .setPositiveButton(Common.resStr(context, R.string.form_im_sure), (dialog, whichButton) -> {
                         element.deleteFromFirestore(
-                                x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), "Class deleted"); },
-                                ex -> Common.toast(itemView.getContext(), "Couldn't delete this class")
+                                x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), Common.resStr(context, R.string.class_deleted)); },
+                                ex -> Common.toast(itemView.getContext(), Common.resStr(context, R.string.class_cant_delete))
                         );
                     })
-                    .setNegativeButton("Cancel", null).show();
+                    .setNegativeButton(Common.resStr(context, R.string.basic_cancel), null).show();
             return true;
         }
 

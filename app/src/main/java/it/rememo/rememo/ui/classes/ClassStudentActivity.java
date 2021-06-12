@@ -2,6 +2,7 @@ package it.rememo.rememo.ui.classes;
 
 import java.util.ArrayList;
 
+import it.rememo.rememo.R;
 import it.rememo.rememo.models.FirebaseModel;
 import it.rememo.rememo.models.StudentClass;
 import it.rememo.rememo.models.Username;
@@ -12,11 +13,11 @@ public class ClassStudentActivity extends ClassListActivity {
 
     @Override
     protected String getBtnName() {
-        return "Share class";
+        return Common.resStr(this, R.string.class_share);
     }
     @Override
     protected String getPageTitle() {
-        return "Students";
+        return Common.resStr(this, R.string.title_students);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class ClassStudentActivity extends ClassListActivity {
     protected void updateList(StudentClass cl) {
         cl.getClassStudents(
                 students -> adapter.addAll(students),
-                ex -> Common.toast(this, "Couldn't load Usernames")
+                ex -> Common.toast(this, Common.resStr(this, R.string.class_cant_load_usernames))
         );
     }
 
@@ -38,7 +39,7 @@ public class ClassStudentActivity extends ClassListActivity {
         u.add((Username) item);
         this.stClass.removeStudents(u,
                 success -> {},
-                ex -> Common.toast(getApplicationContext(), "Couldn't remove collection")
+                ex -> Common.toast(getApplicationContext(), Common.resStr(this, R.string.coll_cant_remove_coll))
         );
     }
 }

@@ -9,15 +9,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import it.rememo.rememo.R;
 import it.rememo.rememo.ui.collections.CollectionsGroupFragment;
+import it.rememo.rememo.utils.Common;
 
 public class ClassesGroupPagerAdapter extends FragmentStateAdapter {
     ArrayList<String> classTypes;
     public ClassesGroupPagerAdapter(Fragment fa) {
         super(fa);
         this.classTypes = new ArrayList<>();
-        this.classTypes.add("Joined");
-        this.classTypes.add("Created");
+        this.classTypes.add(Common.resStr(fa.getContext(), R.string.classes_joined));
+        this.classTypes.add(Common.resStr(fa.getContext(), R.string.classes_created));
     }
 
     @NotNull
