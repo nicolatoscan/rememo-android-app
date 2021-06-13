@@ -64,11 +64,17 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
         if (learnType < 0 || learnType > 2)
             return;
 
+        ArrayList<String> selectedIds = this.adapter.getSelectedIds();
+        if (selectedIds.size() <= 0) {
+            Common.toast(this, "You need to select at least a collection");
+            return;
+        }
+
         Intent i = null;
         if (learnType == EStudyType.LEARN) {
         } else if (learnType == EStudyType.TEST) {
             i = new Intent(this, TestActivity.class);
-            i.putExtra(TestActivity.ARG_COLLECTIONS, this.adapter.getSelectedIds());
+            i.putExtra(TestActivity.ARG_COLLECTIONS, selectedIds);
         } else if (learnType == EStudyType.TRAIN) {
         }
 
