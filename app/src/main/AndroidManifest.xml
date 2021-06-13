@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Rememo">
-        <activity android:name=".ui.study.TestActivity"></activity>
+        <activity android:name=".ui.study.TrainActivity"></activity>
+        <activity android:name=".ui.study.TestActivity" />
         <activity android:name=".ui.study.ChooseCollectionsActivity" />
         <activity android:name=".ui.classes.ClassCollectionsActivity" />
         <activity android:name=".ui.classes.ClassStudentActivity" />

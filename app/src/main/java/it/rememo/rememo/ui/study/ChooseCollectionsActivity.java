@@ -72,13 +72,15 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
 
         Intent i = null;
         if (learnType == EStudyType.LEARN) {
+            i = new Intent(this, TrainActivity.class);
         } else if (learnType == EStudyType.TEST) {
             i = new Intent(this, TestActivity.class);
-            i.putExtra(TestActivity.ARG_COLLECTIONS, selectedIds);
         } else if (learnType == EStudyType.TRAIN) {
+            i = new Intent(this, TrainActivity.class);
         }
 
         if (i != null) {
+            i.putExtra(TestActivity.ARG_COLLECTIONS, selectedIds);
             startActivity(i);
             finish();
         }
