@@ -1,5 +1,7 @@
 package it.rememo.rememo.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -110,7 +112,8 @@ public class CollectionWord {
                 .addOnSuccessListener(docs -> {
                     List<CollectionWord> w = new ArrayList();
                     for (QueryDocumentSnapshot document : docs) {
-                        w.add(new CollectionWord(null, document));
+                        CollectionWord cw = new CollectionWord(null, document);
+                        w.add(cw);
                     }
                     success.onSuccess(w);
                 })

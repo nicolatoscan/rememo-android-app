@@ -108,6 +108,7 @@ public class Collection extends FirebaseModel {
                     }
                     words.clear();
                     words.addAll(newWords);
+                    success.onSuccess(words);
                 },
                 fail
         );
