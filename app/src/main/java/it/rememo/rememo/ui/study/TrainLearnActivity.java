@@ -1,9 +1,7 @@
 package it.rememo.rememo.ui.study;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.drawable.DrawableCompat;
-
 import android.content.Intent;
+import android.graphics.BlurMaskFilter;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,7 +9,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,18 +23,17 @@ import it.rememo.rememo.databinding.ActivityTrainBinding;
 import it.rememo.rememo.models.CollectionWord;
 import it.rememo.rememo.utils.Common;
 
-public class TrainActivity extends AppCompatActivity {
+public abstract class TrainLearnActivity extends AppCompatActivity {
 
     public final static String ARG_COLLECTIONS = "collections";
     MediaPlayer successSound;
     ActivityTrainBinding binding;
     CollectionWord currentWord;
     List<CollectionWord> words;
-    int initialWordsSize;
-    int learnedWords;
-    List<CollectionWord> learningWords;
-    HashMap<String, Double> learningStatus;
-    boolean finished = false;
+    boolean isAnswerShown = false;
+
+    abstract void onSetup();
+    abstract void onWordLoaded();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,33 +42,12 @@ public class TrainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         successSound = MediaPlayer.create(this, R.raw.success);
 
-        learningWords = new ArrayList<>();
-        learningStatus = new HashMap<>();
-
         Intent i = getIntent();
         List<String> collectionsIds = i.getStringArrayListExtra(ARG_COLLECTIONS);
         if (collectionsIds.size() != 1) {
             finish();
             return;
         }
-
-        CollectionWord.getWordsByCollectionId(
-                collectionsIds.get(0),
-                collectionWords -> {
-                    if (collectionWords == null) {
-                        Common.toast(this, "Couldn't load words");
-                        finish();
-                        return;
-                    }
-                    words = collectionWords;
-                    initialWordsSize = words.size();
-                    start();
-                },
-                ex -> {
-                    Common.toast(this, "Couldn't load words");
-                    finish();
-                }
-        );
 
         binding.txtAnswer.setEnabled(false);
         binding.txtAnswer.addTextChangedListener(new TextWatcher() {
@@ -83,19 +61,49 @@ public class TrainActivity extends AppCompatActivity {
             }
         });
         binding.btnNext.setOnClickListener(v -> nextWord());
-        setProgressBar(0);
+
+        binding.txtShowAnswer.setOnClickListener(v -> {
+            binding.txtShowAnswer.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+            binding.txtShowAnswer.getPaint().setMaskFilter(null);
+            isAnswerShown = true;
+        });
+
+        onSetup();
+
+        CollectionWord.getWordsByCollectionId(
+                collectionsIds.get(0),
+                collectionWords -> {
+                    if (collectionWords == null) {
+                        Common.toast(this, "Couldn't load words");
+                        finish();
+                        return;
+                    }
+                    words = collectionWords;
+                    binding.progressBar.setVisibility(View.GONE);
+                    onWordLoaded();
+                    nextWord();
+                },
+                ex -> {
+                    Common.toast(this, "Couldn't load words");
+                    finish();
+                }
+        );
     }
 
-    private void start() {
-        binding.progressBar.setVisibility(View.GONE);
-        for (int i = 0; i < 3; i++) addWord();
-        nextWord();
-    }
+    abstract CollectionWord getNextWord();
 
-    private void nextWord() {
-        this.currentWord = learningWords.get(new Random().nextInt(learningWords.size()));
+    void nextWord() {
+        isAnswerShown = false;
+        this.currentWord = getNextWord();
 
         binding.txtOriginal.setText(currentWord.getOriginal());
+
+        binding.txtShowAnswer.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        float radius = (float)((double)binding.txtShowAnswer.getTextSize() / 2.0);
+        BlurMaskFilter filter = new BlurMaskFilter(radius, BlurMaskFilter.Blur.NORMAL);
+        binding.txtShowAnswer.getPaint().setMaskFilter(filter);
+        binding.txtShowAnswer.setText(currentWord.getTranslated());
+
         binding.txtAnswer.setText("");
         binding.txtAnswer.setEnabled(true);
         binding.txtAnswer.requestFocus();
@@ -111,46 +119,10 @@ public class TrainActivity extends AppCompatActivity {
             DrawableCompat.setTint(binding.txtAnswer.getBackground(), getColor(R.color.rememo_dark));
             successSound.start();
 
-            updatePoints(currentWord.getId(), true);
+            updatePoints(currentWord.getId(), !isAnswerShown);
         }
     }
 
-    private void updatePoints(String id, boolean result) {
-        double points = this.learningStatus.get(id);
-        double nextPoints = result ?  points + ((1 - points) / 2.0) : points / 2.0;
-        this.learningStatus.put(id, nextPoints);
+    abstract void updatePoints(String id, boolean result);
 
-        double threshold = 0.7;
-
-        if (points < threshold && nextPoints >= threshold) {
-            learnedWords++;
-            setProgressBar(learnedWords);
-        }
-        else if (points >= threshold && nextPoints < threshold) {
-            learnedWords--;
-            setProgressBar(learnedWords);
-        }
-
-        if (this.learningWords.size() < learnedWords + 3) {
-            addWord();
-        }
-    }
-
-    private void setProgressBar(int progress) {
-        double v = (double)progress / (double)initialWordsSize;
-        binding.learnProgress.setProgress((int)(v * 100));
-    }
-
-    private void addWord() {
-        int wordsSize = words.size();
-        if (wordsSize <= 0) {
-            finished = true;
-            return;
-        }
-        int pos = new Random().nextInt(wordsSize);
-        CollectionWord cw = words.get(pos);
-        words.remove(pos);
-        learningWords.add(cw);
-        learningStatus.put(cw.getId(), 0.0);
-    }
 }

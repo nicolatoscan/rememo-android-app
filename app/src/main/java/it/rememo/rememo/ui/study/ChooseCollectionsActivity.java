@@ -5,18 +5,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityChooseCollectionsBinding;
 import it.rememo.rememo.models.Collection;
-import it.rememo.rememo.models.CollectionWord;
 import it.rememo.rememo.models.EStudyType;
 import it.rememo.rememo.models.StudentClass;
-import it.rememo.rememo.ui.collections.WordsRecyclerViewAdapter;
 import it.rememo.rememo.utils.Common;
 
 public class ChooseCollectionsActivity extends AppCompatActivity {
@@ -72,11 +68,11 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
 
         Intent i = null;
         if (learnType == EStudyType.LEARN) {
-            i = new Intent(this, TrainActivity.class);
+            i = new Intent(this, LearnActivity.class);
         } else if (learnType == EStudyType.TEST) {
             i = new Intent(this, TestActivity.class);
         } else if (learnType == EStudyType.TRAIN) {
-            i = new Intent(this, TrainActivity.class);
+            i = new Intent(this, LearnActivity.class);
         }
 
         if (i != null) {
