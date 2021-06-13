@@ -1,10 +1,17 @@
 <resources>
     <!-- app -->
     <string name="app_name">#Rememo</string>
+
+
+    <!-- title -->
     <string name="title_home">#Rememo</string>
     <string name="title_collections">#Collections</string>
     <string name="title_classes">#Classes</string>
     <string name="title_students">#Students</string>
+    <string name="title_train">#Train</string>
+    <string name="title_learn_coll">#Learn a collection</string>
+    <string name="title_test_skills">#Test your knowledge</string>
+    <string name="title_">#</string>
 
 
     <!-- login -->
@@ -21,6 +28,11 @@
     <string name="login_failed_retry">#Failed login, please try again</string>
     <string name="login_unknown_user">#Unknown user</string>
     <string name="login_error">#Error logging in</string>
+    <string name="login_add_name_and_start">#Add your name and start using Rememo</string>
+    <string name="login_go_to_rememo">#Go to Rememo</string>
+    <string name="login_sent_to">#Email sent to:</string>
+    <string name="login_check_inbox">#Check inbox</string>
+    <string name="login_">#</string>
 
 
     <!-- basic -->
@@ -31,6 +43,9 @@
     <string name="basic_rename">#Rename</string>
     <string name="basic_share">#Share</string>
     <string name="basic_delete">#Delete</string>
+    <string name="basic_welcome">#Welcome</string>
+    <string name="basic_name">#Name</string>
+    <string name="basic_start">#Start</string>
     <string name="basic_">#</string>
 
 
@@ -44,11 +59,15 @@
     <!-- word -->
     <string name="word_original">#Original</string>
     <string name="word_translated">#Translated</string>
+    <string name="word_translation">#Translation</string>
+    <string name="word_original_w">#Original word</string>
+    <string name="word_translated_w">#Translated word</string>
     <string name="word_cant_create_new">#</string>
     <string name="word_delete">#Delete word</string>
     <string name="word_deleted">#Word deleted</string>
     <string name="word_edit">#Edit word</string>
     <string name="word_cant_delete">#Couldn\'t delete this word</string>
+    <string name="word_insert_new">#INSERT A NEW WORD</string>
     <string name="word_">#</string>
 
     <string name="words_cant_load">#</string>
@@ -74,6 +93,7 @@
     <string name="colls_cant_add">#Couldn\'t add collections</string>
     <string name="colls_cant_load">#Couldn\'t load collections</string>
     <string name="colls_cant_update">"#Couldn'\t update collections"</string>
+    <string name="colls_shared">#Collections shared</string>
     <string name="colls_">#</string>
 
 
@@ -94,10 +114,13 @@
     <string name="class_cant_rename">#Couldn\'t rename class</string>
     <string name="class_cant_delete">#Couldn\'t delete this class</string>
     <string name="class_cant_load_usernames">#Couldn\'t load Usernames</string>
+    <string name="class_students">Students</string>
+    <string name="class_join">Join Class</string>
     <string name="class_"></string>
 
     <string name="classes_joined">#Joined</string>
     <string name="classes_created">#Created</string>
+    <string name="classes_invited_to">You have been inveted to:</string>
     <string name="classes_">#</string>
 
 

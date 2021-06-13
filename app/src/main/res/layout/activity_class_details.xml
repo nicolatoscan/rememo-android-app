@@ -17,7 +17,7 @@
         android:drawableTint="#FFFFFF"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="Students"
+        android:text="@string/title_students"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -33,7 +33,7 @@
         android:drawableTint="#FFFFFF"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="Collections shared"
+        android:text="@string/colls_shared"
         app:layout_constraintBottom_toTopOf="@+id/btnStudents"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
