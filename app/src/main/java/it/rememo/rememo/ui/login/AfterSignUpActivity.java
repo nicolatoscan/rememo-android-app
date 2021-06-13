@@ -36,11 +36,11 @@ public class AfterSignUpActivity extends AppCompatActivity {
     public void onClickOpenRememo() {
         String name = txtName.getEditText().getText().toString().trim();
         if (name.isEmpty()) {
-            txtName.setError("Name can't be empty");
+            txtName.setError(Common.resStr(this, R.string.login_cant_empty_name));
             return;
         }
         if (name.length() > 100) {
-            txtName.setError("Name can't be this long");
+            txtName.setError(Common.resStr(this, R.string.login_too_long_name));
             return;
         }
 
@@ -54,7 +54,7 @@ public class AfterSignUpActivity extends AppCompatActivity {
                 finish();
             },
             ex -> {
-                Common.toast(this, "Error saving name, please try again");
+                Common.toast(this, Common.resStr(this, R.string.login_error_saving_name_retry));
             }
         );
 

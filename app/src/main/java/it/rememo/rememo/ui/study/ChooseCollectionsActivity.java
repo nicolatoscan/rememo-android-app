@@ -10,6 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityChooseCollectionsBinding;
 import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.CollectionWord;
@@ -39,7 +40,7 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
 
         Collection.getMyCollections(
                 collections -> adapter.addAll(collections),
-                ex -> Common.toast(this, "Couldn't load collections")
+                ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
         );
 
         StudentClass.getClasses(false,
@@ -47,11 +48,11 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
                 for (StudentClass sc : classes) {
                     sc.getClassCollections(
                             collections -> adapter.addAll(collections),
-                            ex -> Common.toast(this, "Couldn't load collections")
+                            ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
                     );
                 }
             },
-            ex -> Common.toast(this, "Couldn't load collections")
+            ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
         );
 
         binding.button.setOnClickListener(v -> start());

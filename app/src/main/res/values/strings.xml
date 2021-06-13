@@ -1,4 +1,5 @@
 <resources>
+    <!-- app -->
     <string name="app_name">#Rememo</string>
     <string name="title_home">#Rememo</string>
     <string name="title_collections">#Collections</string>
@@ -11,6 +12,15 @@
     <string name="login_email_addr">#Email</string>
     <string name="login_send_email">#Send Email</string>
     <string name="login_or">#Or</string>
+    <string name="login_logged_as_STR">#Logged in as %s</string>
+    <string name="login_cant_empty_name">#Name can\'t be empty</string>
+    <string name="login_too_long_name">#Name can\'t be this long</string>
+    <string name="login_error_saving_name_retry">#Error saving name, please try again</string>
+    <string name="login_cant_empty_mail">#Email can\'t be empty</string>
+    <string name="login_failed_use_same_device">#Failed login, use the same device you send your email with</string>
+    <string name="login_failed_retry">#Failed login, please try again</string>
+    <string name="login_unknown_user">#Unknown user</string>
+    <string name="login_error">#Error logging in</string>
 
 
     <!-- basic -->
@@ -67,6 +77,10 @@
     <string name="colls_">#</string>
 
 
+    <!-- study -->
+    <string name="study_">#</string>
+
+
     <!-- class -->
     <string name="class_name">#Class name</string>
     <string name="class_create_new">#Create a new class</string>
@@ -79,7 +93,7 @@
     <string name="class_cant_join">#Couldn\'t join class</string>
     <string name="class_cant_rename">#Couldn\'t rename class</string>
     <string name="class_cant_delete">#Couldn\'t delete this class</string>
-    <string name="class_cant_load_usernames">#"Couldn\'t load Usernames"</string>
+    <string name="class_cant_load_usernames">#Couldn\'t load Usernames</string>
     <string name="class_"></string>
 
     <string name="classes_joined">#Joined</string>
@@ -87,6 +101,7 @@
     <string name="classes_">#</string>
 
 
+    <!-- other -->
     <string name="title_activity_delme">ScrollingActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

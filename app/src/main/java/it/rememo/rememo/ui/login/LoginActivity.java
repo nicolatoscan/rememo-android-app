@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onClickSignInWithEmail() {
         String email = binding.loginEmailTextField.getEditText().getText().toString().trim();
         if (email.isEmpty()) {
-            binding.loginEmailTextField.setError("Email can't be empty");
+            binding.loginEmailTextField.setError(Common.resStr(this, R.string.login_cant_empty_mail));
             return;
         }
         binding.loginEmailTextField.setError(null);
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
     public void signInWithEmailLink(String emailLink) {
         String email = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString("signinEmail", "NONE");
         if (email == "None") {
-            failedLogin("Failed login, use the same device you send your email with");
+            failedLogin(Common.resStr(this, R.string.login_failed_use_same_device));
             return;
         }
         fAuth.signInWithEmailLink(email, emailLink)
@@ -149,20 +149,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void failedLogin(String message) {
-        Toast.makeText(LoginActivity.this, message == null ? "Failed login, please try again" : message, Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, message == null ? Common.resStr(this, R.string.login_failed_retry) : message, Toast.LENGTH_LONG).show();
     }
 
     private void openAfterLogin(AuthResult result) {
         FirebaseUser user = result.getUser();
         String name = result.getUser().getDisplayName();
-        Username.setUsername(user.getUid(), name == null ? "Unknown user" : name,
+        Username.setUsername(user.getUid(), name == null ? Common.resStr(this, R.string.login_unknown_user) : name,
                 success -> {
-                    Common.toast(this, "Logged in as " + (name == null ? user.getEmail() : name));
+                    Common.toast(this, String.format(Common.resStr(this, R.string.login_logged_as_STR) , (name == null ? user.getEmail() : name)));
                     startActivity(new Intent(getApplicationContext(), name == null ? AfterSignUpActivity.class : MainActivity.class));
                     finish();
                 },
                 ex -> {
-                    Common.toast(this, "Error logging in");
+                    Common.toast(this, Common.resStr(this, R.string.login_error));
                 });
     }
 }
