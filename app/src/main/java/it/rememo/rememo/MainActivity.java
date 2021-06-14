@@ -1,6 +1,9 @@
 package it.rememo.rememo;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -11,6 +14,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import it.rememo.rememo.databinding.ActivityMainBinding;
+import it.rememo.rememo.ui.account.AccountActivity;
+import it.rememo.rememo.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,4 +39,21 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
+    // create an action bar button
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.btnAccount) {
+            startActivity(new Intent(this, AccountActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
