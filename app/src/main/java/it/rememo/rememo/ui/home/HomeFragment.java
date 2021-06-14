@@ -3,6 +3,7 @@ package it.rememo.rememo.ui.home;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import java.util.Map;
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.FragmentHomeBinding;
 import it.rememo.rememo.models.EStudyType;
+import it.rememo.rememo.models.Stat;
 import it.rememo.rememo.ui.study.ChooseCollectionsActivity;
 
 public class HomeFragment extends Fragment {
@@ -35,15 +37,25 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        /*
-        final TextView textView = binding.textHome;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-        */
+
+        Stat.fetchStats("userId1",
+            stat -> {
+                stat.fetchCollections(
+                        collectionStats -> {
+                            Log.d("COLL", collectionStats.get("collectionId1").correct + "");
+                        },
+                        ex -> {}
+                );
+                stat.fetchDays(
+                        daysStats -> {
+                            Log.d("DAY", daysStats.get("20210610").correct + "");
+                        },
+                        ex -> {}
+                );
+            },
+            ex -> {}
+        );
+
 
 /*
         TypedValue typedValue = new TypedValue();
