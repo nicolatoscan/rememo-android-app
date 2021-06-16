@@ -94,7 +94,7 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
                 if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
             });
 
-            itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
+            this.binding.cardView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                 // menu.setHeaderTitle("Select The Action");
                 menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_edit)).setOnMenuItemClickListener((mItem) -> renameWord());
                 menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteWord());
