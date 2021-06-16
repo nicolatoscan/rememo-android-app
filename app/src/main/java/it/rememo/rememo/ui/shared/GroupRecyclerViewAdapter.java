@@ -81,7 +81,7 @@ public abstract class GroupRecyclerViewAdapter<T extends FirebaseModel, T1 exten
             this.adapterReference = adapterReference;
             this.binding = binding;
 
-            itemView.setOnClickListener(view -> {
+            binding.cardView.setOnClickListener(view -> {
                 if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
             });
         }

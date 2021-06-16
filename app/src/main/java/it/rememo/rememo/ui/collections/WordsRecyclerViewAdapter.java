@@ -90,7 +90,7 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
 
             this.binding = binding;
 
-            itemView.setOnClickListener(view -> {
+            binding.cardView.setOnClickListener(view -> {
                 if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
             });
 
