@@ -36,7 +36,7 @@ public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Col
         ViewHolder(RowCollectionItemBinding binding, CollectionsRecyclerViewAdapter adapterReference) {
             super(binding, adapterReference);
             if (isMine) {
-                itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
+                binding.cardView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                     // menu.setHeaderTitle("Select The Action");
                     menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_rename)).setOnMenuItemClickListener((mItem) -> renameCollection());
                     menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteCollection());

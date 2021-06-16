@@ -46,7 +46,7 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
             super(binding, adapterReference);
             this.context = context;
             if (isCreated) {
-                itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
+                binding.cardView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                     // menu.setHeaderTitle("Select The Action");
                     menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_share)).setOnMenuItemClickListener((mItem) -> shareClass());
                     menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_rename)).setOnMenuItemClickListener((mItem) -> renameClasses());
