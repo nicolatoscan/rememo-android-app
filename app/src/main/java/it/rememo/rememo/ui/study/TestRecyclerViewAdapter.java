@@ -21,6 +21,8 @@ import it.rememo.rememo.databinding.RowSubmitItemBinding;
 import it.rememo.rememo.databinding.RowTestItemBinding;
 import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.CollectionWord;
+import it.rememo.rememo.models.Stat;
+import it.rememo.rememo.utils.Common;
 
 public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerViewAdapter.ViewHolder> {
 
@@ -68,11 +70,12 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
                 holder.binding.editTextAnswer.setText(an);
                 holder.binding.editTextAnswer.setEnabled(false);
                 DrawableCompat.setTint(holder.binding.editTextAnswer.getBackground(), context.getColor(
-                        an.trim().toLowerCase().equals(w.getTranslated().trim().toLowerCase()) ? R.color.rememo_dark : R.color.error_red
+                        Common.checkAnswer(w.getTranslated(), an) ? R.color.rememo_dark : R.color.error_red
                 ));
 
             } else {
                 holder.binding.txtCollectionRow.setText(w.getOriginal());
+                holder.binding.editTextAnswer.setText(answers.get(position));
             }
         } else if (holder.bindingSubmit != null) {
             if (showResults) {
@@ -83,6 +86,14 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
             } else {
                 holder.bindingSubmit.btnSubmit.setText("Submit");
                 holder.bindingSubmit.btnSubmit.setOnClickListener(v -> {
+
+                    for (int i = 0; i < list.size(); i++) {
+                        CollectionWord w = list.get(i);
+                        String an = answers.get(position);
+                        Stat.add(Common.checkAnswer(w.getTranslated(), an), w.getCollectionParentId());
+
+                    }
+
                     if (!showResults) {
                         showResults = true;
                         notifyDataSetChanged();

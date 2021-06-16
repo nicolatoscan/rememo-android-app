@@ -31,4 +31,8 @@ public class Common {
     public static FirebaseFirestore db() {
         return FirebaseFirestore.getInstance();
     }
+
+    public static boolean checkAnswer(String text, String answer) {
+        return answer.trim().toLowerCase().equals(text.trim().toLowerCase());
+    }
 }

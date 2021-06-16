@@ -22,6 +22,7 @@ import java.util.Random;
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityTrainBinding;
 import it.rememo.rememo.models.CollectionWord;
+import it.rememo.rememo.models.Stat;
 import it.rememo.rememo.models.StudyStatsWord;
 import it.rememo.rememo.utils.Common;
 
@@ -135,13 +136,15 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
     }
 
     private void checkAnswer(String answer) {
-        if (currentWord.getTranslated().trim().toLowerCase().equals(answer.trim().toLowerCase())) {
+        if (Common.checkAnswer(currentWord.getTranslated(), answer)) {
             binding.txtAnswer.setEnabled(false);
             binding.btnNext.setVisibility(View.VISIBLE);
             DrawableCompat.setTint(binding.txtAnswer.getBackground(), getColor(R.color.rememo_dark));
             successSound.start();
 
-            updatePoints(currentWord.getId(), !isAnswerShown);
+            boolean result = !isAnswerShown;
+            Stat.add(result, this.currentWord.getCollectionParentId());
+            updatePoints(currentWord.getId(), result);
         }
     }
 

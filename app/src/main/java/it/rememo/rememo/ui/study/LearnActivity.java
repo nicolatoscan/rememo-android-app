@@ -22,6 +22,7 @@ import java.util.Set;
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityTrainBinding;
 import it.rememo.rememo.models.CollectionWord;
+import it.rememo.rememo.models.Stat;
 import it.rememo.rememo.utils.Common;
 
 public class LearnActivity extends TrainLearnActivity {
@@ -57,7 +58,6 @@ public class LearnActivity extends TrainLearnActivity {
         double points = this.currentStudyStats.getLearnRate();
         double nextPoints = result ?  points + ((1 - points) / 2.0) : points / 2.0;
         this.currentStudyStats.updateLearnRate(nextPoints);
-
 
         if (points < threshold && nextPoints >= threshold) {
             learnedWords++;

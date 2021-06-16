@@ -7,10 +7,15 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +33,8 @@ public class Stat extends FirebaseModel {
     private long wrong = 0;
     private final Map<String, StatData> days = new HashMap<>();
     private final Map<String, StatData> collectionStats = new HashMap<>();
+    private final static SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+
 
     public Stat(DocumentSnapshot doc) {
         this.setId(doc.getId());
@@ -117,6 +124,25 @@ public class Stat extends FirebaseModel {
                     success.onSuccess(sub);
                 })
                 .addOnFailureListener(fail);
+    }
+
+    public static void add(boolean result, String collectionId) {
+        Map<String, Object> updateFields = new HashMap();
+        updateFields.put(result ? KEY_CORRECT : KEY_WRONG, FieldValue.increment(1));
+
+        DocumentReference doc = Common.db()
+                .collection(COLLECTION_NAME)
+                .document(Common.getUserId());
+
+        doc.set(updateFields, SetOptions.merge());
+
+        doc.collection(COLLECTION_DAYS_NAME)
+                .document(formatter.format(new Date()))
+                .set(updateFields, SetOptions.merge());
+
+        doc.collection(COLLECTION_COLLECTION_NAME)
+                .document(collectionId)
+                .set(updateFields, SetOptions.merge());
     }
 
 
