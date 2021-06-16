@@ -13,6 +13,7 @@ import java.util.List;
 
 import it.rememo.rememo.databinding.ActivityTestBinding;
 import it.rememo.rememo.databinding.RowTestItemBinding;
+import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.CollectionWord;
 import it.rememo.rememo.utils.Common;
 
@@ -31,7 +32,7 @@ public class TestActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Intent i = getIntent();
-        List<String> collectionsIds = i.getStringArrayListExtra(ARG_COLLECTIONS);
+        List<String> collectionsIds = i.getStringArrayListExtra(TestActivity.ARG_COLLECTIONS);
 
         binding.list.setLayoutManager(new LinearLayoutManager(this));
         adapter = new TestRecyclerViewAdapter(this);
@@ -39,24 +40,17 @@ public class TestActivity extends AppCompatActivity {
 
         allWords = new ArrayList<>();
 
-        final Counter todo = new TestActivity.Counter(collectionsIds.size());
-        for (String id : collectionsIds) {
-            CollectionWord.getWordsByCollectionId(
-                    id,
-                    collectionWords -> {
-                        allWords.addAll(collectionWords);
-                        if (todo.decrease() == 0) {
-                            loadTest();
-                        }
-                    },
-                    ex -> {}
-            );
-        }
+        CollectionWord.getAllWordsOfCollections(collectionsIds,
+            words -> {
+                this.allWords.addAll(words);
+                loadTest();
+            },
+            ex -> {}
+        );
     }
 
     void loadTest() {
         Collections.shuffle(this.allWords);
-
 
         int size = this.allWords.size();
         if (N > size) {
@@ -71,16 +65,5 @@ public class TestActivity extends AppCompatActivity {
             // this.binding.list.addView(row.getRoot());
         // }
 
-    }
-
-    class Counter{
-        int value;
-        Counter(int value) {
-            this.value = value;
-        }
-
-        public int decrease() {
-            return --value;
-        }
     }
 }

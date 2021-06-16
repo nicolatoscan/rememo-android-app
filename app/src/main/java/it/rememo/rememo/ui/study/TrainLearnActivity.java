@@ -16,11 +16,13 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityTrainBinding;
 import it.rememo.rememo.models.CollectionWord;
+import it.rememo.rememo.models.StudyStatsWord;
 import it.rememo.rememo.utils.Common;
 
 public abstract class TrainLearnActivity extends AppCompatActivity {
@@ -29,8 +31,13 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
     MediaPlayer successSound;
     ActivityTrainBinding binding;
     CollectionWord currentWord;
+    StudyStatsWord currentStudyStats;
     List<CollectionWord> words;
+    Map<String, StudyStatsWord> studyStats = new HashMap<>();
     boolean isAnswerShown = false;
+
+    private boolean wordCompleted = false;
+    private boolean studyStatsCompleted = false;
 
     abstract void onSetup();
     abstract void onWordLoaded();
@@ -43,8 +50,8 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
         successSound = MediaPlayer.create(this, R.raw.success);
 
         Intent i = getIntent();
-        List<String> collectionsIds = i.getStringArrayListExtra(ARG_COLLECTIONS);
-        if (collectionsIds.size() != 1) {
+        List<String> collectionsIds = i.getStringArrayListExtra(TestActivity.ARG_COLLECTIONS);
+        if (collectionsIds.size() < 1) {
             finish();
             return;
         }
@@ -68,26 +75,35 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
             isAnswerShown = true;
         });
 
+        this.binding.progressBar.setVisibility(View.VISIBLE);
         onSetup();
 
-        CollectionWord.getWordsByCollectionId(
-                collectionsIds.get(0),
-                collectionWords -> {
-                    if (collectionWords == null) {
-                        Common.toast(this, "Couldn't load words");
-                        finish();
-                        return;
-                    }
-                    words = collectionWords;
-                    binding.progressBar.setVisibility(View.GONE);
-                    onWordLoaded();
-                    nextWord();
+        CollectionWord.getAllWordsOfCollections(collectionsIds,
+                words -> {
+                    this.words = words;
+                    if (studyStatsCompleted)
+                        start();
+                    wordCompleted = true;
+
                 },
-                ex -> {
-                    Common.toast(this, "Couldn't load words");
-                    finish();
-                }
+                ex -> {}
         );
+
+        StudyStatsWord.getStudyStatsByCollectionsId(collectionsIds,
+            studyStatsWords -> {
+                studyStats = studyStatsWords;
+                if (wordCompleted)
+                    start();
+                studyStatsCompleted = true;
+            },
+            ex -> {}
+        );
+    }
+
+    private void start() {
+        this.binding.progressBar.setVisibility(View.GONE);
+        onWordLoaded();
+        nextWord();
     }
 
     abstract CollectionWord getNextWord();
@@ -95,6 +111,12 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
     void nextWord() {
         isAnswerShown = false;
         this.currentWord = getNextWord();
+        this.currentStudyStats = this.studyStats.get(this.currentWord.getId());
+        if (this.currentStudyStats == null) {
+            this.currentStudyStats = new StudyStatsWord(this.currentWord.getCollectionParentId(), this.currentWord.getId());
+            this.studyStats.put(this.currentWord.getId(), this.currentStudyStats);
+        }
+
 
         binding.txtOriginal.setText(currentWord.getOriginal());
 

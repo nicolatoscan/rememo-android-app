@@ -72,7 +72,7 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
         } else if (learnType == EStudyType.TEST) {
             i = new Intent(this, TestActivity.class);
         } else if (learnType == EStudyType.TRAIN) {
-            i = new Intent(this, LearnActivity.class);
+            i = new Intent(this, TrainActivity.class);
         }
 
         if (i != null) {

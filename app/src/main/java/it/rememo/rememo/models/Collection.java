@@ -19,7 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 import it.rememo.rememo.MainActivity;
+import it.rememo.rememo.ui.study.TestActivity;
 import it.rememo.rememo.utils.Common;
+import it.rememo.rememo.utils.Counter;
 
 public class Collection extends FirebaseModel {
     public final static String KEY_NAME = "name";

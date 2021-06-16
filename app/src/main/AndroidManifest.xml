@@ -11,6 +11,7 @@
         android:theme="@style/Theme.Rememo">
         <activity android:name=".ui.account.AccountActivity" android:label="Your account"></activity>
         <activity android:name=".ui.study.LearnActivity" />
+        <activity android:name=".ui.study.TrainActivity" />
         <activity android:name=".ui.study.TestActivity" />
         <activity android:name=".ui.study.ChooseCollectionsActivity" />
         <activity android:name=".ui.classes.ClassCollectionsActivity" />

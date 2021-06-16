@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityTrainBinding;
@@ -25,19 +26,26 @@ import it.rememo.rememo.utils.Common;
 
 public class LearnActivity extends TrainLearnActivity {
 
-    int initialWordsSize;
-    int learnedWords;
-    List<CollectionWord> learningWords;
-    HashMap<String, Double> learningStatus;
+    private int initialWordsSize = 0;
+    private int learnedWords = 0;
+    private List<CollectionWord> learningWords;
+    private final double threshold = 0.7;
+
 
     void onSetup() {
         learningWords = new ArrayList<>();
-        learningStatus = new HashMap<>();
-        setProgressBar(0);
     }
 
     void onWordLoaded() {
         initialWordsSize = words.size();
+
+        for (String s : this.studyStats.keySet()) {
+            if (this.studyStats.get(s).getLearnRate() >= threshold) {
+                this.learnedWords++;
+            }
+        }
+        setProgressBar(learnedWords);
+
         for (int i = 0; i < 3; i++) addWord();
     }
 
@@ -46,11 +54,10 @@ public class LearnActivity extends TrainLearnActivity {
     }
 
     void updatePoints(String id, boolean result) {
-        double points = this.learningStatus.get(id);
+        double points = this.currentStudyStats.getLearnRate();
         double nextPoints = result ?  points + ((1 - points) / 2.0) : points / 2.0;
-        this.learningStatus.put(id, nextPoints);
+        this.currentStudyStats.updateLearnRate(nextPoints);
 
-        double threshold = 0.7;
 
         if (points < threshold && nextPoints >= threshold) {
             learnedWords++;
@@ -71,6 +78,7 @@ public class LearnActivity extends TrainLearnActivity {
     }
 
     void setProgressBar(int progress) {
+        Common.toast(this, "" + progress);
         double v = (double)progress / (double)initialWordsSize;
         binding.learnProgress.setProgress((int)(v * 100));
     }
@@ -88,6 +96,5 @@ public class LearnActivity extends TrainLearnActivity {
         CollectionWord cw = words.get(pos);
         words.remove(pos);
         learningWords.add(cw);
-        learningStatus.put(cw.getId(), 0.0);
     }
 }
