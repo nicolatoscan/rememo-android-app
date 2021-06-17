@@ -3,6 +3,7 @@ package it.rememo.rememo.ui.classes;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.View;
 import android.widget.EditText;
 
 import it.rememo.rememo.R;
@@ -21,7 +22,7 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
         return index == 1;
     }
 
-    protected void setupAdapter() {
+    protected void setUp() {
         adapter = new ClassesRecyclerViewAdapter(getContext(), list, position == 1);
         adapter.setClickListener((v, i) -> {
             Intent intent = new Intent(getContext(), ClassDetailsActivity.class);
@@ -31,15 +32,23 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
             startActivity(intent);
         });
         binding.collectionRecyclerView.setAdapter(adapter);
+        binding.txtLoading.setText(Common.resStr(getContext(), R.string.basic_no_classes));
     }
 
     protected void updateList() {
         if (!(position == 0 || position == 1)) {
             return;
         }
+        binding.txtLoading.setVisibility(View.GONE);
+
         StudentClass.getClasses(position == 1,
-            (updatedCollections) -> {
-                adapter.resetAll(updatedCollections);
+            (updatedClasses) -> {
+                if (updatedClasses.size() == 0) {
+                    binding.txtLoading.setVisibility(View.VISIBLE);
+                }
+
+
+                adapter.resetAll(updatedClasses);
                 binding.collectionSwipeContainer.setRefreshing(false);
             },
             (ex) -> {

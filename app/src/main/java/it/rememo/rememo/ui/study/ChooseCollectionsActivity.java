@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,8 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
     ActivityChooseCollectionsBinding binding;
     ChooseCollectionsRecyclerViewAdapter adapter;
     int learnType = -1;
+    boolean collectionDone = false;
+    boolean classesDone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,16 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
         binding.colllectionList.setAdapter(adapter);
 
         Collection.getMyCollections(
-                collections -> adapter.addAll(collections),
+                collections -> {
+                    if (collections.size() > 0)
+                        binding.txtLoading.setVisibility(View.GONE);
+                    if (classesDone && collections.size() == 0)
+                        binding.txtLoading.setText(Common.resStr(this, R.string.basic_no_collections));
+                    collectionDone = true;
+                    adapter.addAll(collections);
+                    if (classesDone && adapter.getItemCount() - 1 <= 0)
+                        binding.txtLoading.setText(Common.resStr(this, R.string.basic_no_collections));
+                },
                 ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
         );
 
@@ -51,7 +63,15 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
             classes -> {
                 for (StudentClass sc : classes) {
                     sc.getClassCollections(
-                            collections -> adapter.addAll(collections),
+                            collections -> {
+                                if (collections.size() > 0)
+                                    binding.txtLoading.setVisibility(View.GONE);
+                                classesDone = true;
+                                adapter.addAll(collections);
+                                if (collectionDone && adapter.getItemCount() - 1 <= 0)
+                                    binding.txtLoading.setText(Common.resStr(this, R.string.basic_no_collections));
+
+                            },
                             ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
                     );
                 }

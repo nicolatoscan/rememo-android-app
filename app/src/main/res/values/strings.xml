@@ -49,6 +49,11 @@
     <string name="basic_cancel">Cancel</string>
     <string name="basic_delete">Delete</string>
     <string name="basic_leave">Leave</string>
+    <string name="basic_loading">Loading ...</string>
+    <string name="basic_no_collections">You don\'t have any collections</string>
+    <string name="basic_no_classes">You don\'t have any classes</string>
+    <string name="basic_no_students">This class doesn\'t have any students</string>
+    <string name="basic_no_words">This collection doesn\'t have any words</string>
 
     <string name="basic_"></string>
 
@@ -231,4 +236,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+
 </resources>

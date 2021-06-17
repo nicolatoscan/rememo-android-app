@@ -1,6 +1,7 @@
 package it.rememo.rememo.ui.classes;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;

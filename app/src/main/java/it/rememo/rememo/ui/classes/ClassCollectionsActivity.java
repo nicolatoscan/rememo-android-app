@@ -1,5 +1,7 @@
 package it.rememo.rememo.ui.classes;
 
+import android.view.View;
+
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -48,7 +50,13 @@ public class ClassCollectionsActivity extends ClassListActivity {
     @Override
     protected void updateList(StudentClass cl) {
         cl.getClassCollections(
-                collections -> adapter.addAll(collections),
+                collections -> {
+                    if (collections.size() <= 0)
+                        binding.txtLoading.setText(Common.resStr(ClassCollectionsActivity.this, R.string.basic_no_collections));
+                    else
+                        binding.txtLoading.setVisibility(View.GONE);
+                    adapter.addAll(collections);
+                },
                 ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
         );
     }

@@ -1,5 +1,7 @@
 package it.rememo.rememo.ui.classes;
 
+import android.view.View;
+
 import java.util.ArrayList;
 
 import it.rememo.rememo.R;
@@ -28,7 +30,13 @@ public class ClassStudentActivity extends ClassListActivity {
     @Override
     protected void updateList(StudentClass cl) {
         cl.getClassStudents(
-                students -> adapter.addAll(students),
+                students -> {
+                    if (students.size() <= 0)
+                        binding.txtLoading.setText(Common.resStr(ClassStudentActivity.this, R.string.basic_no_students));
+                    else
+                        binding.txtLoading.setVisibility(View.GONE);
+                    adapter.addAll(students);
+                },
                 ex -> Common.toast(this, Common.resStr(this, R.string.class_cant_load_usernames))
         );
     }

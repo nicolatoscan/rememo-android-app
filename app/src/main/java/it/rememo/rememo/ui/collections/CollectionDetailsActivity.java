@@ -58,8 +58,13 @@ public class CollectionDetailsActivity extends AppCompatActivity {
     }
 
     private void updateWordList() {
+        binding.txtLoading.setVisibility(View.GONE);
+
         collection.fetchWords(
             words ->  {
+                if (words.size() <= 0) {
+                    binding.txtLoading.setVisibility(View.VISIBLE);
+                }
                 adapter.resetAll(words);
                 binding.wordsSwipeContainer.setRefreshing(false);
             },

@@ -30,7 +30,7 @@ public abstract class GroupFragment<T extends FirebaseModel> extends Fragment {
     protected int position;
 
     protected abstract boolean isFloatingAddVisible(int index);
-    protected abstract void setupAdapter();
+    protected abstract void setUp();
     protected abstract void updateList();
     protected abstract void onAddClicked();
     protected abstract void parseArgs(Bundle args);
@@ -54,7 +54,7 @@ public abstract class GroupFragment<T extends FirebaseModel> extends Fragment {
 
         // Recycler View
         binding.collectionRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        setupAdapter();
+        setUp();
 
         // To update collections
         binding.collectionSwipeContainer.setOnRefreshListener(this::updateList);
