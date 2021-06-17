@@ -2,15 +2,12 @@ package it.rememo.rememo.ui.collections;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 
@@ -45,15 +42,15 @@ public class CollectionDetailsActivity extends AppCompatActivity {
 
         // Recycler View
         binding.wordsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new WordsRecyclerViewAdapter(this, new ArrayList<CollectionWord>());
+        adapter = new WordsRecyclerViewAdapter(this, new ArrayList<>());
         adapter.setClickListener((v, i) -> { });
         binding.wordsRecyclerView.setAdapter(adapter);
 
         // To update words
-        binding.wordsSwipeContainer.setOnRefreshListener(() -> updateWordList());
+        binding.wordsSwipeContainer.setOnRefreshListener(this::updateWordList);
         updateWordList();
 
-        binding.btnAddWord.setOnClickListener(v -> onAddWordClick(v));
+        binding.btnAddWord.setOnClickListener(this::onAddWordClick);
 
         if (!isEditable) {
             binding.constraintLayout.setVisibility(View.GONE);

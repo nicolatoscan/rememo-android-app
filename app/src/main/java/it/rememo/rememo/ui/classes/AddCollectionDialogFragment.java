@@ -3,7 +3,6 @@ package it.rememo.rememo.ui.classes;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -11,7 +10,8 @@ import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.lang.reflect.Array;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +21,10 @@ import it.rememo.rememo.utils.Common;
 
 public class AddCollectionDialogFragment extends DialogFragment {
 
-    List<Collection> collections;
-    String[] items;
-    boolean[] itemChecked;
-    @NonNull OnSuccessListener<? super ArrayList<Collection>> positiveResponse;
+    final List<Collection> collections;
+    final String[] items;
+    final boolean[] itemChecked;
+    final @NonNull OnSuccessListener<? super ArrayList<Collection>> positiveResponse;
 
 
     public AddCollectionDialogFragment(
@@ -41,6 +41,7 @@ public class AddCollectionDialogFragment extends DialogFragment {
         }
     }
 
+    @NotNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

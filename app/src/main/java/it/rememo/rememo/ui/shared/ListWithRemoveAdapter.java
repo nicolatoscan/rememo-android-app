@@ -2,23 +2,23 @@ package it.rememo.rememo.ui.shared;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import it.rememo.rememo.databinding.RowCollectionItemBinding;
 import it.rememo.rememo.databinding.RowDeletableItemBinding;
 import it.rememo.rememo.models.FirebaseModel;
 
 public class ListWithRemoveAdapter extends RecyclerView.Adapter<ListWithRemoveAdapter.ViewHolder> {
 
-    private ArrayList<FirebaseModel> list;
-    protected LayoutInflater mInflater;
+    private final ArrayList<FirebaseModel> list;
+    final protected LayoutInflater mInflater;
     GroupRecyclerViewAdapter.ItemClickListener mClickListener;
 
     public ListWithRemoveAdapter(Context context, ArrayList<FirebaseModel> list) {
@@ -26,8 +26,9 @@ public class ListWithRemoveAdapter extends RecyclerView.Adapter<ListWithRemoveAd
         this.list = list;
     }
 
+    @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         RowDeletableItemBinding binding = RowDeletableItemBinding.inflate(mInflater, parent, false);
         return new ViewHolder(binding);
     }

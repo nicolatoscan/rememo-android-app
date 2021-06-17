@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +17,10 @@ import it.rememo.rememo.models.Collection;
 
 public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<ChooseCollectionsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Collection> list = new ArrayList<Collection>();
-    protected LayoutInflater mInflater;
+    private final List<Collection> list = new ArrayList<>();
+    final protected LayoutInflater mInflater;
     private int lastCheckedPositionRadio = -1;
-    private final List<Boolean> checkedCheckBoxes = new ArrayList<Boolean>();
+    private final List<Boolean> checkedCheckBoxes = new ArrayList<>();
     private boolean multiselect = false;
 
     public ChooseCollectionsRecyclerViewAdapter(Context context, boolean multiselect) {
@@ -26,8 +28,9 @@ public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<C
         this.multiselect = multiselect;
     }
 
+    @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         RowRadioCollectionBinding binding = RowRadioCollectionBinding.inflate(mInflater, parent, false);
         if (multiselect)
             binding.radioButton.setVisibility(View.GONE);
@@ -45,7 +48,7 @@ public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<C
         notifyItemRangeInserted(sizeBefore, c.size());
     }
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
         String t = list.get(position).getName();
         if (multiselect) {
             holder.binding.checkBox.setText(t);
@@ -91,12 +94,12 @@ public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<C
                 notifyItemChanged(copyOfLastCheckedPosition);
                 notifyItemChanged(lastCheckedPositionRadio);
             });
-            this.binding.checkBox.setOnClickListener(v -> {
+            this.binding.checkBox.setOnClickListener(v ->
                 checkedCheckBoxes.set(
                         getAdapterPosition(),
                         this.binding.checkBox.isChecked()
-                );
-            });
+                )
+            );
         }
     }
 

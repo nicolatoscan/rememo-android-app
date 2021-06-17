@@ -4,10 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,9 +50,7 @@ public class AfterSignUpActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             },
-            ex -> {
-                Common.toast(this, Common.resStr(this, R.string.login_error_saving_name_retry));
-            }
+            ex -> Common.toast(this, Common.resStr(this, R.string.login_error_saving_name_retry))
         );
 
 

@@ -6,18 +6,15 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.drawable.DrawableCompat;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityTrainBinding;
@@ -130,7 +127,7 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
         binding.txtAnswer.setText("");
         binding.txtAnswer.setEnabled(true);
         binding.txtAnswer.requestFocus();
-        ((InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE)).showSoftInput(binding.txtAnswer, InputMethodManager.SHOW_IMPLICIT);
+        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(binding.txtAnswer, InputMethodManager.SHOW_IMPLICIT);
         binding.btnNext.setVisibility(View.GONE);
         DrawableCompat.setTint(binding.txtAnswer.getBackground(), getColor(R.color.error_red));
     }

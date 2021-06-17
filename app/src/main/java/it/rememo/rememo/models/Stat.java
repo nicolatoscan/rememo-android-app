@@ -1,8 +1,6 @@
 package it.rememo.rememo.models;
 
-import android.content.Intent;
 import android.util.Log;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -12,7 +10,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
@@ -22,7 +19,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import it.rememo.rememo.utils.Common;
 
@@ -138,7 +134,7 @@ public class Stat extends FirebaseModel {
     }
 
     public static void add(boolean result, String collectionId) {
-        Map<String, Object> updateFields = new HashMap();
+        Map<String, Object> updateFields = new HashMap<>();
         updateFields.put(result ? KEY_CORRECT : KEY_WRONG, FieldValue.increment(1));
 
         DocumentReference doc = Common.db()
@@ -196,9 +192,7 @@ public class Stat extends FirebaseModel {
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,
             @NonNull OnFailureListener fail
     ) {
-        fetchSubCollections(userId, COLLECTION_COLLECTION_NAME, collectionsStats -> {
-            mapCollectionsNames(collectionsStats, success, fail);
-        }, fail);
+        fetchSubCollections(userId, COLLECTION_COLLECTION_NAME, collectionsStats -> mapCollectionsNames(collectionsStats, success, fail), fail);
     }
 
     public static void fetchUsersStats(

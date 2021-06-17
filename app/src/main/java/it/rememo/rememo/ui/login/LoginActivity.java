@@ -1,7 +1,6 @@
 package it.rememo.rememo.ui.login;
 
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,19 +8,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.ActionCodeSettings;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -31,12 +25,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import it.rememo.rememo.MainActivity;
 import it.rememo.rememo.R;
-import it.rememo.rememo.databinding.ActivityCollectionDetailsBinding;
 import it.rememo.rememo.databinding.ActivityLoginBinding;
 import it.rememo.rememo.models.Username;
 import it.rememo.rememo.utils.Common;
 
-import org.jetbrains.annotations.NotNull;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -134,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signInWithEmailLink(String emailLink) {
         String email = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString("signinEmail", "NONE");
-        if (email == "None") {
+        if (email.equals("None")) {
             failedLogin(Common.resStr(this, R.string.login_failed_use_same_device));
             return;
         }
@@ -161,8 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), name == null ? AfterSignUpActivity.class : MainActivity.class));
                     finish();
                 },
-                ex -> {
-                    Common.toast(this, Common.resStr(this, R.string.login_error));
-                });
+                ex -> Common.toast(this, Common.resStr(this, R.string.login_error))
+                );
     }
 }

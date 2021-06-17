@@ -1,10 +1,7 @@
 package it.rememo.rememo.utils;
 
 import android.content.Context;
-import android.text.InputType;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;

@@ -4,12 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-import it.rememo.rememo.MainActivity;
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityAccountBinding;
 import it.rememo.rememo.models.Username;
@@ -35,18 +35,14 @@ public class AccountActivity extends AppCompatActivity {
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
             FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates);
             Username.setUsername(Common.getUserId(), name,
-                    success -> {
-                        finish();
-                    },
-                    ex -> {
-                        Common.toast(this, Common.resStr(this, R.string.login_error_saving_name_retry));
-                    }
+                    success -> finish(),
+                    ex -> Common.toast(this, Common.resStr(this, R.string.login_error_saving_name_retry))
             );
 
         });
 
         binding.btnLogOut.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();            ;
+            FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         });

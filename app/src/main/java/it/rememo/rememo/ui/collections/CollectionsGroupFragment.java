@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import it.rememo.rememo.R;
@@ -80,7 +79,7 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
             .show();
     }
 
-    private Collection createCollection(String name) {
+    private void createCollection(String name) {
         Collection collection = new Collection(name, null, 0);
         collection.addToFirestore(
             doc -> {
@@ -89,6 +88,5 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
             },
             ex -> Common.toast(getContext(), Common.resStr(getContext(), R.string.coll_err_creating_retry))
         );
-        return collection;
     }
 }

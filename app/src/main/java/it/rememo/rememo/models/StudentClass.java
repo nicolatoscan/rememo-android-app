@@ -1,31 +1,20 @@
 package it.rememo.rememo.models;
 
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.auth.User;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import it.rememo.rememo.MainActivity;
 import it.rememo.rememo.utils.Common;
 
 public class StudentClass extends FirebaseModel {
@@ -73,8 +62,8 @@ public class StudentClass extends FirebaseModel {
         setId(id);
         this.name = name;
         this.ownerId = ownerId;
-        this.studentsIds = studentsIds != null ? studentsIds : new HashMap<String, Boolean>();
-        this.collectionsIds = collectionsIds != null ? collectionsIds : new HashMap<String, Boolean>();
+        this.studentsIds = studentsIds != null ? studentsIds : new HashMap<>();
+        this.collectionsIds = collectionsIds != null ? collectionsIds : new HashMap<>();
     }
 
     public Map<String, Object>  getHashMap() {
@@ -88,11 +77,9 @@ public class StudentClass extends FirebaseModel {
 
     private List<String> getListFromHashMap(Map<String, Boolean> hash) {
         ArrayList<String> res = new ArrayList<>();
-        Iterator it = hash.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<String, Boolean> pair = (Map.Entry)it.next();
-            if (pair.getValue()) {
-                res.add(pair.getKey());
+        for (Map.Entry<String, Boolean> stringBooleanEntry : hash.entrySet()) {
+            if (stringBooleanEntry.getValue()) {
+                res.add(stringBooleanEntry.getKey());
             }
         }
         return res;
@@ -194,14 +181,14 @@ public class StudentClass extends FirebaseModel {
         @NonNull OnSuccessListener<? super List<Collection>> success,
         @NonNull OnFailureListener fail
     ) {
-        List collsIds = this.getCollectionIds();
+        List<String> collsIds = this.getCollectionIds();
         if (collsIds.size() > 0) {
             Common.db()
                     .collection(Collection.COLLECTION_NAME)
                     .whereIn(FieldPath.documentId(), collsIds)
                     .get()
                     .addOnSuccessListener((docs) -> {
-                        ArrayList<Collection> colls = new ArrayList();
+                        ArrayList<Collection> colls = new ArrayList<>();
                         for (QueryDocumentSnapshot d : docs) {
                             colls.add(new Collection(d));
                         }
@@ -209,7 +196,7 @@ public class StudentClass extends FirebaseModel {
                     })
                     .addOnFailureListener(fail);
         } else {
-            success.onSuccess(new ArrayList<Collection>());
+            success.onSuccess(new ArrayList<>());
         }
     }
 
@@ -217,14 +204,14 @@ public class StudentClass extends FirebaseModel {
             @NonNull OnSuccessListener<? super ArrayList<Username>> success,
             @NonNull OnFailureListener fail
     ) {
-        List studIds = this.getStudentsIds();
+        List<String> studIds = this.getStudentsIds();
         if (studIds.size() > 0) {
             Common.db()
                     .collection(Username.COLLECTION_NAME)
                     .whereIn(FieldPath.documentId(), studIds)
                     .get()
                     .addOnSuccessListener((docs) -> {
-                        ArrayList<Username> users = new ArrayList();
+                        ArrayList<Username> users = new ArrayList<>();
                         for (QueryDocumentSnapshot d : docs) {
                             users.add(new Username(d));
                         }
@@ -232,7 +219,7 @@ public class StudentClass extends FirebaseModel {
                     })
                     .addOnFailureListener(fail);
         } else {
-            success.onSuccess(new ArrayList<Username>());
+            success.onSuccess(new ArrayList<>());
         }
     }
 
@@ -247,7 +234,7 @@ public class StudentClass extends FirebaseModel {
             .whereEqualTo(whereField, whereValue)
             .get()
             .addOnSuccessListener(docs -> {
-                ArrayList<StudentClass> updatedCollections = new ArrayList();
+                ArrayList<StudentClass> updatedCollections = new ArrayList<>();
                 for (QueryDocumentSnapshot document : docs) {
                     updatedCollections.add(new StudentClass(document));
                 }
@@ -264,9 +251,7 @@ public class StudentClass extends FirebaseModel {
         Common.db().collection(StudentClass.COLLECTION_NAME)
                 .document(classId)
                 .get()
-                .addOnSuccessListener((doc) -> {
-                    success.onSuccess(new StudentClass(doc));
-                })
+                .addOnSuccessListener((doc) -> success.onSuccess(new StudentClass(doc)))
                 .addOnFailureListener(fail);
     }
 

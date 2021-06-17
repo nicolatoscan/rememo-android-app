@@ -1,6 +1,5 @@
 package it.rememo.rememo.models;
 
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -10,7 +9,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -124,7 +122,7 @@ public class CollectionWord {
                 .collection(CollectionWord.COLLECTION_NAME)
                 .get()
                 .addOnSuccessListener(docs -> {
-                    List<CollectionWord> w = new ArrayList();
+                    List<CollectionWord> w = new ArrayList<>();
                     for (QueryDocumentSnapshot document : docs) {
                         CollectionWord cw = new CollectionWord(collectionId, document);
                         w.add(cw);

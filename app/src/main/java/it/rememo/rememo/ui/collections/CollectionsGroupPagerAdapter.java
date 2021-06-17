@@ -14,14 +14,14 @@ import it.rememo.rememo.models.StudentClass;
 import it.rememo.rememo.utils.Common;
 
 public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
-    ArrayList<StudentClass> collectionsGroups;
-    Fragment fragment;
+    final ArrayList<StudentClass> collectionsGroups;
+    final Fragment fragment;
 
     public CollectionsGroupPagerAdapter(Fragment fa) {
         super(fa);
         fragment = fa;
 
-        collectionsGroups = new ArrayList<StudentClass>();
+        collectionsGroups = new ArrayList<>();
         collectionsGroups.add(null);
 
         StudentClass.getClasses(false,

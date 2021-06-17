@@ -1,27 +1,18 @@
 package it.rememo.rememo.models;
 
-import android.content.Intent;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.SetOptions;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import it.rememo.rememo.MainActivity;
-import it.rememo.rememo.ui.study.TestActivity;
 import it.rememo.rememo.utils.Common;
-import it.rememo.rememo.utils.Counter;
 
 public class Collection extends FirebaseModel {
     public final static String KEY_NAME = "name";
@@ -38,7 +29,7 @@ public class Collection extends FirebaseModel {
     private String description;
     private String ownerId;
     private int numberOfItems;
-    private ArrayList<CollectionWord> words = new ArrayList<>();
+    private final ArrayList<CollectionWord> words = new ArrayList<>();
 
     public Collection(String id, String name, String description, int numberOfItems) {
         this.Init(id, name, description, numberOfItems, null);
@@ -156,7 +147,7 @@ public class Collection extends FirebaseModel {
                 .whereEqualTo(Collection.KEY_OWNER_ID, Common.getUserId())
                 .get()
                 .addOnSuccessListener(docs -> {
-                    ArrayList<Collection> colls = new ArrayList();
+                    ArrayList<Collection> colls = new ArrayList<>();
                     for (QueryDocumentSnapshot document : docs) {
                         colls.add(new Collection(document));
                     }

@@ -12,9 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.ArrayList;
 
-import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.FragmentCollectionsBinding;
 
 public class CollectionsFragment extends Fragment {

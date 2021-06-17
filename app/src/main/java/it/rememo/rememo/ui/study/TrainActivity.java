@@ -1,14 +1,10 @@
 package it.rememo.rememo.ui.study;
 
-import android.util.Log;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import it.rememo.rememo.models.CollectionWord;
-import it.rememo.rememo.utils.Common;
 
 public class TrainActivity extends TrainLearnActivity {
 

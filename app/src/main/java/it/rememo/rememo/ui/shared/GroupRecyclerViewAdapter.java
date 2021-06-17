@@ -7,16 +7,17 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 import it.rememo.rememo.databinding.RowCollectionItemBinding;
 import it.rememo.rememo.models.FirebaseModel;
-import it.rememo.rememo.utils.Common;
 
 public abstract class GroupRecyclerViewAdapter<T extends FirebaseModel, T1 extends  GroupRecyclerViewAdapter.ViewHolder> extends RecyclerView.Adapter<T1> {
 
-    private List<T> list;
-    protected LayoutInflater mInflater;
+    private final List<T> list;
+    final protected LayoutInflater mInflater;
     protected ItemClickListener mClickListener;
 
     public GroupRecyclerViewAdapter(Context context, List<T> collections) {
@@ -26,8 +27,9 @@ public abstract class GroupRecyclerViewAdapter<T extends FirebaseModel, T1 exten
 
     protected abstract RecyclerView.ViewHolder getViewHolder(RowCollectionItemBinding binding, GroupRecyclerViewAdapter adapter);
 
+    @NotNull
     @Override
-    public T1 onCreateViewHolder(ViewGroup parent, int viewType) {
+    public T1 onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         RowCollectionItemBinding binding = RowCollectionItemBinding.inflate(mInflater, parent, false);
         return (T1) getViewHolder(binding, this);
     }

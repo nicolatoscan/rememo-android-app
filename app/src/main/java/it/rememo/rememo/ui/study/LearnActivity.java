@@ -1,28 +1,12 @@
 package it.rememo.rememo.ui.study;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.drawable.DrawableCompat;
 
-import android.content.Intent;
-import android.media.MediaPlayer;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
-import it.rememo.rememo.R;
-import it.rememo.rememo.databinding.ActivityTrainBinding;
 import it.rememo.rememo.models.CollectionWord;
-import it.rememo.rememo.models.Stat;
 import it.rememo.rememo.utils.Common;
 
 public class LearnActivity extends TrainLearnActivity {
@@ -84,7 +68,6 @@ public class LearnActivity extends TrainLearnActivity {
     }
 
     private void finishLearn() {
-
     }
 
     private void addWord() {

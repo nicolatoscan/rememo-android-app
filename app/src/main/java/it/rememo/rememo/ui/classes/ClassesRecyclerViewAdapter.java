@@ -1,13 +1,10 @@
 package it.rememo.rememo.ui.classes;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.text.InputType;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ShareCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
@@ -26,8 +23,8 @@ import it.rememo.rememo.utils.ShareUrls;
 public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collection, ClassesRecyclerViewAdapter.ViewHolder> {
 
 
-    private boolean isCreated;
-    Context context;
+    private final boolean isCreated;
+    final Context context;
 
     ClassesRecyclerViewAdapter(Context context, List<Collection> collections, boolean isCreated) {
         super(context, collections);
@@ -40,7 +37,7 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
     }
 
     public class ViewHolder extends GroupRecyclerViewAdapter.ViewHolder {
-        Context context;
+        final Context context;
 
         ViewHolder(RowCollectionItemBinding binding, ClassesRecyclerViewAdapter adapterReference, Context context) {
             super(binding, adapterReference);
@@ -65,12 +62,12 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
             new AlertDialog.Builder(itemView.getContext())
                     .setTitle("Leave class")
                     .setMessage("Are you sure you want to leave the class?")
-                    .setPositiveButton(Common.resStr(context, R.string.form_im_sure), (dialog, whichButton) -> {
+                    .setPositiveButton(Common.resStr(context, R.string.form_im_sure), (dialog, whichButton) ->
                         ((StudentClass) element).leaveClass(
                                 x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), "Class left"); },
                                 ex -> Common.toast(itemView.getContext(), "Couldn't leave class")
-                        );
-                    })
+                        )
+                    )
                     .setNegativeButton(Common.resStr(context, R.string.basic_cancel), null).show();
             return true;
         }
@@ -113,12 +110,12 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
             new AlertDialog.Builder(itemView.getContext())
                     .setTitle(Common.resStr(context, R.string.class_delete))
                     .setMessage(String.format(Common.resStr(context, R.string.form_sure_to_delete_STR), element.getName()))
-                    .setPositiveButton(Common.resStr(context, R.string.form_im_sure), (dialog, whichButton) -> {
+                    .setPositiveButton(Common.resStr(context, R.string.form_im_sure), (dialog, whichButton) ->
                         element.deleteFromFirestore(
                                 x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), Common.resStr(context, R.string.class_deleted)); },
                                 ex -> Common.toast(itemView.getContext(), Common.resStr(context, R.string.class_cant_delete))
-                        );
-                    })
+                        )
+                    )
                     .setNegativeButton(Common.resStr(context, R.string.basic_cancel), null).show();
             return true;
         }

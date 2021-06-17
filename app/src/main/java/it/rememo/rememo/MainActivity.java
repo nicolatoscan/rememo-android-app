@@ -15,7 +15,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import it.rememo.rememo.databinding.ActivityMainBinding;
 import it.rememo.rememo.ui.account.AccountActivity;
-import it.rememo.rememo.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 

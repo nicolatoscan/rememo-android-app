@@ -30,13 +30,12 @@ public class ClassCollectionsActivity extends ClassListActivity {
 
                     if (colls.size() > 0) {
                         new AddCollectionDialogFragment(colls,
-                            selectedCollections -> {
+                            selectedCollections ->
                                 stClass.addCollections(
                                         selectedCollections,
                                         s -> adapter.addAll(selectedCollections),
                                         ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_add))
-                                );
-                            }
+                                )
                         ).show(getSupportFragmentManager(), "PIPPO");
                     } else {
                         Common.toast(this, Common.resStr(this, R.string.coll_no_other_add));

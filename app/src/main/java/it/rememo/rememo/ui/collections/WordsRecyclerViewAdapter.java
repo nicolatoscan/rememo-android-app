@@ -6,11 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,8 +25,8 @@ import it.rememo.rememo.utils.Common;
 
 public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecyclerViewAdapter.ViewHolder> {
 
-    private List<CollectionWord> words;
-    private LayoutInflater mInflater;
+    private final  List<CollectionWord> words;
+    private final  LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     WordsRecyclerViewAdapter(Context context, List<CollectionWord> words) {
@@ -34,8 +34,9 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
         this.words = words;
     }
 
+    @NotNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         RowWordItemBinding binding = RowWordItemBinding.inflate(mInflater, parent, false);
         return new ViewHolder(binding, this);
     }
@@ -80,9 +81,9 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private RowWordItemBinding binding;
+        private final  RowWordItemBinding binding;
         private CollectionWord word = null;
-        private WordsRecyclerViewAdapter adapterReference;
+        private final  WordsRecyclerViewAdapter adapterReference;
 
         ViewHolder(RowWordItemBinding binding, WordsRecyclerViewAdapter adapterReference) {
             super(binding.getRoot());
@@ -146,12 +147,12 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
                 .setTitle(Common.resStr(itemView.getContext(), R.string.word_delete))
                 .setMessage(String.format(Common.resStr(itemView.getContext(), R.string.form_sure_to_delete_STR), word.getOriginal()))
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(Common.resStr(itemView.getContext(), R.string.form_im_sure), (dialog, whichButton) -> {
+                .setPositiveButton(Common.resStr(itemView.getContext(), R.string.form_im_sure), (dialog, whichButton) ->
                     coll.deleteWord(word,
                             x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.word_deleted)); },
                             ex -> Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.word_cant_delete))
-                    );
-                })
+                    )
+                )
                 .setNegativeButton(Common.resStr(itemView.getContext(), R.string.basic_cancel), null).show();
             return true;
         }

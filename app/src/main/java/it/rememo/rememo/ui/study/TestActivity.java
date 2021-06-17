@@ -5,17 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import it.rememo.rememo.databinding.ActivityTestBinding;
-import it.rememo.rememo.databinding.RowTestItemBinding;
-import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.CollectionWord;
-import it.rememo.rememo.utils.Common;
 
 public class TestActivity extends AppCompatActivity {
 

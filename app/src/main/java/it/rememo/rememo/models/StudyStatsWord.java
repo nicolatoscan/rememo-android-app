@@ -1,6 +1,5 @@
 package it.rememo.rememo.models;
 
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -9,7 +8,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +26,7 @@ public class StudyStatsWord extends FirebaseModel {
 
     private Double learnRate;
     private Double trainRate;
-    private String collectionId;
+    private final String collectionId;
     private Date lastDone;
 
     public StudyStatsWord(DocumentSnapshot doc) {
@@ -68,7 +66,7 @@ public class StudyStatsWord extends FirebaseModel {
         Map<String, Object> res = new HashMap<>();
         res.put(KEY_LEARN_RATE, learnRate);
         res.put(KEY_TRAIN_RATE, trainRate);
-        return null;
+        return res;
     }
 
     @Override
@@ -85,7 +83,6 @@ public class StudyStatsWord extends FirebaseModel {
         this.learnRate = learnRate;
         Map<String, Object> updateData = new HashMap<>();
         updateData.put(KEY_LEARN_RATE, learnRate);
-        updateData.put(KEY_LAST_DONE, new Date());
         update(updateData);
     }
 
@@ -93,11 +90,13 @@ public class StudyStatsWord extends FirebaseModel {
         this.trainRate = trainRate;
         Map<String, Object> updateData = new HashMap<>();
         updateData.put(KEY_TRAIN_RATE, trainRate);
-        updateData.put(KEY_LAST_DONE, new Date());
         update(updateData);
     }
 
     private void update(Map<String, Object> updateData) {
+        lastDone = new Date();
+        updateData.put(KEY_LAST_DONE, lastDone);
+
         Common.db()
                 .collection(COLLECTION_NAME)
                 .document(Common.getUserId())

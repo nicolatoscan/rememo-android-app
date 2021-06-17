@@ -1,16 +1,11 @@
 package it.rememo.rememo.ui.classes;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Map;
 
 import it.rememo.rememo.MainActivity;
 import it.rememo.rememo.R;
@@ -39,7 +34,7 @@ public class JoinClassActivity extends AppCompatActivity {
 
             StudentClass.getClassById(
                     id,
-                    sc -> updateUI(sc),
+                    this::updateUI,
                     ex -> {
                         Common.toast(this, Common.resStr(this, R.string.class_not_found));
                         startActivity(new Intent(this, MainActivity.class));

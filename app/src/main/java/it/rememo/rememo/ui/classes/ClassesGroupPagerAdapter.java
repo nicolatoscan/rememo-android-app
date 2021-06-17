@@ -10,11 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import it.rememo.rememo.R;
-import it.rememo.rememo.ui.collections.CollectionsGroupFragment;
 import it.rememo.rememo.utils.Common;
 
 public class ClassesGroupPagerAdapter extends FragmentStateAdapter {
-    ArrayList<String> classTypes;
+    final ArrayList<String> classTypes;
     public ClassesGroupPagerAdapter(Fragment fa) {
         super(fa);
         this.classTypes = new ArrayList<>();

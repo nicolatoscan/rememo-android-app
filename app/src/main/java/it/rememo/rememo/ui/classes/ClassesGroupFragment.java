@@ -3,31 +3,15 @@ package it.rememo.rememo.ui.classes;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-
 import it.rememo.rememo.R;
-import it.rememo.rememo.databinding.FragmentCollectionGroupBinding;
 import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.StudentClass;
-import it.rememo.rememo.ui.collections.CollectionDetailsActivity;
-import it.rememo.rememo.ui.collections.CollectionsRecyclerViewAdapter;
 import it.rememo.rememo.ui.shared.GroupFragment;
 import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
+
 public class ClassesGroupFragment extends GroupFragment<Collection> {
 
     @Override
@@ -82,7 +66,7 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
                 .show();
     }
 
-    private StudentClass createClass(String name) {
+    private void createClass(String name) {
         StudentClass cl = new StudentClass(name);
         cl.addToFirestore(
                 doc -> {
@@ -91,6 +75,5 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
                 },
                 ex -> Common.toast(getContext(), Common.resStr(getContext(), R.string.coll_err_creating_retry))
         );
-        return cl;
     }
 }

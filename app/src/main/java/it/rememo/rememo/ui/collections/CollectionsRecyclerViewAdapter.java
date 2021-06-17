@@ -20,7 +20,7 @@ import it.rememo.rememo.utils.Common;
 
 public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collection, CollectionsRecyclerViewAdapter.ViewHolder> {
 
-    private boolean isMine;
+    private final boolean isMine;
 
     CollectionsRecyclerViewAdapter(Context context, List<Collection> collections, boolean isMine) {
         super(context, collections);
@@ -78,12 +78,12 @@ public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Col
                     .setTitle(Common.resStr(itemView.getContext(), R.string.word_delete))
                     .setMessage(String.format(Common.resStr(itemView.getContext(), R.string.form_sure_to_delete_coll_STR_and_words), element.getName()))
                     .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setPositiveButton(Common.resStr(itemView.getContext(), R.string.form_im_sure), (dialog, whichButton) -> {
+                    .setPositiveButton(Common.resStr(itemView.getContext(), R.string.form_im_sure), (dialog, whichButton) ->
                         element.deleteFromFirestore(
                                 x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.coll_deleted)); },
                                 ex -> Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.coll_cant_delete))
-                        );
-                    })
+                        )
+                    )
                     .setNegativeButton(Common.resStr(itemView.getContext(), R.string.basic_cancel), null).show();
             return true;
         }
