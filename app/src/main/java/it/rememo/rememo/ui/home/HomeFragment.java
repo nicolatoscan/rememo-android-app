@@ -27,6 +27,7 @@ import it.rememo.rememo.databinding.FragmentHomeBinding;
 import it.rememo.rememo.models.EStudyType;
 import it.rememo.rememo.models.Stat;
 import it.rememo.rememo.ui.study.ChooseCollectionsActivity;
+import it.rememo.rememo.utils.Common;
 
 public class HomeFragment extends Fragment {
 
@@ -37,57 +38,25 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
+        Stat.getLastMonthRatio(
+                ratios -> {
+                    ArrayList<Entry> entries = new ArrayList<>();
+                    int i = 0;
+                    for (double s : ratios) {
+                        entries.add(new Entry(i++, (int)(s * 100)));
+                    }
 
-        Stat.fetchStats("userId1",
-            stat -> {
-                stat.fetchCollections(
-                        collectionStats -> {
-                            Log.d("COLL", collectionStats.get("collectionId1").correct + "");
-                        },
-                        ex -> {}
-                );
-                stat.fetchDays(
-                        daysStats -> {
-                            Log.d("DAY", daysStats.get("20210610").correct + "");
-                        },
-                        ex -> {}
-                );
-            },
-            ex -> {}
+                    LineDataSet set = Common.setLineDataSetStyle(new LineDataSet(entries, "Percentage"), getContext());
+                    LineData data = Common.setLineDataStyle(new LineData(set));
+                    binding.homeChart.setData(data);
+                    binding.homeChart.invalidate();
+                },
+                ex -> Common.toast(getContext(), "Couldn't load chart")
         );
 
 
-/*
-        TypedValue typedValue = new TypedValue();
-        Resources.Theme theme = getContext().getTheme();
-        theme.resolveAttribute(R.attr.textcolor, typedValue, true);
-        @ColorInt int color = typedValue.data;
-        l.setTextColor(color);*/
 
-
-        LineChart chart = binding.homeChart;
-        ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, 10));
-        entries.add(new Entry(1, 8));
-        entries.add(new Entry(2, 12));
-        entries.add(new Entry(3, 10));
-        entries.add(new Entry(4, 5));
-        entries.add(new Entry(5, 7));
-        LineDataSet set = new LineDataSet(entries, "Coll 1");
-        ArrayList<Entry> entries1 = new ArrayList<>();
-        entries1.add(new Entry(0, 12));
-        entries1.add(new Entry(1, 10));
-        entries1.add(new Entry(2, 10));
-        entries1.add(new Entry(3, 18));
-        entries1.add(new Entry(4, 5));
-        entries1.add(new Entry(5, 10));
-        LineDataSet set1 = new LineDataSet(entries1, "Coll 2");
-
-        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(set);
-        dataSets.add(set1);
-        LineData data = new LineData(dataSets);
-        chart.setData(data);
+        Common.setChartStyle(binding.homeChart);
 
         binding.btnLearn.setOnClickListener(v -> startStudy(EStudyType.LEARN));
         binding.btnTest.setOnClickListener(v -> startStudy(EStudyType.TEST));

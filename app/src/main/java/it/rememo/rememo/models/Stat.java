@@ -9,12 +9,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,8 +48,6 @@ public class Stat extends FirebaseModel {
         if (wrong != null)
             this.wrong = (long) wrong;
     }
-
-
 
     @Override
     public String getName() { return null; }
@@ -144,6 +144,42 @@ public class Stat extends FirebaseModel {
                 .document(collectionId)
                 .set(updateFields, SetOptions.merge());
     }
+
+    public static void getLastMonthRatio(
+            @NonNull OnSuccessListener<? super List<Double>> success,
+            @NonNull OnFailureListener fail
+    ) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, -1);
+        String lowerDate = formatter.format(cal.getTime());
+
+        Common.db()
+            .collection(COLLECTION_NAME)
+            .document(Common.getUserId())
+            .collection(COLLECTION_DAYS_NAME)
+            .whereGreaterThan(FieldPath.documentId(), lowerDate)
+            .get()
+            .addOnSuccessListener(docs -> {
+                List<Double> res = new ArrayList<>();
+                int correct = 0;
+                int total = 0;
+                for (DocumentSnapshot doc : docs) {
+                    StatData sd = new StatData(doc);
+                    correct += sd.getCorrect();
+                    total += sd.getCorrect() + sd.getWrong();
+                    Log.d("AAA", sd.getCorrect() + "");
+                    Log.d("CCC", sd.getWrong() + "");
+
+                    if (total > 0) {
+                        res.add( ((double) correct) / ((double) total) );
+                    }
+
+                }
+                success.onSuccess(res);
+            })
+            .addOnFailureListener(fail);
+    }
+
 
 
 

@@ -7,8 +7,8 @@ import java.util.Map;
 public class StatData {
     public static final String KEY_CORRECT = "correct";
     public static final String KEY_WRONG = "wrong";
-    public long correct = 0;
-    public long wrong = 0;
+    private long correct = 0;
+    private long wrong = 0;
 
     public StatData(long correct, long wrong) {
         this.correct = correct;
@@ -21,7 +21,7 @@ public class StatData {
         if (correct != null)
             this.correct = (long) correct;
         if (wrong != null)
-            this.correct = (long) wrong;
+            this.wrong = (long) wrong;
     }
 
     public StatData(DocumentSnapshot doc) {
@@ -30,6 +30,15 @@ public class StatData {
         if (correct != null)
             this.correct = (long) correct;
         if (wrong != null)
-            this.correct = (long) wrong;
+            this.wrong = (long) wrong;
+    }
+
+
+    public long getCorrect() {
+        return correct;
+    }
+
+    public long getWrong() {
+        return wrong;
     }
 }
