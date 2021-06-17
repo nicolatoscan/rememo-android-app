@@ -15,6 +15,7 @@ import it.rememo.rememo.R;
 import it.rememo.rememo.models.Username;
 import it.rememo.rememo.utils.Common;
 
+// Ask for username after signup
 public class AfterSignUpActivity extends AppCompatActivity {
 
     FirebaseAuth fAuth;
@@ -30,14 +31,17 @@ public class AfterSignUpActivity extends AppCompatActivity {
         btnGoTo.setOnClickListener(v -> onClickOpenRememo());
     }
 
+    // Save username and open home
     public void onClickOpenRememo() {
         String name = txtName.getEditText().getText().toString().trim();
+
+        // Validation
         if (name.isEmpty()) {
-            txtName.setError(Common.resStr(this, R.string.login_cant_empty_name));
+            txtName.setError(getString(R.string.login_cant_empty_name));
             return;
         }
         if (name.length() > 100) {
-            txtName.setError(Common.resStr(this, R.string.login_too_long_name));
+            txtName.setError(getString(R.string.login_too_long_name));
             return;
         }
 
@@ -45,12 +49,13 @@ public class AfterSignUpActivity extends AppCompatActivity {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
         fAuth.getCurrentUser().updateProfile(profileUpdates);
 
+        // Also save username in Firestore so professors can see the users names
         Username.setUsername(Common.getUserId(), name,
             success -> {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 finish();
             },
-            ex -> Common.toast(this, Common.resStr(this, R.string.login_error_saving_name_retry))
+            ex -> Common.toast(this, getString(R.string.login_error_saving_name_retry))
         );
 
 

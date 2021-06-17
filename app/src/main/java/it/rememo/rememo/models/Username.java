@@ -12,7 +12,8 @@ import java.util.Map;
 import it.rememo.rememo.utils.Common;
 
 
-// save the username of each users (usually user data)
+// save the username of each users (usually user data saved with authentication on firebase)
+// the username is used to see student name by class creators
 public class Username extends FirebaseModel {
 
     public final static String KEY_NAME = "name";
@@ -47,6 +48,7 @@ public class Username extends FirebaseModel {
         return name;
     }
 
+    // Save username on login
     static public void setUsername(
             String userId, String username,
             @NonNull OnSuccessListener<? super Void> success,

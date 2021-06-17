@@ -16,6 +16,7 @@ import it.rememo.rememo.models.Username;
 import it.rememo.rememo.ui.login.LoginActivity;
 import it.rememo.rememo.utils.Common;
 
+// Activity to change username and logout
 public class AccountActivity extends AppCompatActivity {
     ActivityAccountBinding binding;
     @Override
@@ -30,7 +31,7 @@ public class AccountActivity extends AppCompatActivity {
 
 
         binding.btnSave.setOnClickListener(v -> {
-
+            // Save new username
             String name = binding.txtUsername.getText().toString();
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
             FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates);
@@ -41,6 +42,7 @@ public class AccountActivity extends AppCompatActivity {
 
         });
 
+        // Logout
         binding.btnLogOut.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));

@@ -23,6 +23,8 @@ import it.rememo.rememo.models.StudentClass;
 import it.rememo.rememo.utils.Common;
 import it.rememo.rememo.utils.ShareUrls;
 
+
+// Show details of a class
 public class ClassDetailsActivity extends AppCompatActivity {
     public final static String ARG_CLASS = "class";
     public final static String ARG_IS_CREATED = "isCreated";
@@ -41,22 +43,26 @@ public class ClassDetailsActivity extends AppCompatActivity {
         setTitle(studentClass.getName());
 
         if (isCreated) {
+            // BTN to collection page
             binding.btnCollections.setOnClickListener((v) -> {
                 Intent i = new Intent(this, ClassCollectionsActivity.class);
                 i.putExtra(ClassCollectionsActivity.ARG_CLASS_ID, studentClass.getId());
                 startActivity(i);
             });
 
+            // BTN to students page
             binding.btnStudents.setOnClickListener((v) -> {
                 Intent i = new Intent(this, ClassStudentActivity.class);
                 i.putExtra(ClassCollectionsActivity.ARG_CLASS_ID, studentClass.getId());
                 startActivity(i);
             });
 
+            // BTN to share class
             binding.btnShareClass.setOnClickListener((v) ->
                 ShareUrls.shareClass(this, this.studentClass.getId(), this.studentClass.getName())
             );
         } else {
+            // Remove button if is not owner
             binding.btnCollections.setVisibility(View.GONE);
             binding.btnStudents.setVisibility(View.GONE);
             binding.btnShareClass.setVisibility(View.GONE);
@@ -65,6 +71,8 @@ public class ClassDetailsActivity extends AppCompatActivity {
         binding.chartStudents.setVisibility(View.GONE);
         Common.setChartStyle(binding.chartStudents, true);
 
+
+        // Set charts with data for each students
         Stat.getClassStats(
                 studentClass,
                 usersStats -> {

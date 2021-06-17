@@ -16,10 +16,13 @@ import it.rememo.rememo.models.StudentClass;
 import it.rememo.rememo.ui.login.LoginActivity;
 import it.rememo.rememo.utils.Common;
 
+
+// Page to import a collection
 public class ImportCollectionActivity extends AppCompatActivity {
 
     ActivityImportCollectionBinding binding;
     Collection collection;
+    // If collection is mine i can't import it
     boolean cantImport = true;
 
 
@@ -39,7 +42,7 @@ public class ImportCollectionActivity extends AppCompatActivity {
 
         binding.btnImportCollection.setOnClickListener(v -> importCollection());
 
-
+        // Hide before loading collection
         binding.btnImportCollection.setVisibility(View.GONE);
         binding.txtCollectionName.setVisibility(View.GONE);
         binding.txtTitle.setVisibility(View.GONE);
@@ -50,24 +53,29 @@ public class ImportCollectionActivity extends AppCompatActivity {
             String[] urlParts = url.split("/");
             String id = urlParts[urlParts.length - 1];
 
+            // Get collection
             Collection.getCollectionById(
                 id,
                 this::updateUI,
                 ex -> {
-                    Common.toast(this, Common.resStr(this, R.string.class_not_found));
+                    // The url is probably broken, exit app
+                    Common.toast(this, getString(R.string.class_not_found));
                     startActivity(new Intent(this, MainActivity.class));
                     finish();
                 }
             );
 
+        } else {
+            // This page is used only with an intent
+            finish();
         }
     }
 
+    // Update UI with collection data
     void updateUI(Collection collection) {
-
-        if (collection.getOwnerId().equals(Common.getUserId())) {
-            binding.txtTitle.setText(Common.resStr(this, R.string.coll_import_title_owner_error));
-            binding.btnImportCollection.setText(Common.resStr(this, R.string.login_go_to_rememo));
+        if (collection.getOwnerId().equals(Common.getUserId())) { // Can't import my collections
+            binding.txtTitle.setText(getString(R.string.coll_import_title_owner_error));
+            binding.btnImportCollection.setText(getString(R.string.login_go_to_rememo));
         } else {
             cantImport = false;
         }
@@ -83,11 +91,12 @@ public class ImportCollectionActivity extends AppCompatActivity {
         binding.btnImportCollection.setEnabled(true);
     }
 
+    // Clone collection to my collections
     void importCollection() {
         if (collection == null)
             return;
 
-        if (cantImport) {
+        if (cantImport) { // Is my collection?
             startActivity(new Intent(this, MainActivity.class));
             return;
         }

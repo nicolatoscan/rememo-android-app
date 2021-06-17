@@ -23,6 +23,7 @@ import it.rememo.rememo.models.CollectionWord;
 import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
 
+// recyclerView that holds the words
 public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecyclerViewAdapter.ViewHolder> {
 
     private final  List<CollectionWord> words;
@@ -31,6 +32,7 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
 
     WordsRecyclerViewAdapter(Context context, List<CollectionWord> words) {
         this.mInflater = LayoutInflater.from(context);
+        //List of words
         this.words = words;
     }
 
@@ -52,26 +54,26 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
         return words.size();
     }
 
+    // Remove from list
     public void removeAt(int i) {
         words.remove(i);
         notifyItemRemoved(i);
     }
 
+    // Multiple add to list
     public void resetAll(List<CollectionWord> list) {
         words.clear();
         words.addAll(list);
         notifyDataSetChanged();
     }
 
+    // Add to list
     public void add(CollectionWord w) {
         words.add(w);
         notifyItemInserted(words.size() - 1);
     }
 
-    CollectionWord getItem(int id) {
-        return words.get(id);
-    }
-
+    // set on word click event
     void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
@@ -97,63 +99,67 @@ public class WordsRecyclerViewAdapter extends RecyclerView.Adapter<WordsRecycler
 
             binding.cardView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                 // menu.setHeaderTitle("Select The Action");
-                menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_edit)).setOnMenuItemClickListener((mItem) -> renameWord());
-                menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteWord());
+                menu.add(0, view.getId(), 0, view.getContext().getString(R.string.basic_edit)).setOnMenuItemClickListener((mItem) -> renameWord());
+                menu.add(0, view.getId(), 0, view.getContext().getString(R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteWord());
             });
         }
 
+        // Rename a word translation and original
         private boolean renameWord() {
             final EditText txtOriginal = new EditText(itemView.getContext());
             final EditText txtTranslated = new EditText(itemView.getContext());
             txtOriginal.setInputType(InputType.TYPE_CLASS_TEXT);
             txtTranslated.setInputType(InputType.TYPE_CLASS_TEXT);
-            txtOriginal.setHint(Common.resStr(itemView.getContext(), R.string.word_original));
-            txtTranslated.setHint(Common.resStr(itemView.getContext(), R.string.word_translated));
+            txtOriginal.setHint(itemView.getContext().getString(R.string.word_original));
+            txtTranslated.setHint(itemView.getContext().getString(R.string.word_translated));
             if (word != null) {
                 txtOriginal.setText(word.getOriginal());
                 txtTranslated.setText(word.getTranslated());
             }
 
+            // open rename dialog
             Alerts
-                    .getInputTextAlert(itemView.getContext(), txtOriginal, txtTranslated)
-                    .setTitle(Common.resStr(itemView.getContext(), R.string.word_edit))
-                    .setPositiveButton(Common.resStr(itemView.getContext(), R.string.basic_rename), (dialog, which) -> {
-                        String original = txtOriginal.getText().toString();
-                        String translated = txtTranslated.getText().toString();
+                .getInputTextAlert(itemView.getContext(), txtOriginal, txtTranslated)
+                .setTitle(itemView.getContext().getString(R.string.word_edit))
+                .setPositiveButton(itemView.getContext().getString(R.string.basic_rename), (dialog, which) -> {
+                    String original = txtOriginal.getText().toString();
+                    String translated = txtTranslated.getText().toString();
 
-                        Map<String, Object> updateColl = new HashMap<>();
-                        updateColl.put(CollectionWord.KEY_ORIGINAL, original);
-                        updateColl.put(CollectionWord.KEY_TRANSLATED, translated);
-                        word.updateFirestore(updateColl,
-                            x -> {
-                                word.setOriginal(original);
-                                word.setTranslated(translated);
-                                updateUI();
-                            },
-                            ex -> Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.coll_cant_rename))
-                        );
-                    })
-                    .setNegativeButton(Common.resStr(itemView.getContext(), R.string.basic_cancel), (dialog, which) -> dialog.cancel())
-                    .show();
+                    Map<String, Object> updateColl = new HashMap<>();
+                    updateColl.put(CollectionWord.KEY_ORIGINAL, original);
+                    updateColl.put(CollectionWord.KEY_TRANSLATED, translated);
+                    word.updateFirestore(updateColl,
+                        x -> {
+                            word.setOriginal(original);
+                            word.setTranslated(translated);
+                            updateUI();
+                        },
+                        ex -> Common.toast(itemView.getContext(), itemView.getContext().getString(R.string.coll_cant_rename))
+                    );
+                })
+                .setNegativeButton(itemView.getContext().getString(R.string.basic_cancel), (dialog, which) -> dialog.cancel())
+                .show();
             return true;
         }
+
 
         private boolean deleteWord() {
             Collection coll = word.getCollectionParent();
             if (coll == null) {
                 return false;
             }
+
+            // Ask confirmation
             new AlertDialog.Builder(itemView.getContext())
-                .setTitle(Common.resStr(itemView.getContext(), R.string.word_delete))
-                .setMessage(String.format(Common.resStr(itemView.getContext(), R.string.form_sure_to_delete_STR), word.getOriginal()))
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(Common.resStr(itemView.getContext(), R.string.form_im_sure), (dialog, whichButton) ->
+                .setTitle(itemView.getContext().getString(R.string.word_delete))
+                .setMessage(String.format(itemView.getContext().getString(R.string.form_sure_to_delete_STR), word.getOriginal()))
+                .setPositiveButton(itemView.getContext().getString(R.string.form_im_sure), (dialog, whichButton) ->
                     coll.deleteWord(word,
-                            x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.word_deleted)); },
-                            ex -> Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.word_cant_delete))
+                            x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), itemView.getContext().getString(R.string.word_deleted)); },
+                            ex -> Common.toast(itemView.getContext(), itemView.getContext().getString(R.string.word_cant_delete))
                     )
                 )
-                .setNegativeButton(Common.resStr(itemView.getContext(), R.string.basic_cancel), null).show();
+                .setNegativeButton(itemView.getContext().getString(R.string.basic_cancel), null).show();
             return true;
         }
 

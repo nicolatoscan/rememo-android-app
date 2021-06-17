@@ -30,35 +30,40 @@ import it.rememo.rememo.ui.classes.ClassDetailsActivity;
 import it.rememo.rememo.ui.study.ChooseCollectionsActivity;
 import it.rememo.rememo.utils.Common;
 
+// Home page
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
+        // Configure and hyde chart, waiting for data
         Common.setChartStyle(binding.chartProgress, false);
         Common.setChartStyle(binding.chartCollections, true);
         binding.chartProgress.setVisibility(View.GONE);
         binding.chartCollections.setVisibility(View.GONE);
 
+        // Load last month rations of correct/wrong to draw line plot
         Stat.getLastMonthRatio(
                 ratios -> {
                     if (ratios.size() == 0) {
-                        binding.txtLoadingChartProgresses.setText(Common.resStr(getContext(), R.string.basic_chart_no_data));
+                        binding.txtLoadingChartProgresses.setText(getString(R.string.basic_chart_no_data));
                         return;
                     }
+                    // If only one value, duplicate to show line and not dot
                     if (ratios.size() == 1) {
                         ratios.add(ratios.get(0));
                     }
+
+                    // Create dataset
                     ArrayList<Entry> entries = new ArrayList<>();
                     int i = 0;
                     for (double s : ratios) {
                         entries.add(new Entry(i++, (int)(s * 100)));
                     }
 
+                    // Style chart
                     LineDataSet set = new LineDataSet(entries, getString(R.string.basic_percentage));
                     LineData data = new LineData(Common.setLineDataSetStyle(set, getContext()));
                     binding.chartProgress.setData(Common.setLineDataStyle(data));
@@ -69,12 +74,15 @@ public class HomeFragment extends Fragment {
                 ex -> Common.toast(getContext(), getString(R.string.couldn_load_chart))
         );
 
+        // Load wrong and correct count for collections
         Stat.fetchCollectionsWithNames(Common.getUserId(),
             collectionsStats -> {
                 if (collectionsStats.size() == 0) {
-                    binding.txtLoadingChartCollections.setText(Common.resStr(getContext(), R.string.basic_chart_no_data));
+                    binding.txtLoadingChartCollections.setText(getString(R.string.basic_chart_no_data));
                     return;
                 }
+
+                // Load data
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList<String> labels = new ArrayList<>();
                 int i = 0;
@@ -84,6 +92,7 @@ public class HomeFragment extends Fragment {
                     labels.add(s);
                 }
 
+                // style chart
                 BarDataSet set = new BarDataSet(entries, getString(R.string.title_collections));
                 set.setBarBorderWidth(0.1f);
                 set.setColors(new int[] { R.color.rememo_primary, R.color.error_red }, getContext());
@@ -99,12 +108,14 @@ public class HomeFragment extends Fragment {
             ex -> {}
         );
 
+        // Button on bottom
         binding.btnLearn.setOnClickListener(v -> startStudy(EStudyType.LEARN));
         binding.btnTest.setOnClickListener(v -> startStudy(EStudyType.TEST));
         binding.btnTrain.setOnClickListener(v -> startStudy(EStudyType.TRAIN));
         return binding.getRoot();
     }
 
+    // Start interface to choose collection to train/learn/study
     void startStudy(int type) {
         Intent i = new Intent(getContext(), ChooseCollectionsActivity.class);
         i.putExtra(ChooseCollectionsActivity.ARG_STUDY_TYPE, type);

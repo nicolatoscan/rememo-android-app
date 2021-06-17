@@ -20,6 +20,7 @@ import it.rememo.rememo.ui.shared.GroupFragment;
 import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
 
+// List of collection by class or mine
 public class CollectionsGroupFragment extends GroupFragment<Collection> {
 
     public static final String ARG_CLASS = "class";
@@ -27,6 +28,7 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
 
     @Override
     protected void parseArgs(Bundle args) {
+        // Get class or null if mine
         this.stClass = (StudentClass) args.getSerializable(ARG_CLASS);
     }
 
@@ -72,16 +74,19 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
         }
     }
 
+    // On floating plus click
     protected void onAddClicked() {
         final EditText textInput = new EditText(getContext());
         textInput.setInputType(InputType.TYPE_CLASS_TEXT);
         textInput.setHint(Common.resStr(getContext(), R.string.coll_name));
 
+        // Alert to choose name
         Alerts
             .getInputTextAlert(getContext(), textInput)
             .setTitle(Common.resStr(getContext(), R.string.coll_create_new))
             .setPositiveButton(Common.resStr(getContext(), R.string.basic_create), (dialog, which) -> {
                 String title = textInput.getText().toString();
+                // validation
                 if (title.length() > 0) {
                     createCollection(title);
                 }
@@ -94,7 +99,9 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
         Collection collection = new Collection(name, null, 0);
         collection.addToFirestore(
             doc -> {
+                // Add collection to list
                 adapter.add(collection);
+                binding.txtLoading.setVisibility(View.GONE);
                 binding.collectionRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
             },
             ex -> Common.toast(getContext(), Common.resStr(getContext(), R.string.coll_err_creating_retry))

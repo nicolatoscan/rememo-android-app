@@ -13,6 +13,7 @@ import it.rememo.rememo.R;
 import it.rememo.rememo.models.StudentClass;
 import it.rememo.rememo.utils.Common;
 
+// Tabs adapter for collections
 public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
     final ArrayList<StudentClass> collectionsGroups;
     final Fragment fragment;
@@ -22,8 +23,10 @@ public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
         fragment = fa;
 
         collectionsGroups = new ArrayList<>();
+        // Used to create mine tab
         collectionsGroups.add(null);
 
+        // get all classes
         StudentClass.getClasses(false,
             (classes) -> {
                 collectionsGroups.addAll(classes);
@@ -52,7 +55,7 @@ public class CollectionsGroupPagerAdapter extends FragmentStateAdapter {
     public String getTitle(int pos) {
         StudentClass cl = collectionsGroups.get(pos);
         if (cl == null) {
-            return Common.resStr(fragment.getContext(), R.string.colls_mine);
+            return fragment.getContext().getString(R.string.colls_mine);
         }
         return cl.getName();
     }

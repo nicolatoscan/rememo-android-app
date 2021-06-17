@@ -17,6 +17,7 @@ import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.CollectionWord;
 import it.rememo.rememo.utils.Common;
 
+// Details of a collection with its words
 public class CollectionDetailsActivity extends AppCompatActivity {
     public final static String ARG_COLLECTION = "collection";
     public final static String ARG_EDITABLE = "isEditable";
@@ -60,6 +61,7 @@ public class CollectionDetailsActivity extends AppCompatActivity {
     private void updateWordList() {
         binding.txtLoading.setVisibility(View.GONE);
 
+        // Get all words and update list
         collection.fetchWords(
             words ->  {
                 if (words.size() <= 0) {
@@ -69,12 +71,13 @@ public class CollectionDetailsActivity extends AppCompatActivity {
                 binding.wordsSwipeContainer.setRefreshing(false);
             },
             ex -> {
-                Common.toast(this, Common.resStr(this, R.string.words_cant_load));
+                Common.toast(this, getString(R.string.words_cant_load));
                 binding.wordsSwipeContainer.setRefreshing(false);
             }
         );
     }
 
+    // Add a new word
     private void onAddWordClick(View v) {
         String original = binding.txtOriginalWord.getText().toString();
         String translated = binding.txtTranslatedWord.getText().toString();
@@ -84,15 +87,19 @@ public class CollectionDetailsActivity extends AppCompatActivity {
         }
 
         binding.btnAddWord.setEnabled(false);
+        // Add to database
         collection.addWord(new CollectionWord(original, translated),
             resW -> {
+                // Word added
                 adapter.add(resW);
                 binding.wordsRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
                 resetInputWord();
+                binding.txtLoading.setVisibility(View.GONE);
             },
-            ex -> { Common.toast(this, Common.resStr(this, R.string.word_cant_create_new)); resetInputWord(); }
+            ex -> { Common.toast(this, getString(R.string.word_cant_create_new)); resetInputWord(); }
         );
     }
+
     private void resetInputWord() {
         binding.txtOriginalWord.setText("");
         binding.txtTranslatedWord.setText("");

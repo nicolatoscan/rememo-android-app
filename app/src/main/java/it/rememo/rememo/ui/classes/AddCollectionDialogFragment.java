@@ -19,6 +19,9 @@ import it.rememo.rememo.R;
 import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.utils.Common;
 
+
+// Dialog add collection to class
+// List of collections with checkboxes
 public class AddCollectionDialogFragment extends DialogFragment {
 
     final List<Collection> collections;
@@ -46,10 +49,9 @@ public class AddCollectionDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(Common.resStr(getContext(), R.string.coll_title))
-                .setMultiChoiceItems(items, itemChecked,
-                        (DialogInterface.OnMultiChoiceClickListener) (dialog, which, isChecked) -> { }
-                )
+                .setMultiChoiceItems(items, itemChecked, (dialog, which, isChecked) -> { })
                 .setPositiveButton(Common.resStr(getContext(), R.string.coll_add), (dialog, id) -> {
+                    // Return selected items
                     ArrayList<Collection> res = new ArrayList<>();
                     for (int i = 0; i < itemChecked.length; i++) {
                         if (itemChecked[i]) {
@@ -59,7 +61,6 @@ public class AddCollectionDialogFragment extends DialogFragment {
                     positiveResponse.onSuccess(res);
                 })
                 .setNegativeButton(Common.resStr(getContext(), R.string.basic_cancel), (dialog, id) -> { });
-
         return builder.create();
     }
 }

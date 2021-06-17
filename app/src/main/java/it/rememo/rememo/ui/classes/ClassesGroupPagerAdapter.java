@@ -12,13 +12,15 @@ import java.util.ArrayList;
 import it.rememo.rememo.R;
 import it.rememo.rememo.utils.Common;
 
+// Tab group of classes
 public class ClassesGroupPagerAdapter extends FragmentStateAdapter {
     final ArrayList<String> classTypes;
     public ClassesGroupPagerAdapter(Fragment fa) {
         super(fa);
+        // Tabs
         this.classTypes = new ArrayList<>();
-        this.classTypes.add(Common.resStr(fa.getContext(), R.string.classes_joined));
-        this.classTypes.add(Common.resStr(fa.getContext(), R.string.classes_created));
+        this.classTypes.add(fa.getContext().getString(R.string.classes_joined));
+        this.classTypes.add(fa.getContext().getString(R.string.classes_created));
     }
 
     @NotNull
