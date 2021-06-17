@@ -45,10 +45,7 @@ public class LearnActivity extends TrainLearnActivity {
                 learningWords.put(cw.getId(), cw);
             }
         }
-
-        Log.d("learnedWords", "learnedWords" + learnedWords);
         setProgressBar(learnedWords);
-
         for (int i = 0; i < 3; i++) addWord();
         finishLearnCheck();
     }
@@ -95,9 +92,10 @@ public class LearnActivity extends TrainLearnActivity {
                         for (String key : this.studyStatsByWordId.keySet()) {
                             this.studyStatsByWordId.get(key).resetLearnRate();
                         }
-                        words.putAll(learningWords);
-                        onWordLoaded();
-                        nextWord();
+                        // words.putAll(learningWords);
+                        // onWordLoaded();
+                        // nextWord();
+                        finish();
                     })
                     .show();
         }

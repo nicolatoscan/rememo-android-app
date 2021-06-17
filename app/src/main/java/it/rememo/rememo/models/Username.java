@@ -54,8 +54,6 @@ public class Username extends FirebaseModel {
     ) {
         Map<String, String> data = new HashMap<>();
         data.put(KEY_NAME, username);
-        Log.d("SETTING", userId);
-        Log.d("SETTING", username);
         Common.db().collection(COLLECTION_NAME)
                 .document(userId)
                 .set(data)

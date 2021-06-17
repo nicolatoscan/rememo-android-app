@@ -66,7 +66,7 @@
     <string name="form_sure_to_delete_coll_STR_and_words">Are you sure you want to delete %s and all its words?</string>
     <string name="form_im_sure">I\'m sure</string>
     <string name="form_continue">Continue</string>
-    <string name="form_reset">Reset</string>
+    <string name="form_reset">Exit and Reset</string>
 
 
     <!-- word -->

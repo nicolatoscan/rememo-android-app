@@ -44,7 +44,6 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
         public boolean add(StudyStatsWord sw) {
             int index = Collections.binarySearch(this, sw, StudyStatsWord::compareTo);
             if (index < 0) index = ~index;
-            Log.d("CIAO", "Added at " + index);
             super.add(index, sw);
             return true;
         }

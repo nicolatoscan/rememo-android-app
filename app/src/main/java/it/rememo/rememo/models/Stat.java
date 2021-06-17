@@ -175,8 +175,6 @@ public class Stat extends FirebaseModel {
                     StatData sd = new StatData(doc);
                     correct += sd.getCorrect();
                     total += sd.getCorrect() + sd.getWrong();
-                    Log.d("AAA", sd.getCorrect() + "");
-                    Log.d("CCC", sd.getWrong() + "");
 
                     if (total > 0) {
                         res.add( ((double) correct) / ((double) total) );
