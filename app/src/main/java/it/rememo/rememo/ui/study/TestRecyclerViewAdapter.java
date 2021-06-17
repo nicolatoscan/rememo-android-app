@@ -22,6 +22,8 @@ import it.rememo.rememo.models.CollectionWord;
 import it.rememo.rememo.models.Stat;
 import it.rememo.rememo.utils.Common;
 
+
+// test items to answer
 public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerViewAdapter.ViewHolder> {
 
     private static final int VIEW_TYPE_TEST_ROW = 0;
@@ -41,6 +43,7 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
+        // Reload previous answers
         if (viewType == VIEW_TYPE_SUBMIT_BTN) {
             RowSubmitItemBinding binding = RowSubmitItemBinding.inflate(mInflater, parent, false);
             return new ViewHolder(binding);
@@ -51,6 +54,7 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
 
     }
 
+    // Add all tests question
     public void addAll(List<CollectionWord> c) {
         int sizeBefore = list.size();
         list.addAll(c);
@@ -78,26 +82,31 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
             }
         } else if (holder.bindingSubmit != null) {
             if (showResults) {
+                // Return to homw
                 holder.bindingSubmit.btnSubmit.setText(R.string.exit);
                 holder.bindingSubmit.btnSubmit.setOnClickListener(v -> context.finish());
             } else {
                 holder.bindingSubmit.btnSubmit.setText(R.string.submit);
                 holder.bindingSubmit.btnSubmit.setOnClickListener(v -> {
+                    // test results
                     int tot = list.size(), right = 0;
                     for (int i = 0; i < list.size(); i++) {
                         CollectionWord w = list.get(i);
                         String an = answers.get(i);
                         boolean res = Common.checkAnswer(w.getTranslated(), an);
                         Stat.add(res, w.getCollectionParentId());
+                        // rights words
                         if (res) right++;
                     }
 
+                    // Show results
                     new AlertDialog.Builder(mInflater.getContext())
                             .setTitle(Common.resStr(mInflater.getContext(), R.string.form_test_completed))
                             .setMessage(String.format(Common.resStr(mInflater.getContext(), R.string.form_test_completed_results), right, tot))
                             .setPositiveButton(Common.resStr(mInflater.getContext(), R.string.form_continue), (dialog, whichButton) -> { })
                             .show();
 
+                    // results are in, reload to show correct and wrong
                     if (!showResults) {
                         showResults = true;
                         notifyDataSetChanged();
@@ -131,6 +140,7 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
                 public void onTextChanged(CharSequence s, int start, int before, int count) { }
                 @Override
                 public void afterTextChanged(Editable s) {
+                    // Check if correct
                     answers.set(getAdapterPosition(), s.toString());
                 }
             });

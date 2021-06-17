@@ -15,6 +15,7 @@ import java.util.List;
 import it.rememo.rememo.databinding.RowDeletableItemBinding;
 import it.rememo.rememo.models.FirebaseModel;
 
+// Recycler View used b items with a remove button (students in class or colections in class)
 public class ListWithRemoveAdapter extends RecyclerView.Adapter<ListWithRemoveAdapter.ViewHolder> {
 
     private final ArrayList<FirebaseModel> list;

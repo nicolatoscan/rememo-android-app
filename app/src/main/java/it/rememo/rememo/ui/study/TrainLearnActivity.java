@@ -30,6 +30,7 @@ import it.rememo.rememo.models.Stat;
 import it.rememo.rememo.models.StudyStatsWord;
 import it.rememo.rememo.utils.Common;
 
+// Abstract class used both by learn and train since they are similar
 public abstract class TrainLearnActivity extends AppCompatActivity {
 
     public final static String ARG_COLLECTIONS = "collections";
@@ -186,7 +187,7 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
 
         double range = 0.1;
         double x = Math.random();
-        double size = wordPool.size();
+        double size = orderedStudyStats.size();
 
         int top = (int) Math.ceil((1.0 + range - Math.pow(Math.max(0.0, x - range), 2.0)) * ((double)wordPool.size()));
         if (top >= size) top = (int)size - 1;
@@ -194,8 +195,24 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
         int bottom = (int) Math.floor((1.0 - (2.0 * x * range) - Math.pow(Math.max(2 * range, x), 2)) * ((double)wordPool.size()));
         if (bottom < 0) bottom = 0;
 
-        StudyStatsWord a = orderedStudyStats.get(new Random().nextInt(orderedStudyStats.size()));
-        return new Pair<>(wordPool.get(a.getId()), a);
+        // Check, should not be necessary
+        if (bottom > top) bottom = 0;
+
+
+
+
+        StudyStatsWord lowest = orderedStudyStats.get(bottom);
+        for (int i = bottom; i < top; i++) {
+            StudyStatsWord s = orderedStudyStats.get(i);
+            if (s.getLastDoneCorrect() == null) {
+                return new Pair<>(wordPool.get(s.getId()), s);
+            }
+
+            if (lowest.getLastDoneCorrect().compareTo(s.getLastDoneCorrect()) < 0)
+                lowest = s;
+        }
+        return new Pair<>(wordPool.get(lowest.getId()), lowest);
+
     }
 
     abstract void updatePoints(String id, boolean result);

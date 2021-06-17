@@ -15,12 +15,17 @@ import java.util.List;
 import it.rememo.rememo.databinding.RowRadioCollectionBinding;
 import it.rememo.rememo.models.Collection;
 
+
+// recycler view to show collection to select for study, or button start at the end
 public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<ChooseCollectionsRecyclerViewAdapter.ViewHolder> {
 
     private final List<Collection> list = new ArrayList<>();
     final protected LayoutInflater mInflater;
+
+    // Saved status for when view is recycled
     private int lastCheckedPositionRadio = -1;
     private final List<Boolean> checkedCheckBoxes = new ArrayList<>();
+
     private boolean multiselect = false;
 
     public ChooseCollectionsRecyclerViewAdapter(Context context, boolean multiselect) {
@@ -32,6 +37,7 @@ public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<C
     @Override
     public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         RowRadioCollectionBinding binding = RowRadioCollectionBinding.inflate(mInflater, parent, false);
+        // Checkbox or radio
         if (multiselect)
             binding.radioButton.setVisibility(View.GONE);
         else
@@ -50,6 +56,7 @@ public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<C
     @Override
     public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
         String t = list.get(position).getName();
+        // Reload previous status
         if (multiselect) {
             holder.binding.checkBox.setText(t);
             holder.binding.checkBox.setChecked(checkedCheckBoxes.get(position));
@@ -64,6 +71,8 @@ public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<C
         return list.size();
     }
 
+
+    // retrieve selected ids or id
     public ArrayList<String> getSelectedIds() {
         ArrayList<String> res = new ArrayList<>();
 
@@ -88,6 +97,7 @@ public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<C
         public ViewHolder(RowRadioCollectionBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            // Save status for when view is recycled
             this.binding.radioButton.setOnClickListener(v -> {
                 int copyOfLastCheckedPosition = lastCheckedPositionRadio;
                 lastCheckedPositionRadio = getAdapterPosition();

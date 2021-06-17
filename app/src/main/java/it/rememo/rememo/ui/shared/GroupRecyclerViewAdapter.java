@@ -14,6 +14,7 @@ import java.util.List;
 import it.rememo.rememo.databinding.RowCollectionItemBinding;
 import it.rememo.rememo.models.FirebaseModel;
 
+// Abstract recycled view used both by collections and classes
 public abstract class GroupRecyclerViewAdapter<T extends FirebaseModel, T1 extends  GroupRecyclerViewAdapter.ViewHolder> extends RecyclerView.Adapter<T1> {
 
     private final List<T> list;
@@ -45,6 +46,9 @@ public abstract class GroupRecyclerViewAdapter<T extends FirebaseModel, T1 exten
         return list.size();
     }
 
+
+    // --- Edit data in list ---
+
     public void removeAt(int i) {
         list.remove(i);
         notifyItemRemoved(i);
@@ -60,6 +64,8 @@ public abstract class GroupRecyclerViewAdapter<T extends FirebaseModel, T1 exten
         list.add(c);
         notifyItemInserted(list.size() - 1);
     }
+
+    // --- ---- ---
 
     public T getItem(int id) {
         return list.get(id);

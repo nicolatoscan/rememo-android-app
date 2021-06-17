@@ -43,17 +43,21 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         fAuth = FirebaseAuth.getInstance();
+        // Check if authenticated
         if (fAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
+        // Remove saved userId
         Common.logout();
 
+        // Get login url link
         Uri intentData = getIntent().getData();
         if (intentData != null) {
             signInWithEmailLink(intentData.toString());
         }
 
+        // Setup google sso
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -64,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginBtnSendEmail.setOnClickListener(v -> onClickSignInWithEmail());
     }
 
+    // On google sso login
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -78,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // Authenticate with google SSO
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         fAuth.signInWithCredential(credential)
@@ -90,15 +96,18 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    // On google sso click
     public void signInWithGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
+    // On email login click
     public void onClickSignInWithEmail() {
         String email = binding.loginEmailTextField.getEditText().getText().toString().trim();
+        // Validate
         if (email.isEmpty()) {
-            binding.loginEmailTextField.setError(Common.resStr(this, R.string.login_cant_empty_mail));
+            binding.loginEmailTextField.setError(getString(R.string.login_cant_empty_mail));
             return;
         }
         binding.loginEmailTextField.setError(null);
@@ -112,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                 .setAndroidPackageName("it.rememo.rememo", true, "0")
                 .build();
 
+        // Send email and go to next page
         fAuth.sendSignInLinkToEmail(email, acSettings).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).edit().putString("signinEmail", email).apply();
@@ -125,10 +135,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    // And email login link fom intent
     public void signInWithEmailLink(String emailLink) {
         String email = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this).getString("signinEmail", "NONE");
         if (email.equals("None")) {
-            failedLogin(Common.resStr(this, R.string.login_failed_use_same_device));
+            failedLogin(getString(R.string.login_failed_use_same_device));
             return;
         }
         fAuth.signInWithEmailLink(email, emailLink)
@@ -142,19 +153,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void failedLogin(String message) {
-        Toast.makeText(LoginActivity.this, message == null ? Common.resStr(this, R.string.login_failed_retry) : message, Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, message == null ? getString(R.string.login_failed_retry) : message, Toast.LENGTH_LONG).show();
     }
 
+    // Go to next page wether username is not setted
     private void openAfterLogin(AuthResult result) {
         FirebaseUser user = result.getUser();
         String name = result.getUser().getDisplayName();
-        Username.setUsername(user.getUid(), name == null ? Common.resStr(this, R.string.login_unknown_user) : name,
+        Username.setUsername(user.getUid(), name == null ? getString(R.string.login_unknown_user) : name,
                 success -> {
-                    Common.toast(this, String.format(Common.resStr(this, R.string.login_logged_as_STR) , (name == null ? user.getEmail() : name)));
+                    Common.toast(this, String.format(getString(R.string.login_logged_as_STR) , (name == null ? user.getEmail() : name)));
                     startActivity(new Intent(getApplicationContext(), name == null ? AfterSignUpActivity.class : MainActivity.class));
                     finish();
                 },
-                ex -> Common.toast(this, Common.resStr(this, R.string.login_error))
+                ex -> Common.toast(this, getString(R.string.login_error))
                 );
     }
 }

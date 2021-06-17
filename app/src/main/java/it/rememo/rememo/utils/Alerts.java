@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AlertDialog;
 
 public class Alerts {
+
     public static AlertDialog.Builder getInputTextAlert(Context ctx, EditText... textInputs) {
 
         LinearLayout container = new LinearLayout(ctx);

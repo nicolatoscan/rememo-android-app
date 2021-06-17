@@ -13,12 +13,14 @@ import java.util.List;
 import it.rememo.rememo.databinding.ActivityTestBinding;
 import it.rememo.rememo.models.CollectionWord;
 
+// Test the user with random words
 public class TestActivity extends AppCompatActivity {
 
     public final static String ARG_COLLECTIONS = "collections";
     List<CollectionWord> allWords;
     ActivityTestBinding binding;
     TestRecyclerViewAdapter adapter;
+    // Default length of test
     int N = 15;
 
     @Override
@@ -36,6 +38,7 @@ public class TestActivity extends AppCompatActivity {
 
         allWords = new ArrayList<>();
 
+        // Load words
         CollectionWord.getAllWordsOfCollections(collectionsIds,
             words -> {
                 this.allWords.addAll(words);
@@ -45,6 +48,7 @@ public class TestActivity extends AppCompatActivity {
         );
     }
 
+    // Choose words
     void loadTest() {
         Collections.shuffle(this.allWords);
 

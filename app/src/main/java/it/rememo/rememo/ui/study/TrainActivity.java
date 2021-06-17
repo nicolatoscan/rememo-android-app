@@ -8,6 +8,7 @@ import java.util.Random;
 import it.rememo.rememo.models.CollectionWord;
 import it.rememo.rememo.models.StudyStatsWord;
 
+// Train with words from collections
 public class TrainActivity extends TrainLearnActivity {
 
 

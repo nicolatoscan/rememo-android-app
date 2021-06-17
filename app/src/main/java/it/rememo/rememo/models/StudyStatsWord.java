@@ -68,6 +68,7 @@ public class StudyStatsWord extends FirebaseModel implements Comparable<StudySta
 
     public double getLearnRate() { return learnRate; }
     public double getTrainRate() { return trainRate; }
+    public Date getLastDoneCorrect() { return lastDoneCorrect; }
 
 
     @Override

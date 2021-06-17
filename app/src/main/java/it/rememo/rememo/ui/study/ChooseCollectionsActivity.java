@@ -16,11 +16,13 @@ import it.rememo.rememo.models.EStudyType;
 import it.rememo.rememo.models.StudentClass;
 import it.rememo.rememo.utils.Common;
 
+// Choose collection to train / learn / study (either multi or single select)
 public class ChooseCollectionsActivity extends AppCompatActivity {
     public final static String ARG_STUDY_TYPE = "studyType";
     ActivityChooseCollectionsBinding binding;
     ChooseCollectionsRecyclerViewAdapter adapter;
-    int learnType = -1;
+    // is Learn, Study or Train
+    int studyType = -1;
     boolean collectionDone = false;
     boolean classesDone = false;
 
@@ -31,22 +33,25 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Intent i = getIntent();
-        learnType = i.getIntExtra(ARG_STUDY_TYPE, EStudyType.LEARN);
+        studyType = i.getIntExtra(ARG_STUDY_TYPE, EStudyType.LEARN);
 
-        if (learnType == EStudyType.LEARN) {
+        // Set different title
+        if (studyType == EStudyType.LEARN) {
             setTitle(getString(R.string.title_choose_learn));
-        } else if (learnType == EStudyType.TEST) {
+        } else if (studyType == EStudyType.TEST) {
             setTitle(getString(R.string.title_choose_test));
-        } else if (learnType == EStudyType.TRAIN) {
+        } else if (studyType == EStudyType.TRAIN) {
             setTitle(getString(R.string.title_choose_train));
         }
 
         binding.colllectionList.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ChooseCollectionsRecyclerViewAdapter(this, learnType != EStudyType.LEARN);
+        adapter = new ChooseCollectionsRecyclerViewAdapter(this, studyType != EStudyType.LEARN);
         binding.colllectionList.setAdapter(adapter);
 
+        // get my collections to lsit
         Collection.getMyCollections(
                 collections -> {
+                    // List collections
                     if (collections.size() > 0)
                         binding.txtLoading.setVisibility(View.GONE);
                     if (classesDone && collections.size() == 0)
@@ -59,6 +64,7 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
                 ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
         );
 
+        // get collections to list from classes
         StudentClass.getClasses(false,
             classes -> {
                 for (StudentClass sc : classes) {
@@ -84,8 +90,9 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
 
     }
 
+    // Button start study
     void start() {
-        if (learnType < 0 || learnType > 2)
+        if (studyType < 0 || studyType > 2)
             return;
 
         ArrayList<String> selectedIds = this.adapter.getSelectedIds();
@@ -95,11 +102,11 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
         }
 
         Intent i = null;
-        if (learnType == EStudyType.LEARN) {
+        if (studyType == EStudyType.LEARN) {
             i = new Intent(this, LearnActivity.class);
-        } else if (learnType == EStudyType.TEST) {
+        } else if (studyType == EStudyType.TEST) {
             i = new Intent(this, TestActivity.class);
-        } else if (learnType == EStudyType.TRAIN) {
+        } else if (studyType == EStudyType.TRAIN) {
             i = new Intent(this, TrainActivity.class);
         }
 

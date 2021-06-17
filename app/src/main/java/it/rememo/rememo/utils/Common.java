@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import it.rememo.rememo.R;
 
+// Common utilities
 public class Common {
     private static String userId = null;
     public static String getUserId() {
