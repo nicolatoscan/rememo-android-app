@@ -29,14 +29,15 @@
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtOriginal" />
+        app:layout_constraintTop_toBottomOf="@+id/txtOriginal"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/btnNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableRight="@drawable/ic_baseline_navigate_next_24"
-        android:text="Next"
+        android:drawableEnd="@drawable/ic_baseline_navigate_next_24"
+        android:text="@string/basic_next"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Translate the following word:"
+        android:text="@string/translate_following_word"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/txtOriginal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Click below to show answer:"
+        android:text="@string/click_to_show_answer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtAnswer" />

@@ -269,5 +269,9 @@
     <string name="import_collection_invite">Import collection %s on Rememo</string>
     <string name="exit">Exit</string>
     <string name="submit">Submit</string>
+    <string name="basic_remove">Remove</string>
+    <string name="basic_next">Next</string>
+    <string name="translate_following_word">Translate the following word:</string>
+    <string name="click_to_show_answer">Click below to show answer:</string>
 
 </resources>
