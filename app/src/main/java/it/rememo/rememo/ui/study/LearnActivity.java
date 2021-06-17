@@ -3,45 +3,56 @@ package it.rememo.rememo.ui.study;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import it.rememo.rememo.models.CollectionWord;
+import it.rememo.rememo.models.StudyStatsWord;
 import it.rememo.rememo.utils.Common;
 
 public class LearnActivity extends TrainLearnActivity {
 
     private int initialWordsSize = 0;
     private int learnedWords = 0;
-    private List<CollectionWord> learningWords;
+    private Map<String, CollectionWord> learningWords;
     private final double threshold = 0.7;
 
 
     void onSetup() {
-        learningWords = new ArrayList<>();
+        StudyStatsWord.sortByLearn = false;
+        learningWords = new HashMap<>();
     }
 
     void onWordLoaded() {
         initialWordsSize = words.size();
 
-        for (String s : this.studyStats.keySet()) {
-            if (this.studyStats.get(s).getLearnRate() >= threshold) {
+        for (String id : this.studyStatsByWordId.keySet()) {
+            StudyStatsWord s = this.studyStatsByWordId.get(id);
+            if (s.getLearnRate() >= threshold) {
                 this.learnedWords++;
             }
+            if (s.getLearnRate() >= 0.25) {
+                CollectionWord cw = words.get(s.getId());
+                words.remove(cw.getId());
+                learningWords.put(cw.getId(), cw);
+            }
+
         }
         setProgressBar(learnedWords);
 
         for (int i = 0; i < 3; i++) addWord();
     }
 
-    CollectionWord getNextWord() {
-        return learningWords.get(new Random().nextInt(learningWords.size()));
+    @Override
+    Map<String, CollectionWord> getNextWordPool() {
+        return this.learningWords;
     }
 
     void updatePoints(String id, boolean result) {
         double points = this.currentStudyStats.getLearnRate();
-        double nextPoints = result ?  points + ((1 - points) / 2.0) : points / 2.0;
-        this.currentStudyStats.updateLearnRate(nextPoints);
+        double nextPoints = this.currentStudyStats.updateLearnRate(result);
 
         if (points < threshold && nextPoints >= threshold) {
             learnedWords++;
@@ -76,8 +87,8 @@ public class LearnActivity extends TrainLearnActivity {
             return;
         }
         int pos = new Random().nextInt(wordsSize);
-        CollectionWord cw = words.get(pos);
-        words.remove(pos);
-        learningWords.add(cw);
+        CollectionWord cw = (CollectionWord) words.values().toArray()[pos];
+        words.remove(cw.getId());
+        learningWords.put(cw.getId(), cw);
     }
 }

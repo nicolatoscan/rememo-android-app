@@ -6,18 +6,25 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.drawable.DrawableCompat;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityTrainBinding;
+import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.models.CollectionWord;
 import it.rememo.rememo.models.Stat;
 import it.rememo.rememo.models.StudyStatsWord;
@@ -28,12 +35,24 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
     public final static String ARG_COLLECTIONS = "collections";
     MediaPlayer successSound;
     ActivityTrainBinding binding;
+
     CollectionWord currentWord;
     StudyStatsWord currentStudyStats;
-    List<CollectionWord> words;
-    Map<String, StudyStatsWord> studyStats = new HashMap<>();
-    boolean isAnswerShown = false;
 
+    HashMap<String, CollectionWord> words = new HashMap<>();
+    List<StudyStatsWord> orderedStudyStats = new ArrayList<StudyStatsWord>() {
+        public boolean add(StudyStatsWord sw) {
+            int index = Collections.binarySearch(this, sw, StudyStatsWord::compareTo);
+            if (index < 0) index = ~index;
+            Log.d("CIAO", "Added at " + index);
+            super.add(index, sw);
+            return true;
+        }
+    };
+    Map<String, StudyStatsWord> orderedStudyStatsMap = new HashMap<>();
+    Map<String, StudyStatsWord> studyStatsByWordId = new HashMap<>();
+
+    boolean isAnswerShown = false;
     private boolean wordCompleted = false;
     private boolean studyStatsCompleted = false;
 
@@ -78,7 +97,9 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
 
         CollectionWord.getAllWordsOfCollections(collectionsIds,
                 words -> {
-                    this.words = words;
+                    for (CollectionWord w : words) {
+                        this.words.put(w.getId(), w);
+                    }
                     if (studyStatsCompleted)
                         start();
                     wordCompleted = true;
@@ -89,7 +110,9 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
 
         StudyStatsWord.getStudyStatsByCollectionsId(collectionsIds,
             studyStatsWords -> {
-                studyStats = studyStatsWords;
+                for (StudyStatsWord sw : studyStatsWords) {
+                    studyStatsByWordId.put(sw.getId(), sw);
+                }
                 if (wordCompleted)
                     start();
                 studyStatsCompleted = true;
@@ -104,17 +127,13 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
         nextWord();
     }
 
-    abstract CollectionWord getNextWord();
+    abstract Map<String, CollectionWord> getNextWordPool();
 
     void nextWord() {
         isAnswerShown = false;
-        this.currentWord = getNextWord();
-        this.currentStudyStats = this.studyStats.get(this.currentWord.getId());
-        if (this.currentStudyStats == null) {
-            this.currentStudyStats = new StudyStatsWord(this.currentWord.getCollectionParentId(), this.currentWord.getId());
-            this.studyStats.put(this.currentWord.getId(), this.currentStudyStats);
-        }
-
+        Pair<CollectionWord, StudyStatsWord> next = chooseWord(getNextWordPool());
+        this.currentWord = next.first;
+        this.currentStudyStats = next.second;
 
         binding.txtOriginal.setText(currentWord.getOriginal());
 
@@ -144,6 +163,40 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
             Stat.add(result, this.currentWord.getCollectionParentId());
             updatePoints(currentWord.getId(), result);
         }
+    }
+
+    Pair<CollectionWord, StudyStatsWord> chooseWord(Map<String, CollectionWord> wordPool) {
+        if (orderedStudyStats.size() < wordPool.size()) {
+            List<String> ids = new ArrayList<>();
+            ids.addAll(wordPool.keySet());
+            Collections.shuffle(ids);
+            for (String wId : ids) {
+                if (orderedStudyStatsMap.get(wId) == null) {
+                    CollectionWord w = wordPool.get(wId);
+                    StudyStatsWord ssw = studyStatsByWordId.get(w.getId());
+                    if (ssw == null) {
+                        ssw = new StudyStatsWord(w.getCollectionParentId(), w.getId());
+                        studyStatsByWordId.put(w.getId(), ssw);
+                    }
+                    orderedStudyStats.add(ssw);
+                    orderedStudyStatsMap.put(ssw.getId(), ssw);
+                    return new Pair<>(w, ssw);
+                }
+            }
+        }
+
+        double range = 0.1;
+        double x = Math.random();
+        double size = wordPool.size();
+
+        int top = (int) Math.ceil((1.0 + range - Math.pow(Math.max(0.0, x - range), 2.0)) * ((double)wordPool.size()));
+        if (top >= size) top = (int)size - 1;
+
+        int bottom = (int) Math.floor((1.0 - (2.0 * x * range) - Math.pow(Math.max(2 * range, x), 2)) * ((double)wordPool.size()));
+        if (bottom < 0) bottom = 0;
+
+        StudyStatsWord a = orderedStudyStats.get(new Random().nextInt(orderedStudyStats.size()));
+        return new Pair<>(wordPool.get(a.getId()), a);
     }
 
     abstract void updatePoints(String id, boolean result);

@@ -2,27 +2,31 @@ package it.rememo.rememo.ui.study;
 
 import android.view.View;
 
+import java.util.Map;
 import java.util.Random;
 
 import it.rememo.rememo.models.CollectionWord;
+import it.rememo.rememo.models.StudyStatsWord;
 
 public class TrainActivity extends TrainLearnActivity {
 
 
     void onSetup() {
+        StudyStatsWord.sortByLearn = true;
         this.binding.learnProgress.setVisibility(View.GONE);
     }
 
     void onWordLoaded() { }
 
-    CollectionWord getNextWord() {
-        return this.words.get(new Random().nextInt(this.words.size()));
+    @Override
+    Map<String, CollectionWord> getNextWordPool() {
+        return this.words;
     }
 
     void updatePoints(String id, boolean result) {
-        double points = this.currentStudyStats.getTrainRate();
-        points = result ?  points + ((1 - points) / 2.0) : points / 2.0;
-        this.currentStudyStats.updateTrainRate(points);
+        this.currentStudyStats.updateTrainRate(result);
+        this.orderedStudyStats.remove(this.currentStudyStats);
+        this.orderedStudyStats.add(currentStudyStats);
     }
 
 }
