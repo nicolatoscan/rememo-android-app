@@ -17,6 +17,7 @@ import it.rememo.rememo.models.Collection;
 import it.rememo.rememo.ui.shared.GroupRecyclerViewAdapter;
 import it.rememo.rememo.utils.Alerts;
 import it.rememo.rememo.utils.Common;
+import it.rememo.rememo.utils.ShareUrls;
 
 public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collection, CollectionsRecyclerViewAdapter.ViewHolder> {
 
@@ -38,6 +39,7 @@ public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Col
             if (isMine) {
                 binding.cardView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                     // menu.setHeaderTitle("Select The Action");
+                    menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_share)).setOnMenuItemClickListener((mItem) -> shareCollection());
                     menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_rename)).setOnMenuItemClickListener((mItem) -> renameCollection());
                     menu.add(0, view.getId(), 0, Common.resStr(view.getContext(), R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteCollection());
                 });
@@ -77,7 +79,6 @@ public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Col
             new AlertDialog.Builder(itemView.getContext())
                     .setTitle(Common.resStr(itemView.getContext(), R.string.word_delete))
                     .setMessage(String.format(Common.resStr(itemView.getContext(), R.string.form_sure_to_delete_coll_STR_and_words), element.getName()))
-                    .setIcon(android.R.drawable.ic_dialog_alert)
                     .setPositiveButton(Common.resStr(itemView.getContext(), R.string.form_im_sure), (dialog, whichButton) ->
                         element.deleteFromFirestore(
                                 x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), Common.resStr(itemView.getContext(), R.string.coll_deleted)); },
@@ -85,6 +86,11 @@ public class CollectionsRecyclerViewAdapter extends GroupRecyclerViewAdapter<Col
                         )
                     )
                     .setNegativeButton(Common.resStr(itemView.getContext(), R.string.basic_cancel), null).show();
+            return true;
+        }
+
+        private boolean shareCollection() {
+            ShareUrls.shareCollection(itemView.getContext(), element.getId(), element.getName());
             return true;
         }
 

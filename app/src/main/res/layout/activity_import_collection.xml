@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/progress"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.classes.JoinClassActivity">
+    tools:context=".ui.collections.ImportCollectionActivity">
 
     <TextView
         android:id="@+id/txtTitle"
@@ -14,15 +13,16 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="96dp"
         android:layout_marginEnd="24dp"
-        android:text="@string/classes_invited_to"
+        android:text="@string/coll_import_title"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtClassName"
+        android:id="@+id/txtCollectionName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
 
     <Button
-        android:id="@+id/btnJoinClass"
+        android:id="@+id/btnImportCollection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="128dp"
@@ -43,14 +43,14 @@
         android:paddingTop="16dp"
         android:paddingRight="32dp"
         android:paddingBottom="16dp"
-        android:text="@string/class_join"
+        android:text="@string/coll_import_btn"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
-        android:id="@+id/progressJoin"
+        android:id="@+id/progressImport"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,5 +58,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnJoinClass" />
+        app:layout_constraintTop_toBottomOf="@+id/btnImportCollection" />
 </androidx.constraintlayout.widget.ConstraintLayout>

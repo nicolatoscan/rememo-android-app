@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -15,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import it.rememo.rememo.databinding.ActivityMainBinding;
 import it.rememo.rememo.ui.account.AccountActivity;
+import it.rememo.rememo.ui.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 

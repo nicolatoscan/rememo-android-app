@@ -39,6 +39,9 @@ public class StudentClass extends FirebaseModel {
     public String getName() {
         return name;
     }
+    public String getOwnerId() {
+        return ownerId;
+    }
     public void setName(String name) {
         this.name = name;
     }

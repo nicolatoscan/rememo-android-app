@@ -101,6 +101,10 @@
     <string name="coll_cant_delete">Couldn\'t delete collection</string>
     <string name="coll_err_creating_retry">"Error creating collection, please try again later"</string>
 
+    <string name="coll_import_btn">Import collection</string>
+    <string name="coll_import_title">This collection has been shared with you:</string>
+    <string name="coll_import_title_owner_error">You already own:</string>
+
     <string name="coll_"></string>
 
     <string name="colls_mine">Mine</string>
@@ -111,6 +115,8 @@
     <string name="colls_cant_add">Couldn\'t add collections</string>
     <string name="colls_cant_load">Couldn\'t load collections</string>
     <string name="colls_cant_update">"Couldn'\t update collections"</string>
+    <string name="colls_imported">Collection imported</string>
+    <string name="colls_imported_failed">Couldn\'t import collection</string>
 
     <string name="colls_"></string>
 
@@ -142,7 +148,9 @@
 
     <string name="classes_joined">Joined</string>
     <string name="classes_created">Created</string>
-    <string name="classes_invited_to">You have been inveted to:</string>
+    <string name="classes_invited_to">You have been invited to class:</string>
+    <string name="classes_already_in">You are already in class:</string>
+    <string name="classes_my_class_join_error">You can\'t join your own class:</string>
 
     <string name="classes_"></string>
 

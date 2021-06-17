@@ -5,7 +5,10 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +42,7 @@ public class Collection extends FirebaseModel {
         this.Init(null, name, description, numberOfItems, null);
     }
 
-    public Collection(QueryDocumentSnapshot doc) {
+    public Collection(DocumentSnapshot doc) {
         Map<String, Object> data = doc.getData();
         Init(
                 doc.getId(),
@@ -154,6 +157,58 @@ public class Collection extends FirebaseModel {
                     success.onSuccess(colls);
                 })
                 .addOnFailureListener(fail);
+
+    }
+
+    public static void getCollectionById(
+            String collectionId,
+            @NonNull OnSuccessListener<? super Collection> success,
+            @NonNull OnFailureListener fail
+    ) {
+        Common.db()
+                .collection(Collection.COLLECTION_NAME)
+                .document(collectionId)
+                .get()
+                .addOnSuccessListener(doc -> {
+                    success.onSuccess(new Collection(doc));
+                })
+                .addOnFailureListener(fail);
+
+    }
+
+    public static void importCollection(
+            Collection collection,
+            @NonNull OnSuccessListener<? super Void> success,
+            @NonNull OnFailureListener fail
+    ) {
+
+        collection.fetchWords(
+                words -> {
+
+                    Collection newCollection =  new Collection(collection.getName(), collection.getDescription(), 0);
+                    newCollection.addToFirestore(
+                            savedModel -> {
+                                WriteBatch batch = Common.db().batch();
+
+                                for (CollectionWord w : words) {
+
+                                    CollectionWord word = new CollectionWord(w.getOriginal(), w.getTranslated());
+
+                                    DocumentReference docRef = Common.db().collection(COLLECTION_NAME)
+                                            .document(newCollection.getId())
+                                            .collection(CollectionWord.COLLECTION_NAME)
+                                            .document();
+                                    batch.set(docRef, word.getHashMap());
+                                }
+
+                                batch.commit().addOnSuccessListener(success).addOnFailureListener(fail);
+                            },
+                            fail
+                    );
+
+                },
+                fail
+        );
 
     }
 
