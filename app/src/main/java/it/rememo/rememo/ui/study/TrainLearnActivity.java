@@ -199,8 +199,6 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
         if (bottom > top) bottom = 0;
 
 
-
-
         StudyStatsWord lowest = orderedStudyStats.get(bottom);
         for (int i = bottom; i < top; i++) {
             StudyStatsWord s = orderedStudyStats.get(i);

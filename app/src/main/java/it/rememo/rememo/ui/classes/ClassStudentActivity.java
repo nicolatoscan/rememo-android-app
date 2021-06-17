@@ -15,11 +15,11 @@ public class ClassStudentActivity extends ClassListActivity {
 
     @Override
     protected String getBtnName() {
-        return Common.resStr(this, R.string.class_share);
+        return getString(R.string.class_share);
     }
     @Override
     protected String getPageTitle() {
-        return Common.resStr(this, R.string.title_students);
+        return getString(R.string.title_students);
     }
 
     @Override
@@ -32,12 +32,12 @@ public class ClassStudentActivity extends ClassListActivity {
         cl.getClassStudents(
                 students -> {
                     if (students.size() <= 0)
-                        binding.txtLoading.setText(Common.resStr(ClassStudentActivity.this, R.string.basic_no_students));
+                        binding.txtLoading.setText(ClassStudentActivity.this.getString(R.string.basic_no_students));
                     else
                         binding.txtLoading.setVisibility(View.GONE);
                     adapter.addAll(students);
                 },
-                ex -> Common.toast(this, Common.resStr(this, R.string.class_cant_load_usernames))
+                ex -> Common.toast(this, getString(R.string.class_cant_load_usernames))
         );
     }
 
@@ -47,7 +47,7 @@ public class ClassStudentActivity extends ClassListActivity {
         u.add((Username) item);
         this.stClass.removeStudents(u,
                 success -> {},
-                ex -> Common.toast(getApplicationContext(), Common.resStr(this, R.string.coll_cant_remove))
+                ex -> Common.toast(getApplicationContext(), getString(R.string.coll_cant_remove))
         );
     }
 }

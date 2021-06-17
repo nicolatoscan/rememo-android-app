@@ -55,13 +55,13 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
                     if (collections.size() > 0)
                         binding.txtLoading.setVisibility(View.GONE);
                     if (classesDone && collections.size() == 0)
-                        binding.txtLoading.setText(Common.resStr(this, R.string.basic_no_collections));
+                        binding.txtLoading.setText(getString(R.string.basic_no_collections));
                     collectionDone = true;
                     adapter.addAll(collections);
                     if (classesDone && adapter.getItemCount() - 1 <= 0)
-                        binding.txtLoading.setText(Common.resStr(this, R.string.basic_no_collections));
+                        binding.txtLoading.setText(getString(R.string.basic_no_collections));
                 },
-                ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
+                ex -> Common.toast(this, getString(R.string.colls_cant_load))
         );
 
         // get collections to list from classes
@@ -75,14 +75,14 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
                                 classesDone = true;
                                 adapter.addAll(collections);
                                 if (collectionDone && adapter.getItemCount() - 1 <= 0)
-                                    binding.txtLoading.setText(Common.resStr(this, R.string.basic_no_collections));
+                                    binding.txtLoading.setText(getString(R.string.basic_no_collections));
 
                             },
-                            ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
+                            ex -> Common.toast(this, getString(R.string.colls_cant_load))
                     );
                 }
             },
-            ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_load))
+            ex -> Common.toast(this, getString(R.string.colls_cant_load))
         );
 
         binding.button.setOnClickListener(v -> start());

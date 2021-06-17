@@ -89,7 +89,6 @@ public class LearnActivity extends TrainLearnActivity {
     }
 
     void setProgressBar(int progress) {
-        Common.toast(this, "" + progress);
         double v = (double)progress / (double)initialWordsSize;
         binding.learnProgress.setProgress((int)(v * 100));
     }
@@ -99,10 +98,10 @@ public class LearnActivity extends TrainLearnActivity {
         if (!isFinished && learnedWords >= initialWordsSize) {
             isFinished = true;
             new AlertDialog.Builder(this)
-                    .setTitle(Common.resStr(this, R.string.learn_completed_alert_title))
-                    .setMessage(Common.resStr(this, R.string.learn_completed_alert_text))
-                    .setPositiveButton(Common.resStr(this, R.string.form_continue), (dialog, whichButton) -> { })
-                    .setNegativeButton(Common.resStr(this, R.string.form_reset), (dialog, whichButton) -> {
+                    .setTitle(getString(R.string.learn_completed_alert_title))
+                    .setMessage(getString(R.string.learn_completed_alert_text))
+                    .setPositiveButton(getString(R.string.form_continue), (dialog, whichButton) -> { })
+                    .setNegativeButton(getString(R.string.form_reset), (dialog, whichButton) -> {
                         // Reset learning status
                         for (String key : this.studyStatsByWordId.keySet()) {
                             this.studyStatsByWordId.get(key).resetLearnRate();

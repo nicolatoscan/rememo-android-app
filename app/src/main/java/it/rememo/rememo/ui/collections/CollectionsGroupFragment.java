@@ -45,7 +45,7 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
             startActivity(intent);
         });
         binding.collectionRecyclerView.setAdapter(adapter);
-        binding.txtLoading.setText(Common.resStr(getContext(), R.string.basic_no_collections));
+        binding.txtLoading.setText(getContext().getString(R.string.basic_no_collections));
     }
 
     protected void updateList() {
@@ -63,7 +63,7 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
             binding.collectionSwipeContainer.setRefreshing(false);
         };
         @NonNull OnFailureListener fail = ex -> {
-            Common.toast(getContext(), Common.resStr(getContext(), R.string.colls_cant_update));
+            Common.toast(getContext(), getContext().getString(R.string.colls_cant_update));
             binding.collectionSwipeContainer.setRefreshing(false);
         };
 
@@ -78,20 +78,20 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
     protected void onAddClicked() {
         final EditText textInput = new EditText(getContext());
         textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        textInput.setHint(Common.resStr(getContext(), R.string.coll_name));
+        textInput.setHint(getContext().getString(R.string.coll_name));
 
         // Alert to choose name
         Alerts
             .getInputTextAlert(getContext(), textInput)
-            .setTitle(Common.resStr(getContext(), R.string.coll_create_new))
-            .setPositiveButton(Common.resStr(getContext(), R.string.basic_create), (dialog, which) -> {
+            .setTitle(getContext().getString(R.string.coll_create_new))
+            .setPositiveButton(getContext().getString(R.string.basic_create), (dialog, which) -> {
                 String title = textInput.getText().toString();
                 // validation
                 if (title.length() > 0) {
                     createCollection(title);
                 }
             })
-            .setNegativeButton(Common.resStr(getContext(), R.string.basic_cancel), (dialog, which) -> dialog.cancel())
+            .setNegativeButton(getContext().getString(R.string.basic_cancel), (dialog, which) -> dialog.cancel())
             .show();
     }
 
@@ -104,7 +104,7 @@ public class CollectionsGroupFragment extends GroupFragment<Collection> {
                 binding.txtLoading.setVisibility(View.GONE);
                 binding.collectionRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
             },
-            ex -> Common.toast(getContext(), Common.resStr(getContext(), R.string.coll_err_creating_retry))
+            ex -> Common.toast(getContext(), getContext().getString(R.string.coll_err_creating_retry))
         );
     }
 }

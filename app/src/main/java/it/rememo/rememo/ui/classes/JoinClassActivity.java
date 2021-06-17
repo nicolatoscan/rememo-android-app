@@ -51,7 +51,7 @@ public class JoinClassActivity extends AppCompatActivity {
                     id,
                     this::updateUI,
                     ex -> {
-                        Common.toast(this, Common.resStr(this, R.string.class_not_found));
+                        Common.toast(this, getString(R.string.class_not_found));
                         startActivity(new Intent(this, MainActivity.class));
                         finish();
                     }
@@ -63,11 +63,11 @@ public class JoinClassActivity extends AppCompatActivity {
     void updateUI(StudentClass stClass) {
 
          if (stClass.getOwnerId().equals(Common.getUserId())) {
-            binding.txtTitle.setText(Common.resStr(this, R.string.classes_my_class_join_error));
-            binding.btnJoinClass.setText(Common.resStr(this, R.string.login_go_to_rememo));
+            binding.txtTitle.setText(getString(R.string.classes_my_class_join_error));
+            binding.btnJoinClass.setText(getString(R.string.login_go_to_rememo));
         } else if (stClass.getStudentsIds().contains(Common.getUserId())) {
-            binding.txtTitle.setText(Common.resStr(this, R.string.classes_already_in));
-            binding.btnJoinClass.setText(Common.resStr(this, R.string.login_go_to_rememo));
+            binding.txtTitle.setText(getString(R.string.classes_already_in));
+            binding.btnJoinClass.setText(getString(R.string.login_go_to_rememo));
         } else {
             cantJoin = false;
         }
@@ -97,10 +97,10 @@ public class JoinClassActivity extends AppCompatActivity {
 
         stClass.joinClass(
             x -> {
-                Common.toast(this, Common.resStr(this, R.string.class_joined));
+                Common.toast(this, getString(R.string.class_joined));
                 startActivity(new Intent(this, MainActivity.class));
             },
-            ex -> Common.toast(this, Common.resStr(this, R.string.class_cant_join))
+            ex -> Common.toast(this, getString(R.string.class_cant_join))
         );
 
     }

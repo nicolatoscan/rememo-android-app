@@ -28,10 +28,6 @@ public class Common {
         userId = null;
     }
 
-    public static String resStr(Context context, int id) {
-        return context.getResources().getText(id).toString();
-    }
-
     public static void toast(Context ctx, String error) {
         Common.toast(ctx, error, Toast.LENGTH_LONG);
     }

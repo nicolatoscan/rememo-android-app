@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -99,6 +100,7 @@ public class HomeFragment extends Fragment {
                 BarData data = new BarData(set);
                 data.setHighlightEnabled(false);
                 binding.chartCollections.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+                binding.chartCollections.getXAxis().setTextColor(ContextCompat.getColor(getContext(), R.color.rememo_light));
                 Common.setBarChartStyle(binding.chartCollections);
                 binding.chartCollections.setData(data);
                 binding.chartCollections.invalidate();

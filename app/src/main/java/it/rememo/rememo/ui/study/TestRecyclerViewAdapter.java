@@ -101,9 +101,9 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
 
                     // Show results
                     new AlertDialog.Builder(mInflater.getContext())
-                            .setTitle(Common.resStr(mInflater.getContext(), R.string.form_test_completed))
-                            .setMessage(String.format(Common.resStr(mInflater.getContext(), R.string.form_test_completed_results), right, tot))
-                            .setPositiveButton(Common.resStr(mInflater.getContext(), R.string.form_continue), (dialog, whichButton) -> { })
+                            .setTitle(mInflater.getContext().getString(R.string.form_test_completed))
+                            .setMessage(String.format(mInflater.getContext().getString(R.string.form_test_completed_results), right, tot))
+                            .setPositiveButton(mInflater.getContext().getString(R.string.form_continue), (dialog, whichButton) -> { })
                             .show();
 
                     // results are in, reload to show correct and wrong

@@ -48,15 +48,15 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
                 // Menu for created classes
                 binding.cardView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                     // menu.setHeaderTitle("Select The Action");
-                    menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_share)).setOnMenuItemClickListener((mItem) -> shareClass());
-                    menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_rename)).setOnMenuItemClickListener((mItem) -> renameClasses());
-                    menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteClass());
+                    menu.add(0, view.getId(), 0, context.getString(R.string.basic_share)).setOnMenuItemClickListener((mItem) -> shareClass());
+                    menu.add(0, view.getId(), 0, context.getString(R.string.basic_rename)).setOnMenuItemClickListener((mItem) -> renameClasses());
+                    menu.add(0, view.getId(), 0, context.getString(R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteClass());
                 });
             } else {
                 // Menu for joined classes
                 binding.cardView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                     // menu.setHeaderTitle("Select The Action");
-                    menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_leave)).setOnMenuItemClickListener((mItem) -> leaveClass());
+                    menu.add(0, view.getId(), 0, context.getString(R.string.basic_leave)).setOnMenuItemClickListener((mItem) -> leaveClass());
                 });
             }
 

@@ -72,7 +72,6 @@ public class ChooseCollectionsRecyclerViewAdapter extends RecyclerView.Adapter<C
     }
 
 
-    // retrieve selected ids or id
     public ArrayList<String> getSelectedIds() {
         ArrayList<String> res = new ArrayList<>();
 

@@ -62,7 +62,7 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
     protected void onAddClicked() {
         final EditText textInput = new EditText(getContext());
         textInput.setInputType(InputType.TYPE_CLASS_TEXT);
-        textInput.setHint(Common.resStr(getContext(), R.string.class_name));
+        textInput.setHint(getString(R.string.class_name));
 
         Alerts
                 .getInputTextAlert(getContext(), textInput)

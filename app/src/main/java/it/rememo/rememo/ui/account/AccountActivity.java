@@ -37,7 +37,7 @@ public class AccountActivity extends AppCompatActivity {
             FirebaseAuth.getInstance().getCurrentUser().updateProfile(profileUpdates);
             Username.setUsername(Common.getUserId(), name,
                     success -> finish(),
-                    ex -> Common.toast(this, Common.resStr(this, R.string.login_error_saving_name_retry))
+                    ex -> Common.toast(this, getString(R.string.login_error_saving_name_retry))
             );
 
         });

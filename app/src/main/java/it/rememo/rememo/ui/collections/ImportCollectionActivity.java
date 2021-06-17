@@ -107,10 +107,10 @@ public class ImportCollectionActivity extends AppCompatActivity {
         Collection.importCollection(
             collection,
             x -> {
-                Common.toast(this, Common.resStr(this, R.string.colls_imported));
+                Common.toast(this, getString(R.string.colls_imported));
                 startActivity(new Intent(this, MainActivity.class));
             },
-            ex -> Common.toast(this, Common.resStr(this, R.string.colls_imported_failed))
+            ex -> Common.toast(this, getString(R.string.colls_imported_failed))
         );
 
     }

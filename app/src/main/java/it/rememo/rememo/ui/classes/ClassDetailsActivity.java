@@ -1,6 +1,7 @@
 package it.rememo.rememo.ui.classes;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -77,7 +78,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
                 studentClass,
                 usersStats -> {
                     if (usersStats.size() == 0) {
-                        binding.txtLoadingChart.setText(Common.resStr(ClassDetailsActivity.this, R.string.basic_chart_no_data));
+                        binding.txtLoadingChart.setText(ClassDetailsActivity.this.getString(R.string.basic_chart_no_data));
                         return;
                     }
                     ArrayList<BarEntry> entries = new ArrayList<>();
@@ -96,6 +97,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
                     data.setHighlightEnabled(false);
                     binding.chartStudents.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
                     Common.setBarChartStyle(binding.chartStudents);
+                    binding.chartStudents.getXAxis().setTextColor(ContextCompat.getColor(this, R.color.rememo_light));
                     binding.chartStudents.setData(data);
                     binding.chartStudents.invalidate();
                     binding.chartStudents.setVisibility(View.VISIBLE);
