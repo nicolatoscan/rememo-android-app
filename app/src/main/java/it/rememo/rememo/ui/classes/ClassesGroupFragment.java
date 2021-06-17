@@ -25,13 +25,14 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
 
     protected void setUp() {
         adapter = new ClassesRecyclerViewAdapter(getContext(), list, position == 1);
-        adapter.setClickListener((v, i) -> {
-            Intent intent = new Intent(getContext(), ClassDetailsActivity.class);
-            StudentClass c = (StudentClass) adapter.getItem(i);
-            intent.putExtra(ClassDetailsActivity.ARG_CLASS, c);
-            intent.putExtra(ClassDetailsActivity.ARG_IS_CREATED, position == 1);
-            startActivity(intent);
-        });
+        if (position == 1)
+            adapter.setClickListener((v, i) -> {
+                Intent intent = new Intent(getContext(), ClassDetailsActivity.class);
+                StudentClass c = (StudentClass) adapter.getItem(i);
+                intent.putExtra(ClassDetailsActivity.ARG_CLASS, c);
+                intent.putExtra(ClassDetailsActivity.ARG_IS_CREATED, position == 1);
+                startActivity(intent);
+            });
         binding.collectionRecyclerView.setAdapter(adapter);
         binding.txtLoading.setText(getContext().getString(R.string.basic_no_classes));
     }
@@ -65,16 +66,16 @@ public class ClassesGroupFragment extends GroupFragment<Collection> {
         textInput.setHint(getString(R.string.class_name));
 
         Alerts
-                .getInputTextAlert(getContext(), textInput)
-                .setTitle(getContext().getString(R.string.class_create_new))
-                .setPositiveButton(getContext().getString(R.string.basic_create), (dialog, which) -> {
-                    String title = textInput.getText().toString();
-                    if (title.length() > 0) {
-                        createClass(title);
-                    }
-                })
-                .setNegativeButton(getContext().getString(R.string.basic_cancel), (dialog, which) -> dialog.cancel())
-                .show();
+            .getInputTextAlert(getContext(), textInput)
+            .setTitle(getContext().getString(R.string.class_create_new))
+            .setPositiveButton(getContext().getString(R.string.basic_create), (dialog, which) -> {
+                String title = textInput.getText().toString();
+                if (title.length() > 0) {
+                    createClass(title);
+                }
+            })
+            .setNegativeButton(getContext().getString(R.string.basic_cancel), (dialog, which) -> dialog.cancel())
+            .show();
     }
 
     // Add class to Firestore
