@@ -1,5 +1,7 @@
 package it.rememo.rememo.models;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,6 +24,7 @@ public class StudyStatsWord extends FirebaseModel {
     public final static String KEY_COLLECTION_ID = "collectionId";
     public final static String KEY_LAST_DONE = "lastDone";
     public final static String COLLECTION_NAME = "studyStats";
+    public final static String COLLECTION_WORDS_NAME = "words";
 
     private Double learnRate;
     private Double trainRate;
@@ -95,7 +98,10 @@ public class StudyStatsWord extends FirebaseModel {
     }
 
     private void update(Map<String, Object> updateData) {
-        Common.db().collection(COLLECTION_NAME)
+        Common.db()
+                .collection(COLLECTION_NAME)
+                .document(Common.getUserId())
+                .collection(COLLECTION_WORDS_NAME)
                 .document(getId())
                 .set(updateData, SetOptions.merge());
     }
@@ -107,6 +113,8 @@ public class StudyStatsWord extends FirebaseModel {
     ) {
         Common.db()
                 .collection(COLLECTION_NAME)
+                .document(Common.getUserId())
+                .collection(COLLECTION_WORDS_NAME)
                 .whereIn(KEY_COLLECTION_ID, collectionIds)
                 .get()
                 .addOnSuccessListener(docs -> {

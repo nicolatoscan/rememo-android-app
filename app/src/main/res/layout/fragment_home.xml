@@ -7,15 +7,24 @@
     tools:context=".ui.home.HomeFragment">
 
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/homeChart"
+        android:id="@+id/chartProgress"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toTopOf="@id/btnLearn"
+        app:layout_constraintBottom_toTopOf="@+id/chartCollections"
         app:layout_constraintLeft_toLeftOf="@id/btnLearn"
         app:layout_constraintRight_toRightOf="@id/btnTest"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/chartCollections"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnTest"
+        app:layout_constraintEnd_toEndOf="@+id/btnTest"
+        app:layout_constraintStart_toStartOf="@+id/btnLearn"
+        app:layout_constraintTop_toBottomOf="@+id/chartProgress" />
 
     <Button
         android:id="@+id/btnTrain"

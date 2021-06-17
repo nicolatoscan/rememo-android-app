@@ -3,6 +3,7 @@ package it.rememo.rememo.utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -39,8 +40,9 @@ public class Common {
         return answer.trim().toLowerCase().equals(text.trim().toLowerCase());
     }
 
-    public static LineChart setChartStyle(LineChart chart) {
-        chart.getXAxis().setEnabled(false);
+    public static BarLineChartBase setChartStyle(BarLineChartBase chart, boolean showXBar) {
+        if (!showXBar)
+            chart.getXAxis().setEnabled(false);
         chart.getAxisLeft().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
         chart.getLegend().setEnabled(false);

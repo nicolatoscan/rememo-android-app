@@ -2,6 +2,7 @@ package it.rememo.rememo.models;
 
 import android.content.Intent;
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import it.rememo.rememo.utils.Common;
 
@@ -82,48 +84,57 @@ public class Stat extends FirebaseModel {
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,
             @NonNull OnFailureListener fail
     ) {
-        fetchSubCollections(
-                COLLECTION_COLLECTION_NAME,
-                colls -> {
-                    this.collectionStats.putAll(colls);
-                    success.onSuccess(this.collectionStats);
-                }
-                , fail
-        );
+        fetchCollections(getId(), colls -> {
+            this.collectionStats.putAll(colls);
+            success.onSuccess(this.collectionStats);
+        }, fail);
     }
 
     public void fetchDays(
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,
             @NonNull OnFailureListener fail
     ) {
-        fetchSubCollections(
-            COLLECTION_DAYS_NAME,
-            days -> {
-                this.days.putAll(days);
-                success.onSuccess(this.days);
-            }
-            , fail
-        );
+        fetchDays(getId(), days -> {
+            this.days.putAll(days);
+            success.onSuccess(this.days);
+        }, fail);
     }
 
-    private void fetchSubCollections(
+    public static void fetchCollections(
+            String userId,
+            @NonNull OnSuccessListener<? super Map<String, StatData>> success,
+            @NonNull OnFailureListener fail
+    ) {
+        fetchSubCollections(userId, COLLECTION_COLLECTION_NAME, success, fail);
+    }
+
+    public static void fetchDays(
+            String userId,
+            @NonNull OnSuccessListener<? super Map<String, StatData>> success,
+            @NonNull OnFailureListener fail
+    ) {
+        fetchSubCollections(userId, COLLECTION_DAYS_NAME, success, fail);
+    }
+
+    private static void fetchSubCollections(
+            String id,
             String subCollection,
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,
             @NonNull OnFailureListener fail
     ) {
         Common.db()
-                .collection(COLLECTION_NAME)
-                .document(getId())
-                .collection(subCollection)
-                .get()
-                .addOnSuccessListener(docs -> {
-                    Map<String, StatData> sub = new HashMap<>();
-                    for (DocumentSnapshot day: docs) {
-                        sub.put(day.getId(), new StatData(day));
-                    }
-                    success.onSuccess(sub);
-                })
-                .addOnFailureListener(fail);
+            .collection(COLLECTION_NAME)
+            .document(id)
+            .collection(subCollection)
+            .get()
+            .addOnSuccessListener(docs -> {
+                Map<String, StatData> sub = new HashMap<>();
+                for (DocumentSnapshot day: docs) {
+                    sub.put(day.getId(), new StatData(day));
+                }
+                success.onSuccess(sub);
+            })
+            .addOnFailureListener(fail);
     }
 
     public static void add(boolean result, String collectionId) {
@@ -180,8 +191,32 @@ public class Stat extends FirebaseModel {
             .addOnFailureListener(fail);
     }
 
+    public static void fetchCollectionsWithNames(
+            String userId,
+            @NonNull OnSuccessListener<? super Map<String, StatData>> success,
+            @NonNull OnFailureListener fail
+    ) {
+        fetchSubCollections(userId, COLLECTION_COLLECTION_NAME, collectionsStats -> {
 
+            ArrayList<String> collectionsIds = new ArrayList<>(collectionsStats.keySet());
 
+            Common.db().collection(Collection.COLLECTION_NAME)
+                    .whereIn(FieldPath.documentId(), collectionsIds)
+                    .get()
+                    .addOnSuccessListener(colls -> {
+                        Map<String, StatData> res = new HashMap<>();
+                        for (DocumentSnapshot col : colls) {
+                            res.put(
+                                col.getString(Collection.KEY_NAME),
+                                collectionsStats.get(col.getId())
+                            );
+                        }
+                        success.onSuccess(res);
+                    })
+                    .addOnFailureListener(fail);
+
+        }, fail);
+    }
 
     public long getCorrect() {
         return correct;
