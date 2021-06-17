@@ -2,12 +2,15 @@ package it.rememo.rememo.ui.study;
 
 
 
-import java.util.ArrayList;
+import android.util.Log;
+
+import androidx.appcompat.app.AlertDialog;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import it.rememo.rememo.R;
 import it.rememo.rememo.models.CollectionWord;
 import it.rememo.rememo.models.StudyStatsWord;
 import it.rememo.rememo.utils.Common;
@@ -18,15 +21,18 @@ public class LearnActivity extends TrainLearnActivity {
     private int learnedWords = 0;
     private Map<String, CollectionWord> learningWords;
     private final double threshold = 0.7;
+    private boolean isFinished = false;
 
 
     void onSetup() {
         StudyStatsWord.sortByLearn = false;
-        learningWords = new HashMap<>();
     }
 
     void onWordLoaded() {
         initialWordsSize = words.size();
+        learnedWords = 0;
+        isFinished = false;
+        learningWords = new HashMap<>();
 
         for (String id : this.studyStatsByWordId.keySet()) {
             StudyStatsWord s = this.studyStatsByWordId.get(id);
@@ -38,11 +44,13 @@ public class LearnActivity extends TrainLearnActivity {
                 words.remove(cw.getId());
                 learningWords.put(cw.getId(), cw);
             }
-
         }
+
+        Log.d("learnedWords", "learnedWords" + learnedWords);
         setProgressBar(learnedWords);
 
         for (int i = 0; i < 3; i++) addWord();
+        finishLearnCheck();
     }
 
     @Override
@@ -67,9 +75,7 @@ public class LearnActivity extends TrainLearnActivity {
             addWord();
         }
 
-        if (learnedWords >= initialWordsSize) {
-            finishLearn();
-        }
+        finishLearnCheck();
     }
 
     void setProgressBar(int progress) {
@@ -78,7 +84,23 @@ public class LearnActivity extends TrainLearnActivity {
         binding.learnProgress.setProgress((int)(v * 100));
     }
 
-    private void finishLearn() {
+    private void finishLearnCheck() {
+        if (!isFinished && learnedWords >= initialWordsSize) {
+            isFinished = true;
+            new AlertDialog.Builder(this)
+                    .setTitle(Common.resStr(this, R.string.learn_completed_alert_title))
+                    .setMessage(Common.resStr(this, R.string.learn_completed_alert_text))
+                    .setPositiveButton(Common.resStr(this, R.string.form_continue), (dialog, whichButton) -> { })
+                    .setNegativeButton(Common.resStr(this, R.string.form_reset), (dialog, whichButton) -> {
+                        for (String key : this.studyStatsByWordId.keySet()) {
+                            this.studyStatsByWordId.get(key).resetLearnRate();
+                        }
+                        words.putAll(learningWords);
+                        onWordLoaded();
+                        nextWord();
+                    })
+                    .show();
+        }
     }
 
     private void addWord() {

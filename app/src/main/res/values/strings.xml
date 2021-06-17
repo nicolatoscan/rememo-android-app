@@ -65,6 +65,8 @@
     <string name="form_sure_to_delete_STR">Are you sure you want to delete %s?</string>
     <string name="form_sure_to_delete_coll_STR_and_words">Are you sure you want to delete %s and all its words?</string>
     <string name="form_im_sure">I\'m sure</string>
+    <string name="form_continue">Continue</string>
+    <string name="form_reset">Reset</string>
 
 
     <!-- word -->
@@ -122,6 +124,8 @@
 
 
     <!-- study -->
+    <string name="learn_completed_alert_title">Learning completed</string>
+    <string name="learn_completed_alert_text">You learned all words in this collection</string>
     <string name="study_"></string>
 
 

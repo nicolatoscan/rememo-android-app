@@ -95,6 +95,14 @@ public class StudyStatsWord extends FirebaseModel implements Comparable {
         return result ?  original + ((1 - original) / 2.0) : original / 2.0;
     }
 
+    public double resetLearnRate() {
+        this.learnRate = 0.0;
+        Map<String, Object> updateData = new HashMap<>();
+        updateData.put(KEY_LEARN_RATE, learnRate);
+        update(updateData, false);
+        return this.learnRate;
+    }
+
     public double updateLearnRate(boolean result) {
         this.learnRate = updatePoint(this.learnRate, result);
         Map<String, Object> updateData = new HashMap<>();
