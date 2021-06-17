@@ -67,6 +67,8 @@
     <string name="form_im_sure">I\'m sure</string>
     <string name="form_continue">Continue</string>
     <string name="form_reset">Exit and Reset</string>
+    <string name="form_test_completed">Test Completed</string>
+    <string name="form_test_completed_results">You got %s out of %s</string>
 
 
     <!-- word -->

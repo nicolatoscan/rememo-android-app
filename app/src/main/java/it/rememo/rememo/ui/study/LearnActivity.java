@@ -92,9 +92,6 @@ public class LearnActivity extends TrainLearnActivity {
                         for (String key : this.studyStatsByWordId.keySet()) {
                             this.studyStatsByWordId.get(key).resetLearnRate();
                         }
-                        // words.putAll(learningWords);
-                        // onWordLoaded();
-                        // nextWord();
                         finish();
                     })
                     .show();

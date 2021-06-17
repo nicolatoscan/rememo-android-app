@@ -2,9 +2,11 @@ package it.rememo.rememo.ui.study;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -81,13 +83,20 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
             } else {
                 holder.bindingSubmit.btnSubmit.setText("Submit");
                 holder.bindingSubmit.btnSubmit.setOnClickListener(v -> {
-
+                    int tot = list.size(), right = 0;
                     for (int i = 0; i < list.size(); i++) {
                         CollectionWord w = list.get(i);
-                        String an = answers.get(position);
-                        Stat.add(Common.checkAnswer(w.getTranslated(), an), w.getCollectionParentId());
-
+                        String an = answers.get(i);
+                        boolean res = Common.checkAnswer(w.getTranslated(), an);
+                        Stat.add(res, w.getCollectionParentId());
+                        if (res) right++;
                     }
+
+                    new AlertDialog.Builder(mInflater.getContext())
+                            .setTitle(Common.resStr(mInflater.getContext(), R.string.form_test_completed))
+                            .setMessage(String.format(Common.resStr(mInflater.getContext(), R.string.form_test_completed_results), right, tot))
+                            .setPositiveButton(Common.resStr(mInflater.getContext(), R.string.form_continue), (dialog, whichButton) -> { })
+                            .show();
 
                     if (!showResults) {
                         showResults = true;

@@ -54,12 +54,5 @@ public class TestActivity extends AppCompatActivity {
         }
         this.allWords = this.allWords.subList(0, size);
         this.adapter.addAll(this.allWords);
-
-        // for (int i = 0; i < 100; i++) {
-            // RowTestItemBinding row = RowTestItemBinding.inflate(getLayoutInflater());
-            // row.txtCollectionRow.setText("Pippo");
-            // this.binding.list.addView(row.getRoot());
-        // }
-
     }
 }
