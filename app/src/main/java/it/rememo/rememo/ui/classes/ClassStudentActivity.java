@@ -22,7 +22,7 @@ public class ClassStudentActivity extends ClassListActivity {
 
     @Override
     protected void  onBtnClick() {
-        ShareUrls.shareClass(this, this.stClass.getId());
+        ShareUrls.shareClass(this, this.stClass.getId(), this.stClass.getName());
     }
 
     @Override

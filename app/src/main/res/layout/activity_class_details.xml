@@ -7,22 +7,6 @@
     tools:context=".ui.classes.ClassDetailsActivity">
 
     <Button
-        android:id="@+id/btnStudents"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="40dp"
-        android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
-        android:drawableTint="#FFFFFF"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:text="@string/title_students"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
         android:id="@+id/btnCollections"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -37,4 +21,38 @@
         app:layout_constraintBottom_toTopOf="@+id/btnStudents"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnStudents"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:drawableRight="@drawable/ic_baseline_arrow_forward_ios_24"
+        android:drawableTint="#FFFFFF"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/title_students"
+        app:layout_constraintBottom_toTopOf="@+id/btnShareClass"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnShareClass"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:drawableRight="@drawable/ic_baseline_share_24"
+        android:drawableTint="#FFFFFF"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/share"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

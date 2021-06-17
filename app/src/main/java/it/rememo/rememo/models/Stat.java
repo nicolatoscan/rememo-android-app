@@ -30,8 +30,8 @@ public class Stat extends FirebaseModel {
     public final static String KEY_CORRECT = "correct";
     public final static String KEY_WRONG = "wrong";
     public final static String COLLECTION_NAME = "stats";
-    public final static String COLLECTION_DAYS_NAME = "days";
-    public final static String COLLECTION_COLLECTION_NAME = "collections";
+    public final static String COLLECTION_DAYS_NAME = "daysStats";
+    public final static String COLLECTION_COLLECTION_NAME = "collectionsStats";
 
     private long correct = 0;
     private long wrong = 0;
@@ -197,25 +197,53 @@ public class Stat extends FirebaseModel {
             @NonNull OnFailureListener fail
     ) {
         fetchSubCollections(userId, COLLECTION_COLLECTION_NAME, collectionsStats -> {
-
-            ArrayList<String> collectionsIds = new ArrayList<>(collectionsStats.keySet());
-
-            Common.db().collection(Collection.COLLECTION_NAME)
-                    .whereIn(FieldPath.documentId(), collectionsIds)
-                    .get()
-                    .addOnSuccessListener(colls -> {
-                        Map<String, StatData> res = new HashMap<>();
-                        for (DocumentSnapshot col : colls) {
-                            res.put(
-                                col.getString(Collection.KEY_NAME),
-                                collectionsStats.get(col.getId())
-                            );
-                        }
-                        success.onSuccess(res);
-                    })
-                    .addOnFailureListener(fail);
-
+            mapCollectionsNames(collectionsStats, success, fail);
         }, fail);
+    }
+
+    public static void fetchUsersStats(
+            List<String> collectionsIds,
+            @NonNull OnSuccessListener<? super Map<String, StatData>> success,
+            @NonNull OnFailureListener fail
+    ) {
+        Common.db()
+                .collectionGroup(COLLECTION_COLLECTION_NAME)
+                .whereIn(FieldPath.documentId(), collectionsIds)
+                .get()
+                .addOnSuccessListener(docs -> {
+                    Map<String, StatData> sds = new HashMap<>();
+                    for (DocumentSnapshot day: docs) {
+                        sds.put(day.getId(), new StatData(day));
+                    }
+                    mapCollectionsNames(sds, success, fail);
+                });
+    }
+
+    private static void mapCollectionsNames(
+            Map<String, StatData> collectionsStats,
+            @NonNull OnSuccessListener<? super Map<String, StatData>> success,
+            @NonNull OnFailureListener fail
+    ) {
+        ArrayList<String> collectionsIds = new ArrayList<>(collectionsStats.keySet());
+        if (collectionsIds.size() <= 0) {
+            success.onSuccess(new HashMap<>());
+            return;
+        }
+
+        Common.db().collection(Collection.COLLECTION_NAME)
+            .whereIn(FieldPath.documentId(), collectionsIds)
+            .get()
+            .addOnSuccessListener(colls -> {
+                Map<String, StatData> res = new HashMap<>();
+                for (DocumentSnapshot col : colls) {
+                    res.put(
+                        col.getString(Collection.KEY_NAME),
+                        collectionsStats.get(col.getId())
+                    );
+                }
+                success.onSuccess(res);
+            })
+            .addOnFailureListener(fail);
     }
 
     public long getCorrect() {

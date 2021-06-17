@@ -56,7 +56,7 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
         }
 
         private boolean shareClass() {
-            ShareUrls.shareClass(context, element.getId());
+            ShareUrls.shareClass(context, element.getId(), element.getName());
             return true;
         }
 

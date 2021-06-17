@@ -2,6 +2,8 @@
     <!-- app -->
     <string name="app_name">Rememo</string>
 
+    <!-- Common -->
+    <string name="share">Share</string>
 
     <!-- title -->
     <string name="title_home">Rememo</string>

@@ -111,6 +111,10 @@ public class StudyStatsWord extends FirebaseModel {
             @NonNull OnSuccessListener<? super Map<String, StudyStatsWord>> success,
             @NonNull OnFailureListener fail
     ) {
+        if (collectionIds.size() <= 0) {
+            success.onSuccess(new HashMap<>());
+            return;
+        }
         Common.db()
                 .collection(COLLECTION_NAME)
                 .document(Common.getUserId())
