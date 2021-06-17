@@ -30,6 +30,14 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
         Intent i = getIntent();
         learnType = i.getIntExtra(ARG_STUDY_TYPE, EStudyType.LEARN);
 
+        if (learnType == EStudyType.LEARN) {
+            setTitle("Choose a collection to learn");
+        } else if (learnType == EStudyType.TEST) {
+            setTitle("Choose collections to test");
+        } else if (learnType == EStudyType.TRAIN) {
+            setTitle("Choose collections to train");
+        }
+
         binding.colllectionList.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ChooseCollectionsRecyclerViewAdapter(this, learnType != EStudyType.LEARN);
         binding.colllectionList.setAdapter(adapter);

@@ -129,6 +129,7 @@ public abstract class TrainLearnActivity extends AppCompatActivity {
         binding.txtAnswer.requestFocus();
         ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).showSoftInput(binding.txtAnswer, InputMethodManager.SHOW_IMPLICIT);
         binding.btnNext.setVisibility(View.GONE);
+        // TODO: back to original
         DrawableCompat.setTint(binding.txtAnswer.getBackground(), getColor(R.color.error_red));
     }
 
