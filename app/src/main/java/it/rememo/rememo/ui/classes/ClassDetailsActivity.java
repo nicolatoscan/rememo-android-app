@@ -4,10 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+
+import java.util.ArrayList;
+
+import it.rememo.rememo.R;
 import it.rememo.rememo.databinding.ActivityClassDetailsBinding;
+import it.rememo.rememo.models.Stat;
+import it.rememo.rememo.models.StatData;
 import it.rememo.rememo.models.StudentClass;
+import it.rememo.rememo.utils.Common;
 import it.rememo.rememo.utils.ShareUrls;
 
 public class ClassDetailsActivity extends AppCompatActivity {
@@ -49,15 +62,32 @@ public class ClassDetailsActivity extends AppCompatActivity {
             binding.btnShareClass.setVisibility(View.GONE);
         }
 
+        Common.setChartStyle(binding.chartStudents, true);
 
+        Stat.getClassStats(
+                studentClass,
+                usersStats -> {
+                    ArrayList<BarEntry> entries = new ArrayList<>();
+                    ArrayList<String> labels = new ArrayList<>();
+                    int i = 0;
+                    for (String studentName : usersStats.keySet()) {
+                        StatData sd = usersStats.get(studentName);
+                        entries.add(new BarEntry(i++, new float[] { sd.getCorrect(), sd.getWrong()  }, studentName));
+                        labels.add(studentName);
+                    }
 
-        // Stat.fetchUsersStats(studentClass.getCollectionIds(),
-        //     stats -> {
-        //         for (String s : stats.keySet()) {
-        //             Log.d("CIAO", s);
-        //         }
-        //     },
-        //     ex -> {}
-        // );
+                    BarDataSet set = new BarDataSet(entries, "Students");
+                    set.setBarBorderWidth(0.1f);
+                    set.setColors(new int[] { R.color.rememo_primary, R.color.error_red }, ClassDetailsActivity.this);
+                    BarData data = new BarData(set);
+                    data.setHighlightEnabled(false);
+                    binding.chartStudents.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+                    Common.setBarChartStyle(binding.chartStudents);
+                    binding.chartStudents.setData(data);
+                    binding.chartStudents.invalidate();
+                },
+                ex -> {}
+        );
+
     }
 }

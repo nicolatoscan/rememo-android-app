@@ -74,9 +74,7 @@ public class HomeFragment extends Fragment {
                 BarData data = new BarData(set);
                 data.setHighlightEnabled(false);
                 binding.chartCollections.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
-                binding.chartCollections.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-                binding.chartCollections.getXAxis().setGranularity(1);
-                binding.chartCollections.getXAxis().setGranularityEnabled(true);
+                Common.setBarChartStyle(binding.chartCollections);
                 binding.chartCollections.setData(data);
                 binding.chartCollections.invalidate();
             },

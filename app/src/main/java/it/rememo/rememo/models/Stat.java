@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.rememo.rememo.utils.Common;
+import it.rememo.rememo.utils.Counter;
 
 public class Stat extends FirebaseModel {
     public final static String KEY_CORRECT = "correct";
@@ -238,6 +239,45 @@ public class Stat extends FirebaseModel {
                 success.onSuccess(res);
             })
             .addOnFailureListener(fail);
+    }
+
+    public static void getClassStats(
+            StudentClass sClass,
+            @NonNull OnSuccessListener<? super Map<String, StatData>> success,
+            @NonNull OnFailureListener fail
+    ) {
+        sClass.getClassStudents(
+                students -> {
+                    final Counter todo = new Counter(students.size());
+                    Map<String, StatData> res = new HashMap<>();
+
+                    if (students.size() == 0 || sClass.getCollectionIds().size() == 0) {
+                        success.onSuccess(res);
+                        return;
+                    }
+
+                    for (Username student : students) {
+                        Common.db()
+                                .collection(COLLECTION_NAME)
+                                .document(student.getId())
+                                .collection(COLLECTION_COLLECTION_NAME)
+                                .whereIn(FieldPath.documentId(), sClass.getCollectionIds())
+                                .get()
+                                .addOnSuccessListener(docs -> {
+                                    StatData studentData = new StatData(0,0);
+                                    for (DocumentSnapshot doc : docs) {
+                                        studentData.add(new StatData(doc));
+                                    }
+                                    res.put(student.getName(), studentData);
+                                    if (todo.decrease() <= 0) success.onSuccess(res);
+                                })
+                                .addOnFailureListener(ex -> {
+                                    if (todo.decrease() <= 0) success.onSuccess(res);
+                                });
+                    }
+                },
+                fail
+        );
     }
 
     public long getCorrect() {

@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.classes.ClassDetailsActivity">
 
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/chartStudents"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnCollections"
+        app:layout_constraintEnd_toEndOf="@+id/btnCollections"
+        app:layout_constraintStart_toStartOf="@+id/btnCollections"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/btnCollections"
         android:layout_width="0dp"

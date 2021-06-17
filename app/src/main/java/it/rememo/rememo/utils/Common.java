@@ -3,9 +3,12 @@ package it.rememo.rememo.utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.BarLineChartBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -66,4 +69,10 @@ public class Common {
         return data;
     }
 
+    public static BarChart setBarChartStyle(BarChart chart) {
+        chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        chart.getXAxis().setGranularity(1);
+        chart.getXAxis().setGranularityEnabled(true);
+        return chart;
+    }
 }

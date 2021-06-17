@@ -41,4 +41,11 @@ public class StatData {
     public long getWrong() {
         return wrong;
     }
+
+    public void add(StatData toAdd) {
+        this.correct += toAdd.getCorrect();
+        this.wrong += toAdd.getWrong();
+    }
+
+
 }
