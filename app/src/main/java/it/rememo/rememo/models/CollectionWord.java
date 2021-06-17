@@ -17,7 +17,9 @@ import java.util.Map;
 import it.rememo.rememo.utils.Common;
 import it.rememo.rememo.utils.Counter;
 
+// Collections of words
 public class CollectionWord {
+    // Firestore keys
     public final static String KEY_ORIGINAL = "original";
     public final static String KEY_TRANSLATED = "translated";
     public final static String COLLECTION_NAME = "words";
@@ -111,6 +113,7 @@ public class CollectionWord {
         return collectionParentId;
     }
 
+    // Fetch all words of a collection
     public static void getWordsByCollectionId(
             String collectionId,
             @NonNull OnSuccessListener<? super List<CollectionWord>> success,
@@ -132,6 +135,7 @@ public class CollectionWord {
                 .addOnFailureListener(fail);
     }
 
+    // Fetch all words of a multiple collections
     public static void getAllWordsOfCollections(
             List<String> ids,
             @NonNull OnSuccessListener<? super List<CollectionWord>> success,

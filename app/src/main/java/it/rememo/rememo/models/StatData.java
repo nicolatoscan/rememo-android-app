@@ -4,6 +4,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Map;
 
+// Stats about wrong and correct answer given, stored in Firebase
+// It uses the same format for user, collection of each user and each
+// day of each user
 public class StatData {
     public static final String KEY_CORRECT = "correct";
     public static final String KEY_WRONG = "wrong";

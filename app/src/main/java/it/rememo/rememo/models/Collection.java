@@ -17,7 +17,9 @@ import java.util.Map;
 
 import it.rememo.rememo.utils.Common;
 
+// Collections of words
 public class Collection extends FirebaseModel {
+    // Firestore documents key
     public final static String KEY_NAME = "name";
     public final static String KEY_DESCRIPTION = "description";
     public final static String KEY_NUMBER_OF_ITEMS = "numberOfItems";
@@ -83,6 +85,7 @@ public class Collection extends FirebaseModel {
         return words;
     }
 
+    @Override
     public Map<String, Object>  getHashMap() {
         Map<String, Object> collection = new HashMap<>();
         collection.put(KEY_OWNER_ID, Common.getUserId());
@@ -93,9 +96,12 @@ public class Collection extends FirebaseModel {
         return collection;
     }
 
+
+    // Get all words of collection from Firestore
     public void fetchWords(
             @NonNull OnSuccessListener<? super List<CollectionWord>> success,
-            @NonNull OnFailureListener fail) {
+            @NonNull OnFailureListener fail
+    ) {
         CollectionWord.getWordsByCollectionId(
                 getId(),
                 newWords -> {
@@ -110,6 +116,7 @@ public class Collection extends FirebaseModel {
         );
     }
 
+    // Add a new word to the collection
     public void addWord(CollectionWord word,
             @NonNull OnSuccessListener<? super CollectionWord> success,
             @NonNull OnFailureListener fail) {
@@ -126,6 +133,7 @@ public class Collection extends FirebaseModel {
                 .addOnFailureListener(fail);
     }
 
+    // Delete word from collection
     public void deleteWord(CollectionWord word,
             @NonNull OnSuccessListener<? super Void> success,
             @NonNull OnFailureListener fail) {
@@ -141,6 +149,7 @@ public class Collection extends FirebaseModel {
         }
     }
 
+    // Get my collection
     public static void getMyCollections(
             @NonNull OnSuccessListener<? super List<Collection>> success,
             @NonNull OnFailureListener fail
@@ -160,6 +169,7 @@ public class Collection extends FirebaseModel {
 
     }
 
+    // Get a collection by Id
     public static void getCollectionById(
             String collectionId,
             @NonNull OnSuccessListener<? super Collection> success,
@@ -176,6 +186,7 @@ public class Collection extends FirebaseModel {
 
     }
 
+    // clone a collection of another user
     public static void importCollection(
             Collection collection,
             @NonNull OnSuccessListener<? super Void> success,

@@ -23,6 +23,10 @@ public class Common {
         return userId;
     }
 
+    public static void logout() {
+        userId = null;
+    }
+
     public static String resStr(Context context, int id) {
         return context.getResources().getText(id).toString();
     }

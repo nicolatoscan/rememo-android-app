@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             finish();
         }
+        Common.logout();
 
         Uri intentData = getIntent().getData();
         if (intentData != null) {

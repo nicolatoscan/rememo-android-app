@@ -11,6 +11,8 @@ import com.google.firebase.firestore.SetOptions;
 import java.io.Serializable;
 import java.util.Map;
 
+// abstract class to use as an interface for any collection on firebase
+// All methods implemented should reflect their result on the database
 public abstract class FirebaseModel implements Serializable {
 
     private String id;
@@ -21,10 +23,12 @@ public abstract class FirebaseModel implements Serializable {
         this.id = id;
     }
 
+    // Get map to save on firestore
     public abstract Map<String, Object> getHashMap();
     public abstract String getFirebaseCollectionName();
     public abstract String getName();
 
+    // save document on Firestore
     public void addToFirestore(
             @NonNull OnSuccessListener<? super DocumentReference> success,
             @NonNull OnFailureListener fail) {
@@ -37,6 +41,7 @@ public abstract class FirebaseModel implements Serializable {
                 .addOnFailureListener(fail);
     }
 
+    // Update document on Firestore
     public void updateFirestore(
             Map<String, Object> updateData,
             @NonNull OnSuccessListener<? super Void> success,
@@ -48,6 +53,7 @@ public abstract class FirebaseModel implements Serializable {
                 .addOnFailureListener(fail);
     }
 
+    // Delete from Firestore
     public void deleteFromFirestore(
             @NonNull OnSuccessListener<? super Void> success,
             @NonNull OnFailureListener fail) {

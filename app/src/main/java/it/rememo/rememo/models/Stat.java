@@ -23,6 +23,7 @@ import java.util.Map;
 import it.rememo.rememo.utils.Common;
 import it.rememo.rememo.utils.Counter;
 
+// Firebase model to save stats of users and users collections
 public class Stat extends FirebaseModel {
     public final static String KEY_CORRECT = "correct";
     public final static String KEY_WRONG = "wrong";
@@ -51,12 +52,11 @@ public class Stat extends FirebaseModel {
     @Override
     public String getName() { return null; }
     @Override
-    public String getFirebaseCollectionName() {
-        return COLLECTION_NAME;
-    }
+    public String getFirebaseCollectionName() { return COLLECTION_NAME; }
     @Override
     public Map<String, Object> getHashMap() { return null; }
 
+    // get user stats
     public static void fetchStats(
             @NonNull OnSuccessListener<? super Stat> success,
             @NonNull OnFailureListener fail
@@ -64,6 +64,7 @@ public class Stat extends FirebaseModel {
         fetchStats(Common.getUserId(), success, fail);
     }
 
+    // fetch stats by userId
     public static void fetchStats(
             String userId,
             @NonNull OnSuccessListener<? super Stat> success,
@@ -77,6 +78,7 @@ public class Stat extends FirebaseModel {
             .addOnFailureListener(fail);
     }
 
+    // fetch stats of user collection
     public void fetchCollections(
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,
             @NonNull OnFailureListener fail
@@ -87,6 +89,7 @@ public class Stat extends FirebaseModel {
         }, fail);
     }
 
+    // fetch stats by days of logged user
     public void fetchDays(
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,
             @NonNull OnFailureListener fail
@@ -97,6 +100,7 @@ public class Stat extends FirebaseModel {
         }, fail);
     }
 
+    // fetch stats by collection of logged user
     public static void fetchCollections(
             String userId,
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,
@@ -105,6 +109,7 @@ public class Stat extends FirebaseModel {
         fetchSubCollections(userId, COLLECTION_COLLECTION_NAME, success, fail);
     }
 
+    // fetch stats by days of user by user Id
     public static void fetchDays(
             String userId,
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,
@@ -113,6 +118,7 @@ public class Stat extends FirebaseModel {
         fetchSubCollections(userId, COLLECTION_DAYS_NAME, success, fail);
     }
 
+    // utility to fetch a Firestore subcollections of the stats collection
     private static void fetchSubCollections(
             String id,
             String subCollection,
@@ -134,6 +140,7 @@ public class Stat extends FirebaseModel {
             .addOnFailureListener(fail);
     }
 
+    // Update stats with result of a collection
     public static void add(boolean result, String collectionId) {
         Map<String, Object> updateFields = new HashMap<>();
         updateFields.put(result ? KEY_CORRECT : KEY_WRONG, FieldValue.increment(1));
@@ -153,6 +160,7 @@ public class Stat extends FirebaseModel {
                 .set(updateFields, SetOptions.merge());
     }
 
+    // get stats of coorect/wrong of last month
     public static void getLastMonthRatio(
             @NonNull OnSuccessListener<? super List<Double>> success,
             @NonNull OnFailureListener fail
@@ -186,6 +194,7 @@ public class Stat extends FirebaseModel {
             .addOnFailureListener(fail);
     }
 
+    // get stats by collection of collection with their name
     public static void fetchCollectionsWithNames(
             String userId,
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,
@@ -194,24 +203,7 @@ public class Stat extends FirebaseModel {
         fetchSubCollections(userId, COLLECTION_COLLECTION_NAME, collectionsStats -> mapCollectionsNames(collectionsStats, success, fail), fail);
     }
 
-    public static void fetchUsersStats(
-            List<String> collectionsIds,
-            @NonNull OnSuccessListener<? super Map<String, StatData>> success,
-            @NonNull OnFailureListener fail
-    ) {
-        Common.db()
-                .collectionGroup(COLLECTION_COLLECTION_NAME)
-                .whereIn(FieldPath.documentId(), collectionsIds)
-                .get()
-                .addOnSuccessListener(docs -> {
-                    Map<String, StatData> sds = new HashMap<>();
-                    for (DocumentSnapshot day: docs) {
-                        sds.put(day.getId(), new StatData(day));
-                    }
-                    mapCollectionsNames(sds, success, fail);
-                });
-    }
-
+    // get names of collections from ids
     private static void mapCollectionsNames(
             Map<String, StatData> collectionsStats,
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,
@@ -239,6 +231,7 @@ public class Stat extends FirebaseModel {
             .addOnFailureListener(fail);
     }
 
+    // get stats of each users in a class
     public static void getClassStats(
             StudentClass sClass,
             @NonNull OnSuccessListener<? super Map<String, StatData>> success,

@@ -17,6 +17,7 @@ import java.util.Map;
 
 import it.rememo.rememo.utils.Common;
 
+// A class (called StudentClass to avoid conflict with the keyword class)
 public class StudentClass extends FirebaseModel {
     public final static String KEY_NAME = "name";
     public final static String KEY_OWNER_ID = "ownerId";
@@ -27,8 +28,6 @@ public class StudentClass extends FirebaseModel {
     public String getFirebaseCollectionName() {
         return COLLECTION_NAME;
     }
-
-
 
     private String name;
     private String ownerId;
@@ -125,6 +124,7 @@ public class StudentClass extends FirebaseModel {
         this.updateFirestore(updateData, success, fail);
     }
 
+    // add reference to collection to class
     public void addCollections(
             List<Collection> collections,
             @NonNull OnSuccessListener<? super Void> success,
@@ -133,6 +133,7 @@ public class StudentClass extends FirebaseModel {
         toggleCollections(true, collections, success, fail);
     }
 
+    // remove reference to collection to class
     public void removeCollections(
             List<Collection> collections,
             @NonNull OnSuccessListener<? super Void> success,
@@ -155,6 +156,7 @@ public class StudentClass extends FirebaseModel {
         this.updateFirestore(updateData, success, fail);
     }
 
+    // remove reference to student to class
     public void removeStudents(
             List<Username> usernames,
             @NonNull OnSuccessListener<? super Void> success,
@@ -168,18 +170,7 @@ public class StudentClass extends FirebaseModel {
         this.updateFirestore(updateData, success, fail);
     }
 
-    private void updateStudentClass(
-        Map<String, Object> updateData,
-        @NonNull OnSuccessListener<? super Void> success,
-        @NonNull OnFailureListener fail
-    ) {
-        FirebaseFirestore.getInstance().collection(getFirebaseCollectionName())
-                .document(getId())
-                .update(updateData)
-                .addOnSuccessListener(success)
-                .addOnFailureListener(fail);
-    }
-
+    // get all collections of classes
     public void getClassCollections(
         @NonNull OnSuccessListener<? super List<Collection>> success,
         @NonNull OnFailureListener fail
@@ -203,6 +194,7 @@ public class StudentClass extends FirebaseModel {
         }
     }
 
+    // get all usernames of classes
     public void getClassStudents(
             @NonNull OnSuccessListener<? super ArrayList<Username>> success,
             @NonNull OnFailureListener fail
@@ -226,6 +218,7 @@ public class StudentClass extends FirebaseModel {
         }
     }
 
+    // get users classes created or joined
     static public void getClasses(boolean createdJoined,
             @NonNull OnSuccessListener<? super ArrayList<StudentClass>> success,
            @NonNull OnFailureListener fail

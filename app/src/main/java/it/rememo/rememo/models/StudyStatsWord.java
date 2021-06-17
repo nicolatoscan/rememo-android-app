@@ -1,8 +1,6 @@
 package it.rememo.rememo.models;
 
 
-import android.content.Intent;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -18,7 +16,8 @@ import java.util.Map;
 
 import it.rememo.rememo.utils.Common;
 
-public class StudyStatsWord extends FirebaseModel implements Comparable {
+// Statistic about learning and train status
+public class StudyStatsWord extends FirebaseModel implements Comparable<StudyStatsWord> {
 
     public final static String KEY_LEARN_RATE = "learnRate";
     public final static String KEY_TRAIN_RATE = "trainRate";
@@ -91,6 +90,7 @@ public class StudyStatsWord extends FirebaseModel implements Comparable {
         return getId();
     }
 
+    // if the answer is wrong half
     private double updatePoint(double original, boolean result) {
         return result ?  original + ((1 - original) / 2.0) : original / 2.0;
     }
@@ -164,13 +164,11 @@ public class StudyStatsWord extends FirebaseModel implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        StudyStatsWord sw = (StudyStatsWord) o;
+    public int compareTo(StudyStatsWord sw) {
         if (sortByLearn) {
             return ((Double) this.getLearnRate()).compareTo((Double) sw.getLearnRate());
         } else {
             return ((Double) this.getTrainRate()).compareTo((Double) sw.getTrainRate());
         }
-
     }
 }
