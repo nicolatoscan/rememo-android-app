@@ -1,7 +1,5 @@
 package it.rememo.rememo.models;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -13,6 +11,8 @@ import java.util.Map;
 
 import it.rememo.rememo.utils.Common;
 
+
+// save the username of each users (usually user data)
 public class Username extends FirebaseModel {
 
     public final static String KEY_NAME = "name";

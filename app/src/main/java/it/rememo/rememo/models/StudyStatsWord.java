@@ -16,7 +16,7 @@ import java.util.Map;
 
 import it.rememo.rememo.utils.Common;
 
-// Statistic about learning and train status
+// Statistic about learning and train status of word
 public class StudyStatsWord extends FirebaseModel implements Comparable<StudyStatsWord> {
 
     public final static String KEY_LEARN_RATE = "learnRate";
@@ -90,11 +90,13 @@ public class StudyStatsWord extends FirebaseModel implements Comparable<StudySta
         return getId();
     }
 
-    // if the answer is wrong half
+    // if the answer is wrong halved, if the answer is correct augmented by half o the remaning
+    // result goes from 0 to 1
     private double updatePoint(double original, boolean result) {
         return result ?  original + ((1 - original) / 2.0) : original / 2.0;
     }
 
+    // reset learn rate to start learning a collection again
     public double resetLearnRate() {
         this.learnRate = 0.0;
         Map<String, Object> updateData = new HashMap<>();
@@ -103,6 +105,7 @@ public class StudyStatsWord extends FirebaseModel implements Comparable<StudySta
         return this.learnRate;
     }
 
+    // update points locally and remotely
     public double updateLearnRate(boolean result) {
         this.learnRate = updatePoint(this.learnRate, result);
         Map<String, Object> updateData = new HashMap<>();
@@ -112,6 +115,7 @@ public class StudyStatsWord extends FirebaseModel implements Comparable<StudySta
         return this.learnRate;
     }
 
+    // update points locally and remotely
     public double updateTrainRate(boolean result) {
         this.trainRate = updatePoint(this.trainRate, result);
         Map<String, Object> updateData = new HashMap<>();
@@ -138,6 +142,7 @@ public class StudyStatsWord extends FirebaseModel implements Comparable<StudySta
                 .set(updateData, SetOptions.merge());
     }
 
+    // get all word stats by collection
     public static void getStudyStatsByCollectionsId(
             List<String> collectionIds,
             @NonNull OnSuccessListener<? super List<StudyStatsWord>> success,
