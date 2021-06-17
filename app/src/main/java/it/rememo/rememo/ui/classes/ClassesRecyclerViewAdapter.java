@@ -52,7 +52,27 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
                     menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_rename)).setOnMenuItemClickListener((mItem) -> renameClasses());
                     menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_delete)).setOnMenuItemClickListener((mItem) -> deleteCollection());
                 });
+            } else {
+                binding.cardView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
+                    // menu.setHeaderTitle("Select The Action");
+                    menu.add(0, view.getId(), 0, Common.resStr(context, R.string.basic_leave)).setOnMenuItemClickListener((mItem) -> leaveClass());
+                });
             }
+
+        }
+
+        private boolean leaveClass() {
+            new AlertDialog.Builder(itemView.getContext())
+                    .setTitle("Leave class")
+                    .setMessage("Are you sure you want to leave the class?")
+                    .setPositiveButton(Common.resStr(context, R.string.form_im_sure), (dialog, whichButton) -> {
+                        ((StudentClass) element).leaveClass(
+                                x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), "Class left"); },
+                                ex -> Common.toast(itemView.getContext(), "Couldn't leave class")
+                        );
+                    })
+                    .setNegativeButton(Common.resStr(context, R.string.basic_cancel), null).show();
+            return true;
         }
 
         private boolean shareClass() {
@@ -69,23 +89,23 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
             }
 
             Alerts
-                    .getInputTextAlert(itemView.getContext(), textInput)
-                    .setTitle(Common.resStr(context, R.string.class_rename))
-                    .setPositiveButton(Common.resStr(context, R.string.basic_rename), (dialog, which) -> {
-                        String title = textInput.getText().toString();
+                .getInputTextAlert(itemView.getContext(), textInput)
+                .setTitle(Common.resStr(context, R.string.class_rename))
+                .setPositiveButton(Common.resStr(context, R.string.basic_rename), (dialog, which) -> {
+                    String title = textInput.getText().toString();
 
-                        Map<String, Object> updateColl = new HashMap<>();
-                        updateColl.put(Collection.KEY_NAME, title);
-                        element.updateFirestore(updateColl,
-                                x -> {
-                                    ((StudentClass) element).setName(title);
-                                    updateUI();
-                                },
-                                ex -> Common.toast(itemView.getContext(), Common.resStr(context, R.string.class_cant_rename))
-                        );
-                    })
-                    .setNegativeButton(Common.resStr(context, R.string.basic_cancel), (dialog, which) -> dialog.cancel())
-                    .show();
+                    Map<String, Object> updateColl = new HashMap<>();
+                    updateColl.put(Collection.KEY_NAME, title);
+                    element.updateFirestore(updateColl,
+                            x -> {
+                                ((StudentClass) element).setName(title);
+                                updateUI();
+                            },
+                            ex -> Common.toast(itemView.getContext(), Common.resStr(context, R.string.class_cant_rename))
+                    );
+                })
+                .setNegativeButton(Common.resStr(context, R.string.basic_cancel), (dialog, which) -> dialog.cancel())
+                .show();
             return true;
         }
 

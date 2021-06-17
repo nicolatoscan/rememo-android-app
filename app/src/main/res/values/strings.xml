@@ -2,9 +2,6 @@
     <!-- app -->
     <string name="app_name">Rememo</string>
 
-    <!-- Common -->
-    <string name="share">Share</string>
-
     <!-- title -->
     <string name="title_home">Rememo</string>
     <string name="basic_welcome">Welcome</string>
@@ -51,6 +48,7 @@
     <string name="basic_rename">Rename</string>
     <string name="basic_cancel">Cancel</string>
     <string name="basic_delete">Delete</string>
+    <string name="basic_leave">Leave</string>
 
     <string name="basic_"></string>
 

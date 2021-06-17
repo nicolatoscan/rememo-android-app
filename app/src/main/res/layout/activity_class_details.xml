@@ -49,7 +49,7 @@
         android:drawableTint="#FFFFFF"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:text="@string/share"
+        android:text="@string/basic_share"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
