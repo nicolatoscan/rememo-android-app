@@ -34,11 +34,11 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
         learnType = i.getIntExtra(ARG_STUDY_TYPE, EStudyType.LEARN);
 
         if (learnType == EStudyType.LEARN) {
-            setTitle("Choose a collection to learn");
+            setTitle(getString(R.string.title_choose_learn));
         } else if (learnType == EStudyType.TEST) {
-            setTitle("Choose collections to test");
+            setTitle(getString(R.string.title_choose_test));
         } else if (learnType == EStudyType.TRAIN) {
-            setTitle("Choose collections to train");
+            setTitle(getString(R.string.title_choose_train));
         }
 
         binding.colllectionList.setLayoutManager(new LinearLayoutManager(this));
@@ -90,7 +90,7 @@ public class ChooseCollectionsActivity extends AppCompatActivity {
 
         ArrayList<String> selectedIds = this.adapter.getSelectedIds();
         if (selectedIds.size() <= 0) {
-            Common.toast(this, "You need to select at least a collection");
+            Common.toast(this, getString(R.string.study_at_least_collection));
             return;
         }
 

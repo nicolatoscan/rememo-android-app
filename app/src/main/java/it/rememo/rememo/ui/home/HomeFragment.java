@@ -59,14 +59,14 @@ public class HomeFragment extends Fragment {
                         entries.add(new Entry(i++, (int)(s * 100)));
                     }
 
-                    LineDataSet set = new LineDataSet(entries, "Percentage");
+                    LineDataSet set = new LineDataSet(entries, getString(R.string.basic_percentage));
                     LineData data = new LineData(Common.setLineDataSetStyle(set, getContext()));
                     binding.chartProgress.setData(Common.setLineDataStyle(data));
                     binding.chartProgress.invalidate();
                     binding.txtLoadingChartProgresses.setVisibility(View.GONE);
                     binding.chartProgress.setVisibility(View.VISIBLE);
                 },
-                ex -> Common.toast(getContext(), "Couldn't load chart")
+                ex -> Common.toast(getContext(), getString(R.string.couldn_load_chart))
         );
 
         Stat.fetchCollectionsWithNames(Common.getUserId(),
@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment {
                     labels.add(s);
                 }
 
-                BarDataSet set = new BarDataSet(entries, "Collections");
+                BarDataSet set = new BarDataSet(entries, getString(R.string.title_collections));
                 set.setBarBorderWidth(0.1f);
                 set.setColors(new int[] { R.color.rememo_primary, R.color.error_red }, getContext());
                 BarData data = new BarData(set);

@@ -11,6 +11,7 @@
     <string name="title_train">Train</string>
     <string name="title_learn_coll">Learn a collection</string>
     <string name="title_test_skills">Test your knowledge</string>
+
     <string name="title_"></string>
 
 
@@ -253,5 +254,20 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="title_choose_train">Choose collections to train</string>
+    <string name="title_choose_test">Choose collections to test</string>
+    <string name="title_choose_learn">Choose a collection to learn</string>
+    <string name="study_at_least_collection">You need to select at least a collection</string>
+    <string name="basic_students">Students</string>
+    <string name="class_leave">Leave class</string>
+    <string name="dialog_sure_leave_class">Are you sure you want to leave the class?</string>
+    <string name="class_left">Class left</string>
+    <string name="class_couldnt_leave">Couldn\'t leave class</string>
+    <string name="basic_percentage">Percentage</string>
+    <string name="couldn_load_chart">Couldn\'t load chart</string>
+    <string name="join_class_invite">Join class %s on Rememo</string>
+    <string name="import_collection_invite">Import collection %s on Rememo</string>
+    <string name="exit">Exit</string>
+    <string name="submit">Submit</string>
 
 </resources>

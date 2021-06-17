@@ -60,12 +60,12 @@ public class ClassesRecyclerViewAdapter extends GroupRecyclerViewAdapter<Collect
 
         private boolean leaveClass() {
             new AlertDialog.Builder(itemView.getContext())
-                    .setTitle("Leave class")
-                    .setMessage("Are you sure you want to leave the class?")
+                    .setTitle(R.string.class_leave)
+                    .setMessage(R.string.dialog_sure_leave_class)
                     .setPositiveButton(Common.resStr(context, R.string.form_im_sure), (dialog, whichButton) ->
                         ((StudentClass) element).leaveClass(
-                                x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), "Class left"); },
-                                ex -> Common.toast(itemView.getContext(), "Couldn't leave class")
+                                x -> { removeAt(getAdapterPosition()); Common.toast(itemView.getContext(), context.getString(R.string.class_left)); },
+                                ex -> Common.toast(itemView.getContext(), context.getString(R.string.class_couldnt_leave))
                         )
                     )
                     .setNegativeButton(Common.resStr(context, R.string.basic_cancel), null).show();

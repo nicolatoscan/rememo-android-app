@@ -81,7 +81,7 @@ public class ClassDetailsActivity extends AppCompatActivity {
                         labels.add(studentName);
                     }
 
-                    BarDataSet set = new BarDataSet(entries, "Students");
+                    BarDataSet set = new BarDataSet(entries, getString(R.string.basic_students));
                     set.setBarBorderWidth(0.1f);
                     set.setColors(new int[] { R.color.rememo_primary, R.color.error_red }, ClassDetailsActivity.this);
                     BarData data = new BarData(set);

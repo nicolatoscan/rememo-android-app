@@ -38,7 +38,7 @@ public class ClassCollectionsActivity extends ClassListActivity {
                                         s -> adapter.addAll(selectedCollections),
                                         ex -> Common.toast(this, Common.resStr(this, R.string.colls_cant_add))
                                 )
-                        ).show(getSupportFragmentManager(), "PIPPO");
+                        ).show(getSupportFragmentManager(), "");
                     } else {
                         Common.toast(this, Common.resStr(this, R.string.coll_no_other_add));
                     }

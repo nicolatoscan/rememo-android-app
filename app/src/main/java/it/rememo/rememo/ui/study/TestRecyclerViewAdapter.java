@@ -78,10 +78,10 @@ public class TestRecyclerViewAdapter extends RecyclerView.Adapter<TestRecyclerVi
             }
         } else if (holder.bindingSubmit != null) {
             if (showResults) {
-                holder.bindingSubmit.btnSubmit.setText("Exit");
+                holder.bindingSubmit.btnSubmit.setText(R.string.exit);
                 holder.bindingSubmit.btnSubmit.setOnClickListener(v -> context.finish());
             } else {
-                holder.bindingSubmit.btnSubmit.setText("Submit");
+                holder.bindingSubmit.btnSubmit.setText(R.string.submit);
                 holder.bindingSubmit.btnSubmit.setOnClickListener(v -> {
                     int tot = list.size(), right = 0;
                     for (int i = 0; i < list.size(); i++) {
