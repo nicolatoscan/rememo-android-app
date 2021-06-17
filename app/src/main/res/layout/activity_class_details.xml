@@ -10,12 +10,12 @@
         android:id="@+id/chartStudents"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@+id/btnCollections"
         app:layout_constraintEnd_toEndOf="@+id/btnCollections"
         app:layout_constraintStart_toStartOf="@+id/btnCollections"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <Button
         android:id="@+id/btnCollections"
@@ -65,5 +65,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/class_chart_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtLoadingChart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/basic_loading"
+        app:layout_constraintBottom_toTopOf="@+id/btnCollections"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

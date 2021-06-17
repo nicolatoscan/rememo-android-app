@@ -26,6 +26,7 @@ import it.rememo.rememo.databinding.FragmentHomeBinding;
 import it.rememo.rememo.models.EStudyType;
 import it.rememo.rememo.models.Stat;
 import it.rememo.rememo.models.StatData;
+import it.rememo.rememo.ui.classes.ClassDetailsActivity;
 import it.rememo.rememo.ui.study.ChooseCollectionsActivity;
 import it.rememo.rememo.utils.Common;
 
@@ -40,9 +41,18 @@ public class HomeFragment extends Fragment {
 
         Common.setChartStyle(binding.chartProgress, false);
         Common.setChartStyle(binding.chartCollections, true);
+        binding.chartProgress.setVisibility(View.GONE);
+        binding.chartCollections.setVisibility(View.GONE);
 
         Stat.getLastMonthRatio(
                 ratios -> {
+                    if (ratios.size() == 0) {
+                        binding.txtLoadingChartProgresses.setText(Common.resStr(getContext(), R.string.basic_chart_no_data));
+                        return;
+                    }
+                    if (ratios.size() == 1) {
+                        ratios.add(ratios.get(0));
+                    }
                     ArrayList<Entry> entries = new ArrayList<>();
                     int i = 0;
                     for (double s : ratios) {
@@ -53,12 +63,18 @@ public class HomeFragment extends Fragment {
                     LineData data = new LineData(Common.setLineDataSetStyle(set, getContext()));
                     binding.chartProgress.setData(Common.setLineDataStyle(data));
                     binding.chartProgress.invalidate();
+                    binding.txtLoadingChartProgresses.setVisibility(View.GONE);
+                    binding.chartProgress.setVisibility(View.VISIBLE);
                 },
                 ex -> Common.toast(getContext(), "Couldn't load chart")
         );
 
         Stat.fetchCollectionsWithNames(Common.getUserId(),
             collectionsStats -> {
+                if (collectionsStats.size() == 0) {
+                    binding.txtLoadingChartCollections.setText(Common.resStr(getContext(), R.string.basic_chart_no_data));
+                    return;
+                }
                 ArrayList<BarEntry> entries = new ArrayList<>();
                 ArrayList<String> labels = new ArrayList<>();
                 int i = 0;
@@ -77,6 +93,8 @@ public class HomeFragment extends Fragment {
                 Common.setBarChartStyle(binding.chartCollections);
                 binding.chartCollections.setData(data);
                 binding.chartCollections.invalidate();
+                binding.txtLoadingChartCollections.setVisibility(View.GONE);
+                binding.chartCollections.setVisibility(View.VISIBLE);
             },
             ex -> {}
         );

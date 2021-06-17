@@ -54,6 +54,8 @@
     <string name="basic_no_classes">You don\'t have any classes</string>
     <string name="basic_no_students">This class doesn\'t have any students</string>
     <string name="basic_no_words">This collection doesn\'t have any words</string>
+    <string name="basic_chart_no_data">Not enough data to load a chart, keep training</string>
+    <string name="basic_chart_title">Your progresses:</string>
 
     <string name="basic_"></string>
 
@@ -134,6 +136,7 @@
     <string name="class_cant_load_usernames">Couldn\'t load Usernames</string>
     <string name="class_cant_rename">Couldn\'t rename class</string>
     <string name="class_cant_delete">Couldn\'t delete this class</string>
+    <string name="class_chart_title">Your students progresses:</string>
 
     <string name="class_"></string>
 

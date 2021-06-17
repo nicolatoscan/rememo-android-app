@@ -10,11 +10,11 @@
         android:id="@+id/chartProgress"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/chartCollections"
         app:layout_constraintLeft_toLeftOf="@id/btnLearn"
         app:layout_constraintRight_toRightOf="@id/btnTest"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/chartCollections"
@@ -76,4 +76,34 @@
         app:layout_constraintGuide_percent="0.5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/basic_chart_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtLoadingChartProgresses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/basic_loading"
+        app:layout_constraintBottom_toBottomOf="@+id/chartProgress"
+        app:layout_constraintEnd_toEndOf="@+id/chartProgress"
+        app:layout_constraintStart_toStartOf="@+id/chartProgress"
+        app:layout_constraintTop_toTopOf="@+id/chartProgress" />
+
+    <TextView
+        android:id="@+id/txtLoadingChartCollections"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/basic_loading"
+        app:layout_constraintBottom_toBottomOf="@+id/chartCollections"
+        app:layout_constraintEnd_toEndOf="@+id/chartCollections"
+        app:layout_constraintStart_toStartOf="@+id/chartCollections"
+        app:layout_constraintTop_toBottomOf="@+id/chartProgress" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -62,11 +62,16 @@ public class ClassDetailsActivity extends AppCompatActivity {
             binding.btnShareClass.setVisibility(View.GONE);
         }
 
+        binding.chartStudents.setVisibility(View.GONE);
         Common.setChartStyle(binding.chartStudents, true);
 
         Stat.getClassStats(
                 studentClass,
                 usersStats -> {
+                    if (usersStats.size() == 0) {
+                        binding.txtLoadingChart.setText(Common.resStr(ClassDetailsActivity.this, R.string.basic_chart_no_data));
+                        return;
+                    }
                     ArrayList<BarEntry> entries = new ArrayList<>();
                     ArrayList<String> labels = new ArrayList<>();
                     int i = 0;
@@ -85,6 +90,8 @@ public class ClassDetailsActivity extends AppCompatActivity {
                     Common.setBarChartStyle(binding.chartStudents);
                     binding.chartStudents.setData(data);
                     binding.chartStudents.invalidate();
+                    binding.chartStudents.setVisibility(View.VISIBLE);
+                    binding.txtLoadingChart.setVisibility(View.GONE);
                 },
                 ex -> {}
         );
